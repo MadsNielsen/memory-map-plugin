@@ -30,7 +30,7 @@ import org.kohsuke.stapler.DataBoundConstructor;
  *
  * @author Unknown
  */
-public class AIRParser extends AbstractMemoryMapParser {
+public class IARParser extends AbstractMemoryMapParser {
     
     
 /*
@@ -45,11 +45,11 @@ public class AIRParser extends AbstractMemoryMapParser {
  
  
     @DataBoundConstructor
-    public AIRParser(String mapFile, String configurationFile, Integer wordSize, Boolean bytesOnGraph, Pattern... pattern) {
-        super(mapFile, configurationFile, wordSize, bytesOnGraph, pattern);
+    public IARParser(String mapFile, String configurationFile, Integer wordSize, Boolean bytesOnGraph, Pattern... pattern) {
+        super(mapFile, configurationFile, wordSize, bytesOnGraph, NEAR_I,NEAR_Z,NEAR_N,CSTACK,SADDR_I,SADDR_Z);
     }
 
-    public AIRParser() {
+    public IARParser() {
         super();        
     }
  
