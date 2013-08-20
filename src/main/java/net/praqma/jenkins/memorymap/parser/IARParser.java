@@ -36,6 +36,12 @@ public class IARParser extends AbstractMemoryMapParser {
 /*
  * Ram
  */
+ private static final Pattern FAR_HEAP_SIZE = Pattern.compile(null, Pattern.MULTILINE);
+ private static final Pattern NEAR_CONST_LOCATION_START = Pattern.compile(null, Pattern.MULTILINE);
+ private static final Pattern NEAR_CONST_LOCATION_END = Pattern.compile(null, Pattern.MULTILINE);
+ private static final Pattern NEAR_CONST_LOCATION = Pattern.compile(null, Pattern.MULTILINE);
+ private static final Pattern NEAR_HEAP_SIZE = Pattern.compile(null, Pattern.MULTILINE);
+ private static final Pattern CSTACK_SIZE = Pattern.compile(null, Pattern.MULTILINE);
  private static final Pattern NEAR_I = Pattern.compile(null, Pattern.MULTILINE);
  private static final Pattern NEAR_Z = Pattern.compile(null, Pattern.MULTILINE);                         
  private static final Pattern NEAR_N = Pattern.compile(null, Pattern.MULTILINE);                         
