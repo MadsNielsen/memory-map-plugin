@@ -32,6 +32,22 @@ import org.kohsuke.stapler.DataBoundConstructor;
  */
 public class IARParser extends AbstractMemoryMapParser {
     
+/*
+ * Ram?? Flash?? Rom??
+ */
+private static final Pattern INTVEC = Pattern.compile(null, Pattern.MULTILINE);
+private static final Pattern OPTBYTE = Pattern.compile(null, Pattern.MULTILINE);
+private static final Pattern SECUID = Pattern.compile(null, Pattern.MULTILINE);
+private static final Pattern aseg = Pattern.compile(null, Pattern.MULTILINE);
+private static final Pattern RCODE = Pattern.compile(null, Pattern.MULTILINE);
+private static final Pattern CODE = Pattern.compile(null, Pattern.MULTILINE);
+private static final Pattern NEAR_ID = Pattern.compile(null, Pattern.MULTILINE);
+private static final Pattern NEAR_CONST = Pattern.compile(null, Pattern.MULTILINE);
+private static final Pattern SWITCH = Pattern.compile(null, Pattern.MULTILINE);
+private static final Pattern CHECKSUM = Pattern.compile(null, Pattern.MULTILINE);
+private static final Pattern NEAR_A = Pattern.compile(null, Pattern.MULTILINE);
+private static final Pattern SADDR_A = Pattern.compile(null, Pattern.MULTILINE);
+    
     
 /*
  * Ram
@@ -52,7 +68,9 @@ public class IARParser extends AbstractMemoryMapParser {
  
     @DataBoundConstructor
     public IARParser(String mapFile, String configurationFile, Integer wordSize, Boolean bytesOnGraph, Pattern... pattern) {
-        super(mapFile, configurationFile, wordSize, bytesOnGraph, NEAR_I,NEAR_Z,NEAR_N,CSTACK,SADDR_I,SADDR_Z);
+        super(mapFile, configurationFile, wordSize, bytesOnGraph, INTVEC,OPTBYTE,SECUID,aseg,RCODE,CODE,NEAR_ID,NEAR_CONST,SWITCH,CHECKSUM,NEAR_A,SADDR_A,FAR_HEAP_SIZE,
+                                                                    NEAR_CONST_LOCATION_START,NEAR_CONST_LOCATION_END,NEAR_CONST_LOCATION,NEAR_HEAP_SIZE,
+                                                                    CSTACK_SIZE,NEAR_I,NEAR_Z,NEAR_N,CSTACK,SADDR_I,SADDR_Z);
     }
 
     public IARParser() {
