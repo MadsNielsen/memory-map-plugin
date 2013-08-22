@@ -123,7 +123,7 @@ private static final Pattern SADDR_A = Pattern.compile(null, Pattern.MULTILINE);
     }
 
     @Extension
-    public static final class DescriptorImpl extends MemoryMapParserDescriptor<TexasInstrumentsMemoryMapParser> {
+    public static final class DescriptorImpl extends MemoryMapParserDescriptor<IARParser> {
 
         @Override
         public String getDisplayName() {
@@ -132,7 +132,7 @@ private static final Pattern SADDR_A = Pattern.compile(null, Pattern.MULTILINE);
 
         @Override
         public AbstractMemoryMapParser newInstance(StaplerRequest req, JSONObject formData, AbstractMemoryMapParser instance) throws Descriptor.FormException {
-            TexasInstrumentsMemoryMapParser parser = (TexasInstrumentsMemoryMapParser) instance;
+            IARParser parser = (IARParser) instance;
             save();
             return parser;
         }
