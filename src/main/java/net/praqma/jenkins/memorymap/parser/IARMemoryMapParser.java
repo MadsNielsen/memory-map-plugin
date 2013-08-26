@@ -40,12 +40,12 @@ import org.kohsuke.stapler.StaplerRequest;
 
 /**
  *
- * @author Unknown
+ * @author Praqma
  */
-public class IARParser extends AbstractMemoryMapParser {
+public class IARMemoryMapParser extends AbstractMemoryMapParser {
     
 /*
- * Ram?? Flash?? Rom??
+ * ROM/Flash 
  */
 private static final Pattern INTVEC = Pattern.compile(null, Pattern.MULTILINE);
 private static final Pattern OPTBYTE = Pattern.compile(null, Pattern.MULTILINE);
@@ -62,7 +62,7 @@ private static final Pattern SADDR_A = Pattern.compile(null, Pattern.MULTILINE);
     
     
 /*
- * Ram
+ * RAM
  */
  private static final Pattern FAR_HEAP_SIZE = Pattern.compile(null, Pattern.MULTILINE);
  private static final Pattern NEAR_CONST_LOCATION_START = Pattern.compile(null, Pattern.MULTILINE);
@@ -79,13 +79,13 @@ private static final Pattern SADDR_A = Pattern.compile(null, Pattern.MULTILINE);
  
  
     @DataBoundConstructor
-    public IARParser(String mapFile, String configurationFile, Integer wordSize, Boolean bytesOnGraph, Pattern... pattern) {
+    public IARMemoryMapParser(String mapFile, String configurationFile, Integer wordSize, Boolean bytesOnGraph, Pattern... pattern) {
         super(mapFile, configurationFile, wordSize, bytesOnGraph, INTVEC,OPTBYTE,SECUID,aseg,RCODE,CODE,NEAR_ID,NEAR_CONST,SWITCH,CHECKSUM,NEAR_A,SADDR_A,FAR_HEAP_SIZE,
                                                                     NEAR_CONST_LOCATION_START,NEAR_CONST_LOCATION_END,NEAR_CONST_LOCATION,NEAR_HEAP_SIZE,
                                                                     CSTACK_SIZE,NEAR_I,NEAR_Z,NEAR_N,CSTACK,SADDR_I,SADDR_Z);
     }
 
-    public IARParser() {
+    public IARMemoryMapParser() {
         super();        
     }
     
@@ -123,7 +123,7 @@ private static final Pattern SADDR_A = Pattern.compile(null, Pattern.MULTILINE);
     }
 
     @Extension
-    public static final class DescriptorImpl extends MemoryMapParserDescriptor<IARParser> {
+    public static final class DescriptorImpl extends MemoryMapParserDescriptor<IARMemoryMapParser> {
 
         @Override
         public String getDisplayName() {
@@ -132,7 +132,7 @@ private static final Pattern SADDR_A = Pattern.compile(null, Pattern.MULTILINE);
 
         @Override
         public AbstractMemoryMapParser newInstance(StaplerRequest req, JSONObject formData, AbstractMemoryMapParser instance) throws Descriptor.FormException {
-            IARParser parser = (IARParser) instance;
+            IARMemoryMapParser parser = (IARMemoryMapParser) instance;
             save();
             return parser;
         }

@@ -29,7 +29,7 @@ import java.util.List;
 
 /**
  *
- * @author Unknown
+ * @author Praqma
  */
 public class IARMemoryMapGroup extends LinkedList<String> {
     
