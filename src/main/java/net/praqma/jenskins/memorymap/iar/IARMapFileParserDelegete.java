@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2013 Martin.
+ * Copyright 2013 Praqma.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package net.praqma.jenkins.memorymap.parser;
+package net.praqma.jenskins.memorymap.iar;
 
 import hudson.remoting.VirtualChannel;
 import java.io.File;
@@ -31,12 +31,13 @@ import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import net.praqma.jenkins.memorymap.parser.AbstractMemoryMapParser;
 import net.praqma.jenkins.memorymap.result.MemoryMapConfigMemory;
 import net.praqma.jenkins.memorymap.util.FileFoundable;
 
 /**
  * Class to wrap the FileCallable method. Serves as a proxy to the parser method. 
- * @author Martin
+ * @author Praqma
  */
 public class IARMapFileParserDelegete extends FileFoundable<MemoryMapConfigMemory>{
     private static final Logger log = Logger.getLogger(IARMapFileParserDelegete.class.getName());
