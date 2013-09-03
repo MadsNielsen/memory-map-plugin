@@ -40,6 +40,11 @@ public class MemoryMapConfigMemoryItem implements Serializable {
     private List<MemoryMapConfigMemoryItem> associatedSections;
 
     public MemoryMapConfigMemoryItem() { }
+    
+    public MemoryMapConfigMemoryItem (String name, String origin){
+        this.name = name != null ? name.trim() : "";;
+        this.origin = origin;
+    }
 
     public MemoryMapConfigMemoryItem(String name, String origin, String length) {
         this.name = name != null ? name.trim() : "";
