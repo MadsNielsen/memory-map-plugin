@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2013 Unknown.
+ * Copyright 2013 Praqma.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package net.praqma.jenkins.memorymap.iarcompiler;
+package net.praqma.jenskins.memorymap.iar;
 
 import hudson.Extension;
 import hudson.model.Descriptor;
@@ -45,7 +45,7 @@ import org.kohsuke.stapler.StaplerRequest;
 
 /**
  *
- * @author Unknown
+ * @author Praqma
  */
 public class IARMemoryMapParser extends AbstractMemoryMapParser {
 
@@ -80,7 +80,6 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
     private static final Pattern SADDR_I = Pattern.compile("", Pattern.MULTILINE);
     private static final Pattern SADDR_Z = Pattern.compile("", Pattern.MULTILINE);
     private static HashMap<String, Pattern> patternRegistry;
-    
 
     @DataBoundConstructor
     public IARMemoryMapParser(String mapFile, String configurationFile, Integer wordSize, Boolean bytesOnGraph, Pattern... pattern) {
@@ -92,28 +91,9 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
     public IARMemoryMapParser() {
         super();
     }
-    
-//    private static Pattern getPatternForOPTBYTE(String memoryTypeName) {
-//        HashMap<String, Pattern> patternRegistry = null;
-//        
-//        if (patternRegistry == null) {
-//            patternRegistry = new HashMap<String, Pattern>();
-//        }
-//        if (patternRegistry.containsKey(memoryTypeName)) {
-//            return patternRegistry.get(memoryTypeName);
-//        } else {
-//
-//            String RegEx = String.format("(-Z)(.\b[C][O]...)(\\w+)+=([A-f,0-9]{4,})\\-([A-f,0-9]{4,})$", memoryTypeName);
-//            Pattern memoryType = Pattern.compile(RegEx, Pattern.MULTILINE);
-//            patternRegistry.put(memoryTypeName, memoryType);
-//            return memoryType;
-//        }
-//    }
-    
-       
+
     private static Pattern getPatternForCodeMemoryDividedConfig(String memoryTypeName) {
-//        HashMap<String, Pattern> patternRegistry = null;
-        
+
         if (patternRegistry == null) {
             patternRegistry = new HashMap<String, Pattern>();
         }
@@ -128,10 +108,8 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
             return memoryType;
         }
     }
-    
-        private static Pattern getPatternForCodeMemoryConfig(String memoryTypeName) {
-//        HashMap<String, Pattern> patternRegistry = null;
-        
+
+    private static Pattern getPatternForCodeMemoryConfig(String memoryTypeName) {
         if (patternRegistry == null) {
             patternRegistry = new HashMap<String, Pattern>();
         }
@@ -146,10 +124,8 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
             return memoryType;
         }
     }
-        
+
     private static Pattern getPatternForDataMemoryConfig(String memoryTypeName) {
-//        HashMap<String, Pattern> patternRegistry = null;
-        
         if (patternRegistry == null) {
             patternRegistry = new HashMap<String, Pattern>();
         }
@@ -163,11 +139,9 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
             System.out.println("MemoryTypeName Value:" + memoryTypeName + " MemoryType Value:" + memoryType);
             return memoryType;
         }
-    }    
-    
+    }
+
     private static Pattern getPatternForDataMemoryDividedConfig(String memoryTypeName) {
-//        HashMap<String, Pattern> patternRegistry = null;
-        
         if (patternRegistry == null) {
             patternRegistry = new HashMap<String, Pattern>();
         }
@@ -182,10 +156,8 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
             return memoryType;
         }
     }
-    
+
     private static Pattern getPatternForConstMemoryConfig(String memoryTypeName) {
-//        HashMap<String, Pattern> patternRegistry = null;
-        
         if (patternRegistry == null) {
             patternRegistry = new HashMap<String, Pattern>();
         }
@@ -200,10 +172,8 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
             return memoryType;
         }
     }
-    
+
     private static Pattern getPatternForConstMemoryDividedConfig(String memoryTypeName) {
-//        HashMap<String, Pattern> patternRegistry = null;
-        
         if (patternRegistry == null) {
             patternRegistry = new HashMap<String, Pattern>();
         }
@@ -218,10 +188,8 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
             return memoryType;
         }
     }
-    
+
     private static Pattern getPatternForConstMemoryConfigSharp(String memoryTypeName) {
-//        HashMap<String, Pattern> patternRegistry = null;
-        
         if (patternRegistry == null) {
             patternRegistry = new HashMap<String, Pattern>();
         }
@@ -236,73 +204,32 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
             return memoryType;
         }
     }
-    
+
     private static Pattern getPatternForCodeMemoryMap(String memoryTypeName) {
-//        HashMap<String, Pattern> patternRegistry = null;
+            String RegEx = String.format("([\\d|\\s]*)\\sbytes of (%s)", memoryTypeName);
+            Pattern memoryType = Pattern.compile(RegEx, Pattern.MULTILINE);
+            System.out.println("MemoryTypeName Value:" + memoryTypeName + " MemoryType Value:" + memoryType);
+            return memoryType;
         
-        if (patternRegistry == null) {
-            patternRegistry = new HashMap<String, Pattern>();
-        }
-        if (patternRegistry.containsKey(memoryTypeName)) {
-            return patternRegistry.get(memoryTypeName);
-        } else {
+    }
 
+    private static Pattern getPatternForDataMemoryMap(String memoryTypeName) {
             String RegEx = String.format("([\\d|\\s]*)\\sbytes of .(%s)", memoryTypeName);
             Pattern memoryType = Pattern.compile(RegEx, Pattern.MULTILINE);
-            patternRegistry.put(memoryTypeName, memoryType);
-            System.out.println("This is in the map!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             System.out.println("MemoryTypeName Value:" + memoryTypeName + " MemoryType Value:" + memoryType);
             return memoryType;
-        }
     }
-    
-     private static Pattern getPatternForDataMemoryMap(String memoryTypeName) {
-//        HashMap<String, Pattern> patternRegistry = null;
 
-         
-        if (patternRegistry == null) {
-            patternRegistry = new HashMap<String, Pattern>();
-        } 
-        if (patternRegistry.containsKey(memoryTypeName)) {
-            return patternRegistry.get(memoryTypeName);
-        } else {
-
+    private static Pattern getPatternForConstMemoryMap(String memoryTypeName) {
             String RegEx = String.format("([\\d|\\s]*)\\sbytes of .(%s)", memoryTypeName);
             Pattern memoryType = Pattern.compile(RegEx, Pattern.MULTILINE);
-            patternRegistry.put(memoryTypeName, memoryType);
             System.out.println("MemoryTypeName Value:" + memoryTypeName + " MemoryType Value:" + memoryType);
             return memoryType;
-        }
     }
-     
-      private static Pattern getPatternForConstMemoryMap(String memoryTypeName) {
-//          HashMap<String, Pattern> patternRegistry = null;
-          
-        if (patternRegistry == null) {
-            patternRegistry = new HashMap<String, Pattern>();
-        }
-        if (patternRegistry.containsKey(memoryTypeName)) {
-            return patternRegistry.get(memoryTypeName);
-        } else {
 
-            String RegEx = String.format("([\\d|\\s]*)\\sbytes of .(%s)",memoryTypeName);
-            Pattern memoryType = Pattern.compile(RegEx, Pattern.MULTILINE);
-            patternRegistry.put(memoryTypeName, memoryType);
-            System.out.println("MemoryTypeName Value:" + memoryTypeName + " MemoryType Value:" + memoryType);
-            return memoryType;
-        }
+    private int lengthCalculator() {
+        return 0;
     }
-      
-    private int lengthCalculator(){
-        
-        int result = 0; 
-        
-        
-        return result;
-    }
-      
-    
-    
 
     @Override
     public MemoryMapConfigMemory parseConfigFile(List<MemoryMapGraphConfiguration> graphConfig, File f) throws IOException {
@@ -315,7 +242,6 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
                 s.trim();
                 String[] multiSections = s.split("\\+");
                 for (String ms : multiSections) {
-    //                Matcher m0 = getPatternForOPTBYTE(ms.replace(" ","")).matcher(sequence);
                     Matcher m1 = getPatternForCodeMemoryDividedConfig(ms.replace(" ", "")).matcher(sequence);
                     Matcher m2 = getPatternForCodeMemoryConfig(ms.replace(" ", "")).matcher(sequence);
                     Matcher m3 = getPatternForDataMemoryConfig(ms.replace(" ", "")).matcher(sequence);
@@ -323,8 +249,7 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
                     Matcher m5 = getPatternForConstMemoryConfig(ms.replace(" ", "")).matcher(sequence);
                     Matcher m6 = getPatternForConstMemoryDividedConfig(ms.replace(" ", "")).matcher(sequence);
 //                    Matcher m7 = getPatternForConstMemoryConfigSharp(ms.replace(" ", "")).matcher(sequence);
-                    
-      //              MemoryMapConfigMemoryItem item0 = null;                  
+
                     MemoryMapConfigMemoryItem item1 = null;
                     MemoryMapConfigMemoryItem item2 = null;
                     MemoryMapConfigMemoryItem item3 = null;
@@ -332,41 +257,33 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
                     MemoryMapConfigMemoryItem item5 = null;
                     MemoryMapConfigMemoryItem item6 = null;
 //                    MemoryMapConfigMemoryItem item7 = null;
-                    
-                   
-//                    while (m0.find()) {
-//                        item0 = new MemoryMapConfigMemoryItem(m0.group(3),m0.group(4), m0.group(5));
-//                        config.add(item0);
-//                        System.out.println("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\");
-//                        System.out.println("Helllllooo, here I AM" + item0);
-//                    }
-                    
-                       while (m1.find()) {
-                        item1 = new MemoryMapConfigMemoryItem(m1.group(2),m1.group(4), m1.group(5));
+
+                    while (m1.find()) {
+                        item1 = new MemoryMapConfigMemoryItem(m1.group(2), m1.group(4), m1.group(5));
                         config.add(item1);
                         System.out.println(item1.toString());
                     }
-                           while (m2.find()) {
+                    while (m2.find()) {
                         item2 = new MemoryMapConfigMemoryItem(m2.group(2), m2.group(3), m2.group(4));
                         config.add(item2);
                         System.out.println(item2.toString());
                     }
-                               while (m3.find()) {
+                    while (m3.find()) {
                         item3 = new MemoryMapConfigMemoryItem(m3.group(2), m3.group(3), m3.group(4));
                         config.add(item3);
                         System.out.println(item3.toString());
                     }
-                                 while (m4.find()) {
+                    while (m4.find()) {
                         item4 = new MemoryMapConfigMemoryItem(m4.group(2), m4.group(3), m4.group(4));
                         config.add(item4);
                         System.out.println(item4.toString());
                     }
-                                   while (m5.find()) {
+                    while (m5.find()) {
                         item5 = new MemoryMapConfigMemoryItem(m5.group(2), m5.group(4), m5.group(5));
                         config.add(item5);
                         System.out.println(item5.toString());
                     }
-                                     while (m6.find()) {
+                    while (m6.find()) {
                         item6 = new MemoryMapConfigMemoryItem(m6.group(2), m6.group(4), m6.group(5));
                         config.add(item6);
                         System.out.println(item6.toString());
@@ -376,11 +293,7 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
 //                        config.add(item7);
 //                        System.out.println(item7.toString());
 //                    }
-                                       
-//                     if (item0 == null) {
-//                        logger.logp(Level.WARNING, "parseConfigFile", IARMemoryMapParser.class.getName(), String.format("parseConfigFile(List<MemoryMapGraphConfiguration> graphConfig, File f) non existing item: %s", s));
-//                        throw new IOException(String.format("No match found for program memory named %s", s));
-//                    }                  
+
 
                     if (item1 == null) {
                         logger.logp(Level.WARNING, "parseConfigFile", IARMemoryMapParser.class.getName(), String.format("parseConfigFile(List<MemoryMapGraphConfiguration> graphConfig, File f) non existing item: %s", s));
@@ -419,47 +332,55 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
 
     @Override
     public MemoryMapConfigMemory parseMapFile(File f, MemoryMapConfigMemory config) throws IOException {
-       CharSequence sequence = createCharSequenceFromFile(f);
-        
-        for(MemoryMapConfigMemoryItem item10 : config) {            
-            Matcher matcher = getPatternForCodeMemoryMap(item10.getName()).matcher(sequence);
+        CharSequence sequence = createCharSequenceFromFile(f);
+
+        for (MemoryMapConfigMemoryItem codeItem : config) {
+            Matcher matcher = getPatternForCodeMemoryMap(codeItem.getName()).matcher(sequence);
             boolean found = false;
-            while(matcher.find()) {
-                //item10.setName(matcher.group(2));
-                item10.setUsed(matcher.group(1));
-                System.out.println(item10.toString());
-                found = true;
+            while (matcher.find()) {
+                codeItem.setUsed(matcher.group(1));
+                found = true;     
             }
-            if(!found) {
-                logger.logp(Level.WARNING, "parseMapFile", IARMemoryMapParser.class.getName(), String.format("parseMapFile(File f, MemoryMapConfigMemory configuration) non existing item: %s",item10));
-                throw new IOException(String.format("Linker command element %s not found in .map file", item10));
+                System.out.println("/////////////////////////////////////////////////////");
+                System.out.println("Memory type: " + codeItem.getName() + "\t\tUsed memory: " + codeItem.getUsed());
+                System.out.println("/////////////////////////////////////////////////////");
+            if (!found) {    
+                logger.logp(Level.WARNING, "parseMapFile", IARMemoryMapParser.class.getName(), String.format("parseMapFile(File f, MemoryMapConfigMemory configuration) non existing item: %s", codeItem));
+                throw new IOException(String.format("Linker command element %s not found in .map file", codeItem));
             }
         }
-        for(MemoryMapConfigMemoryItem item11 : config) {            
-            Matcher matcher = getPatternForDataMemoryMap(item11.getName()).matcher(sequence);
+
+        for (MemoryMapConfigMemoryItem dataItem : config) {
+            Matcher matcher = getPatternForDataMemoryMap(dataItem.getName()).matcher(sequence);
             boolean found = false;
-            while(matcher.find()) {                
-                item11.setName(matcher.group(2));
-                item11.setUsed(matcher.group(1));
+            while (matcher.find()) {
+                dataItem.setUsed(matcher.group(1));
+                System.out.println(dataItem.toString());
                 found = true;
             }
-            if(!found) {
-                logger.logp(Level.WARNING, "parseMapFile", IARMemoryMapParser.class.getName(), String.format("parseMapFile(File f, MemoryMapConfigMemory configuration) non existing item: %s",item11));
-                throw new IOException(String.format("Linker command element %s not found in .map file", item11));
+                System.out.println("/////////////////////////////////////////////////////");
+                System.out.println("Memory type: " + dataItem.getName() + "\t\tUsed memory: " + dataItem.getUsed());
+                System.out.println("/////////////////////////////////////////////////////");
+            if (!found) {
+                logger.logp(Level.WARNING, "parseMapFile", IARMemoryMapParser.class.getName(), String.format("parseMapFile(File f, MemoryMapConfigMemory configuration) non existing item: %s", dataItem));
+                throw new IOException(String.format("Linker command element %s not found in .map file", dataItem));
             }
         }
-        
-        for(MemoryMapConfigMemoryItem item3 : config) {            
-            Matcher matcher = getPatternForConstMemoryMap(item3.getName()).matcher(sequence);
+
+        for (MemoryMapConfigMemoryItem constItem : config) {
+            Matcher matcher = getPatternForConstMemoryMap(constItem.getName()).matcher(sequence);
             boolean found = false;
-            while(matcher.find()) {
-                item3.setName(matcher.group(2));
-                item3.setUsed(matcher.group(1));
+            while (matcher.find()) {
+                constItem.setUsed(matcher.group(1));
+                System.out.println(constItem.toString());
                 found = true;
             }
-            if(!found) {
-                logger.logp(Level.WARNING, "parseMapFile", IARMemoryMapParser.class.getName(), String.format("parseMapFile(File f, MemoryMapConfigMemory configuration) non existing item: %s",item3));
-                throw new IOException(String.format("Linker command element %s not found in .map file", item3));
+                System.out.println("/////////////////////////////////////////////////////");
+                System.out.println("Memory type: " + constItem.getName() + "\t\tUsed memory: " + constItem.getUsed());
+                System.out.println("/////////////////////////////////////////////////////");
+            if (!found) {
+                logger.logp(Level.WARNING, "parseMapFile", IARMemoryMapParser.class.getName(), String.format("parseMapFile(File f, MemoryMapConfigMemory configuration) non existing item: %s", constItem));
+                throw new IOException(String.format("Linker command element %s not found in .map file", constItem));
             }
         }
         return config;
@@ -480,6 +401,4 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
             return parser;
         }
     }
-    
-    
 }
