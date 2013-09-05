@@ -47,7 +47,7 @@ import org.kohsuke.stapler.StaplerRequest;
  *
  * @author Praqma
  */
-public class IARParser extends AbstractMemoryMapParser {
+public class IARMemoryMapParser extends AbstractMemoryMapParser {
 
     /*
      * Ram?? Flash?? Rom??
@@ -82,13 +82,13 @@ public class IARParser extends AbstractMemoryMapParser {
 //    private static HashMap<String, Pattern> patternRegistry;
 
     @DataBoundConstructor
-    public IARParser(String mapFile, String configurationFile, Integer wordSize, Boolean bytesOnGraph, Pattern... pattern) {
+    public IARMemoryMapParser(String mapFile, String configurationFile, Integer wordSize, Boolean bytesOnGraph, Pattern... pattern) {
         super(mapFile, configurationFile, wordSize, bytesOnGraph, INTVEC, OPTBYTE, SECUID, aseg, RCODE, CODE, NEAR_ID, NEAR_CONST, SWITCH, CHECKSUM, NEAR_A, SADDR_A, FAR_HEAP_SIZE,
                 NEAR_CONST_LOCATION_START, NEAR_CONST_LOCATION_END, NEAR_CONST_LOCATION, NEAR_HEAP_SIZE,
                 CSTACK_SIZE, NEAR_I, NEAR_Z, NEAR_N, CSTACK, SADDR_I, SADDR_Z);
     }
 
-    public IARParser() {
+    public IARMemoryMapParser() {
         super();
     }
 
@@ -318,31 +318,31 @@ public class IARParser extends AbstractMemoryMapParser {
 
 
                     if (item1 == null) {
-                        logger.logp(Level.WARNING, "parseConfigFile", IARParser.class.getName(), String.format("parseConfigFile(List<MemoryMapGraphConfiguration> graphConfig, File f) non existing item: %s", s));
+                        logger.logp(Level.WARNING, "parseConfigFile", IARMemoryMapParser.class.getName(), String.format("parseConfigFile(List<MemoryMapGraphConfiguration> graphConfig, File f) non existing item: %s", s));
                         throw new IOException(String.format("No match found for program memory named %s", s));
                     }
                     if (item2 == null) {
-                        logger.logp(Level.WARNING, "parseConfigFile", IARParser.class.getName(), String.format("parseConfigFile(List<MemoryMapGraphConfiguration> graphConfig, File f) non existing item: %s", s));
+                        logger.logp(Level.WARNING, "parseConfigFile", IARMemoryMapParser.class.getName(), String.format("parseConfigFile(List<MemoryMapGraphConfiguration> graphConfig, File f) non existing item: %s", s));
                         throw new IOException(String.format("No match found for program memory named %s", s));
                     }
                     if (item3 == null) {
-                        logger.logp(Level.WARNING, "parseConfigFile", IARParser.class.getName(), String.format("parseConfigFile(List<MemoryMapGraphConfiguration> graphConfig, File f) non existing item: %s", s));
+                        logger.logp(Level.WARNING, "parseConfigFile", IARMemoryMapParser.class.getName(), String.format("parseConfigFile(List<MemoryMapGraphConfiguration> graphConfig, File f) non existing item: %s", s));
                         throw new IOException(String.format("No match found for program memory named %s", s));
                     }
                     if (item4 == null) {
-                        logger.logp(Level.WARNING, "parseConfigFile", IARParser.class.getName(), String.format("parseConfigFile(List<MemoryMapGraphConfiguration> graphConfig, File f) non existing item: %s", s));
+                        logger.logp(Level.WARNING, "parseConfigFile", IARMemoryMapParser.class.getName(), String.format("parseConfigFile(List<MemoryMapGraphConfiguration> graphConfig, File f) non existing item: %s", s));
                         throw new IOException(String.format("No match found for program memory named %s", s));
                     }
                     if (item5 == null) {
-                        logger.logp(Level.WARNING, "parseConfigFile", IARParser.class.getName(), String.format("parseConfigFile(List<MemoryMapGraphConfiguration> graphConfig, File f) non existing item: %s", s));
+                        logger.logp(Level.WARNING, "parseConfigFile", IARMemoryMapParser.class.getName(), String.format("parseConfigFile(List<MemoryMapGraphConfiguration> graphConfig, File f) non existing item: %s", s));
                         throw new IOException(String.format("No match found for program memory named %s", s));
                     }
                     if (item6 == null) {
-                        logger.logp(Level.WARNING, "parseConfigFile", IARParser.class.getName(), String.format("parseConfigFile(List<MemoryMapGraphConfiguration> graphConfig, File f) non existing item: %s", s));
+                        logger.logp(Level.WARNING, "parseConfigFile", IARMemoryMapParser.class.getName(), String.format("parseConfigFile(List<MemoryMapGraphConfiguration> graphConfig, File f) non existing item: %s", s));
                         throw new IOException(String.format("No match found for program memory named %s", s));
                     }
 //                    if (item7 == null) {
-//                        logger.logp(Level.WARNING, "parseConfigFile", IARParser.class.getName(), String.format("parseConfigFile(List<MemoryMapGraphConfiguration> graphConfig, File f) non existing item: %s", s));
+//                        logger.logp(Level.WARNING, "parseConfigFile", IARMemoryMapParser.class.getName(), String.format("parseConfigFile(List<MemoryMapGraphConfiguration> graphConfig, File f) non existing item: %s", s));
 //                        throw new IOException(String.format("No match found for program memory named %s", s));
 //                    }
                 }
@@ -367,7 +367,7 @@ public class IARParser extends AbstractMemoryMapParser {
                 found = true;
             }
             if (!found) {
-                logger.logp(Level.WARNING, "parseMapFile", IARParser.class.getName(), String.format("parseMapFile(File f, MemoryMapConfigMemory configuration) non existing item: %s", codeItem));
+                logger.logp(Level.WARNING, "parseMapFile", IARMemoryMapParser.class.getName(), String.format("parseMapFile(File f, MemoryMapConfigMemory configuration) non existing item: %s", codeItem));
                 throw new IOException(String.format("Linker command element %s not found in .map file", codeItem));
             }
         }
@@ -382,7 +382,7 @@ public class IARParser extends AbstractMemoryMapParser {
                 found = true;
             }
             if (!found) {
-                logger.logp(Level.WARNING, "parseMapFile", IARParser.class.getName(), String.format("parseMapFile(File f, MemoryMapConfigMemory configuration) non existing item: %s", dataItem));
+                logger.logp(Level.WARNING, "parseMapFile", IARMemoryMapParser.class.getName(), String.format("parseMapFile(File f, MemoryMapConfigMemory configuration) non existing item: %s", dataItem));
                 throw new IOException(String.format("Linker command element %s not found in .map file", dataItem));
             }
         }
@@ -397,7 +397,7 @@ public class IARParser extends AbstractMemoryMapParser {
                 found = true;
             }
             if (!found) {
-                logger.logp(Level.WARNING, "parseMapFile", IARParser.class.getName(), String.format("parseMapFile(File f, MemoryMapConfigMemory configuration) non existing item: %s", constItem));
+                logger.logp(Level.WARNING, "parseMapFile", IARMemoryMapParser.class.getName(), String.format("parseMapFile(File f, MemoryMapConfigMemory configuration) non existing item: %s", constItem));
                 throw new IOException(String.format("Linker command element %s not found in .map file", constItem));
             }
         }
@@ -405,7 +405,7 @@ public class IARParser extends AbstractMemoryMapParser {
     }
 
     @Extension
-    public static final class DescriptorImpl extends MemoryMapParserDescriptor<IARParser> {
+    public static final class DescriptorImpl extends MemoryMapParserDescriptor<IARMemoryMapParser> {
 
         @Override
         public String getDisplayName() {
@@ -413,8 +413,8 @@ public class IARParser extends AbstractMemoryMapParser {
         }
 
         @Override
-        public IARParser newInstance(StaplerRequest req, JSONObject formData, AbstractMemoryMapParser instance) throws Descriptor.FormException {
-            IARParser parser = (IARParser) instance;
+        public IARMemoryMapParser newInstance(StaplerRequest req, JSONObject formData, AbstractMemoryMapParser instance) throws Descriptor.FormException {
+            IARMemoryMapParser parser = (IARMemoryMapParser) instance;
             save();
             return parser;
         }

@@ -58,7 +58,7 @@ public class HexUtils {
     }
      
     private static double getRadix(String hexString, int radix) {
-        Double i = (double)(Integer.parseInt(hexString.replace("0x",""), radix));
+        Double i = (double)(Integer.parseInt(hexString.replace("0x","").replaceAll("\\s", ""), radix));
         return i;
     }
 }
