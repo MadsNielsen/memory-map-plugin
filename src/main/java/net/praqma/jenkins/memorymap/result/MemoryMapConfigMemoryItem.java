@@ -35,6 +35,7 @@ public class MemoryMapConfigMemoryItem implements Serializable {
     private String name;
     private String origin;
     private String length;
+    private String endAddress;
     private String used = "";
     private String unused = "";
     private List<MemoryMapConfigMemoryItem> associatedSections;
@@ -101,7 +102,23 @@ public class MemoryMapConfigMemoryItem implements Serializable {
     public void setLength(String length) {
         this.length = length;
     }
-
+    
+    /**
+     * @return the endAddress
+     */
+    public String getEndAddress() {
+        return endAddress;
+    }
+    
+    /**
+     * 
+     * @param endAddress of the segment (IAR)
+     */
+    public void setEndAddress(String endAddress) {
+        this.endAddress = endAddress;
+    }
+    
+     
     /**
      * @return the associatedSections
      */
@@ -115,7 +132,12 @@ public class MemoryMapConfigMemoryItem implements Serializable {
     public void setAssociatedSections(List<MemoryMapConfigMemoryItem> associatedSections) {
         this.setAssociatedSections(associatedSections);
     }
-
+    
+    public String toStringIAR(){
+        return String.format("%s [origin = %s, endAddress = %s, segmentLength = %s]",
+        getName(), getOrigin(), getEndAddress(), getLength());
+    }
+    
     @Override
     public String toString() {
         return String.format("%s [origin = %s, length = %s, used = %s, unused = %s]", getName(), getOrigin(), getLength(), getUsed(), getUnused());
