@@ -31,7 +31,9 @@ import java.util.List;
  * @author Praqma
  */
 public class MemoryMapConfigMemoryItem implements Serializable {
-
+    
+    // added a endAddress variable for the IAR Parser
+    
     private String name;
     private String origin;
     private String length;
@@ -42,6 +44,13 @@ public class MemoryMapConfigMemoryItem implements Serializable {
 
     public MemoryMapConfigMemoryItem() { }
     
+    /**
+     * 
+     * @param name
+     * @param origin 
+     * Used for the IAR Parser 
+     */
+   
     public MemoryMapConfigMemoryItem (String name, String origin){
         this.name = name != null ? name.trim() : "";
         this.origin = origin;
@@ -104,7 +113,7 @@ public class MemoryMapConfigMemoryItem implements Serializable {
     }
     
     /**
-     * @return the endAddress
+     * @return the endAddress of the segment (IAR)
      */
     public String getEndAddress() {
         return endAddress;
@@ -133,6 +142,10 @@ public class MemoryMapConfigMemoryItem implements Serializable {
         this.setAssociatedSections(associatedSections);
     }
     
+    /**
+     * 
+     * @return toString for the IAR parser 
+     */
     public String toStringIAR(){
         return String.format("%s [origin = %s, endAddress = %s, length = %s]",
         getName(), getOrigin(), getEndAddress(), getLength());
