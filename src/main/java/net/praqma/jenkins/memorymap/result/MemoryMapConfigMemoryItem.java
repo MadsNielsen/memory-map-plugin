@@ -134,7 +134,7 @@ public class MemoryMapConfigMemoryItem implements Serializable {
     }
     
     public String toStringIAR(){
-        return String.format("%s [origin = %s, endAddress = %s, segmentLength = %s]",
+        return String.format("%s [origin = %s, endAddress = %s, length = %s]",
         getName(), getOrigin(), getEndAddress(), getLength());
     }
     
