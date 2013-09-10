@@ -342,7 +342,7 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
         }
         System.out.println("parseMapFile: SUCCESS");
         return config;
-        
+
     }
 
     @Extension
