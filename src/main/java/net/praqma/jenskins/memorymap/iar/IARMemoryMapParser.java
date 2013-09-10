@@ -292,12 +292,9 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
 
         for (MemoryMapConfigMemoryItem codeItem : config) {
             Matcher matcher = getPatternForCodeMemoryMap(codeItem.getName()).matcher(sequence);
-//            System.out.println(codeItem.toString());
             boolean found = false;
             while (matcher.find()) {
-                // codeItem.setName(matcher.group(2));
                 codeItem.setUsed(matcher.group(1));
-//                System.out.println("Inside the while loop in the parseMapFile method!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 found = true;
             }
             if (!found) {
@@ -310,9 +307,7 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
             Matcher matcher = getPatternForDataMemoryMap(dataItem.getName()).matcher(sequence);
             boolean found = false;
             while (matcher.find()) {
-                // dataItem.setName(matcher.group(2));
                 dataItem.setUsed(matcher.group(1));
-//                System.out.println(dataItem.toString());
                 found = true;
             }
             if (!found) {
@@ -325,9 +320,7 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
             Matcher matcher = getPatternForConstMemoryMap(constItem.getName()).matcher(sequence);
             boolean found = false;
             while (matcher.find()) {
-                //  constItem.setName(matcher.group(2));
                 constItem.setUsed(matcher.group(1));
-//                System.out.println(constItem.toString());
                 found = true;
             }
             if (!found) {
