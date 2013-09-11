@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package net.praqma.jenskins.memorymap.iar;
+package net.praqma.jenkins.memorymap.parser;
 
 import hudson.Extension;
 import hudson.model.Descriptor;
