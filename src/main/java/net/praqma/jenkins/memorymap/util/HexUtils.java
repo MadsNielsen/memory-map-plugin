@@ -35,7 +35,7 @@ public class HexUtils {
     private static final int HEXA_RADIX = 16;
     private static final int BITS_PER_BYTE = 8;
     
-    
+    private static final double DEFAULT = 1d;
     private static final double KILO = 1024;
     private static final double MEGA = KILO*1024;
     private static final double GIGA = MEGA*1024;
@@ -43,6 +43,7 @@ public class HexUtils {
     private static final Map<String, Double> scale = new HashMap<String, Double>();
     
     static {
+        scale.put("default", DEFAULT);
         scale.put("kilo", KILO);
         scale.put("mega", MEGA);
         scale.put("giga", GIGA);
@@ -57,7 +58,7 @@ public class HexUtils {
     }
      
     private static double getRadix(String hexString, int radix) {
-        Double i = (double)(Integer.parseInt(hexString.replace("0x",""), radix));
+        Double i = (double)(Integer.parseInt(hexString.replace("0x","").replaceAll("\\s", ""), radix));
         return i;
     }
 }

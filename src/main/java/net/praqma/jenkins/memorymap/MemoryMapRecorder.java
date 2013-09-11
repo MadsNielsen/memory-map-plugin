@@ -248,6 +248,7 @@ public class MemoryMapRecorder extends Recorder {
         
         private List<String> getScales(){
             List<String> scales = new ArrayList<String>();
+            scales.add("default");
             scales.add("kilo");
             scales.add("Mega");
             scales.add("Giga");

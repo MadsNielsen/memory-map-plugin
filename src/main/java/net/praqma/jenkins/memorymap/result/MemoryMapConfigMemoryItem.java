@@ -31,15 +31,30 @@ import java.util.List;
  * @author Praqma
  */
 public class MemoryMapConfigMemoryItem implements Serializable {
-
+    
+    // added a endAddress variable for the IAR Parser
+    
     private String name;
     private String origin;
     private String length;
+    private String endAddress;
     private String used = "";
     private String unused = "";
     private List<MemoryMapConfigMemoryItem> associatedSections;
 
     public MemoryMapConfigMemoryItem() { }
+    
+    /**
+     * 
+     * @param name
+     * @param origin 
+     * Used for the IAR Parser 
+     */
+   
+    public MemoryMapConfigMemoryItem (String name, String origin){
+        this.name = name != null ? name.trim() : "";
+        this.origin = origin;
+    }
 
     public MemoryMapConfigMemoryItem(String name, String origin, String length) {
         this.name = name != null ? name.trim() : "";
@@ -96,7 +111,23 @@ public class MemoryMapConfigMemoryItem implements Serializable {
     public void setLength(String length) {
         this.length = length;
     }
-
+    
+    /**
+     * @return the endAddress of the segment (IAR)
+     */
+    public String getEndAddress() {
+        return endAddress;
+    }
+    
+    /**
+     * 
+     * @param endAddress of the segment (IAR)
+     */
+    public void setEndAddress(String endAddress) {
+        this.endAddress = endAddress;
+    }
+    
+     
     /**
      * @return the associatedSections
      */
@@ -110,7 +141,16 @@ public class MemoryMapConfigMemoryItem implements Serializable {
     public void setAssociatedSections(List<MemoryMapConfigMemoryItem> associatedSections) {
         this.setAssociatedSections(associatedSections);
     }
-
+    
+    /**
+     * 
+     * @return toString for the IAR parser 
+     */
+    public String toStringIAR(){
+        return String.format("%s [origin = %s, endAddress = %s, length = %s]",
+        getName(), getOrigin(), getEndAddress(), getLength());
+    }
+    
     @Override
     public String toString() {
         return String.format("%s [origin = %s, length = %s, used = %s, unused = %s]", getName(), getOrigin(), getLength(), getUsed(), getUnused());
