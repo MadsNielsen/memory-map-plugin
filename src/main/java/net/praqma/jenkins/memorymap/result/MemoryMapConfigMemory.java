@@ -46,5 +46,26 @@ public class MemoryMapConfigMemory extends LinkedList<MemoryMapConfigMemoryItem>
         
         return builder.toString();
     }
-      
+
+    /**
+     * 
+     * @param e
+     * @return
+     */
+    @Override
+    public boolean add(MemoryMapConfigMemoryItem e) {
+        /*
+        if(contains(e)) {
+            int index = indexOf(e);
+            MemoryMapConfigMemoryItem existing = this.get(index);
+            
+            return false;
+        } else {
+        * /
+            return super.add(e); /*
+        }
+        */ 
+        return super.add(e);
+    }
+
 }
