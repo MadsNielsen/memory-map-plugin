@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2012 Praqma.
+ * Copyright 2013 mads.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,26 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package net.praqma.jenkins.unit;
-
-import net.praqma.jenkins.memorymap.MemoryMapBuildAction;
-import org.junit.Test;
-import static org.junit.Assert.*;
+package net.praqma.jenkins.memorymap.util;
 
 /**
  *
- * @author Praqma
+ * @author mads
  */
-
-
-public class MemoryMapBuildActionSimpleTest {
+public interface MemoryMapError {
     
-    @Test
-    public void memoryMapBuildAction_trivial_accessor_mutator_test() throws Exception {
-        MemoryMapBuildAction memoryMapBuildAction = new MemoryMapBuildAction(null, null);
-        assertNull(memoryMapBuildAction.getIconFileName());
-        assertNull(memoryMapBuildAction.getUrlName());
-        assertEquals("Memory map", memoryMapBuildAction.getDisplayName());
-    }
-
 }

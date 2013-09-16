@@ -25,7 +25,6 @@ package net.praqma.jenkins.memorymap.util;
 
 import hudson.FilePath;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import org.apache.tools.ant.types.FileSet;
 
@@ -46,13 +45,13 @@ public abstract class FileFoundable<T> implements FilePath.FileCallable<T>  {
         
         int numberOfFoundFiles = fileSet.getDirectoryScanner(project).getIncludedFiles().length;
         if(numberOfFoundFiles == 0) {
-            throw new FileNotFoundException(String.format("Filematcher found no files using pattern %s in folder %s",pattern,file.getAbsolutePath()));
+            throw new MemoryMapFileNotFoundError(String.format("Filematcher found no files using pattern %s in folder %s", pattern, file.getAbsolutePath()), file);
         } 
         
         File f = new File(file.getAbsoluteFile() + System.getProperty("file.separator") + fileSet.getDirectoryScanner(project).getIncludedFiles()[0]);
 
         if(!f.exists()) {
-            throw new FileNotFoundException(String.format("File %s not found workspace was %s scanner found %s files.", f.getAbsolutePath(),file.getAbsolutePath(),numberOfFoundFiles));
+            throw new MemoryMapFileNotFoundError(String.format("File %s not found workspace was %s scanner found %s files.", f.getAbsolutePath(),file.getAbsolutePath(),numberOfFoundFiles), file);            
         }
         return f;
     } 

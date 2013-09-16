@@ -61,4 +61,40 @@ public class HexUtils {
         Double i = (double)(Integer.parseInt(hexString.replace("0x","").replaceAll("\\s", ""), radix));
         return i;
     }
+    
+    public static class HexString implements Comparable<HexString> {
+        
+        public final String rawString;
+        
+        public HexString(String rawString) {
+            this.rawString = rawString;
+        }
+        
+        public HexString(Integer value) {
+            this.rawString = Integer.toHexString(value);
+        }
+        
+        public Integer getIntegerValue() {
+            return Integer.parseInt(rawString, 16);
+        }
+        
+        public HexUtils.HexString getLengthAsHex(HexString other) {
+           int diff = Math.abs(getIntegerValue() - other.getIntegerValue());
+           return new HexUtils.HexString(diff);
+        }
+
+        @Override
+        public int compareTo(HexString t) {
+            int current = Integer.parseInt(rawString, 16);
+            int other = Integer.parseInt(t.rawString, 16);
+            
+            if (other > current) {
+                return 1;
+            } else if (other < current) {
+                return -1;
+            } else {
+                return 0;
+            }            
+        }
+    }
 }

@@ -55,20 +55,7 @@ public class MemoryMapConfigFileParserDelegate extends FileFoundable<MemoryMapCo
     
     @Override
     public MemoryMapConfigMemory invoke(File f, VirtualChannel channel) throws IOException, InterruptedException {
-        MemoryMapConfigMemory mmcm = null;
-        
-        try {
-            mmcm = parser.parseConfigFile(graphConfig, findFile(f, parser.getConfigurationFile()));
-        } catch (IOException ex) {
-            log.logp(Level.WARNING, "invoke", MemoryMapConfigFileParserDelegate.class.getName(), "invoke caught file not found exception", ex);
-            throw new IOException(ex.getMessage());
-        }
-        
-        if(mmcm == null) {
-            log.warning("Result was null, and no exception was thrown, this should NOT happen");
-            throw new IOException("Result was null, and no exception was thrown, this should NOT happen");
-        }
-        
+        MemoryMapConfigMemory mmcm  = parser.parseConfigFile(graphConfig, findFile(f, parser.getConfigurationFile()));
         return mmcm;
     }
 

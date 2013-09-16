@@ -25,6 +25,7 @@ package net.praqma.jenkins.memorymap.result;
 
 import java.io.Serializable;
 import java.util.List;
+import net.praqma.jenkins.memorymap.util.HexUtils;
 
 /**
  *
@@ -41,6 +42,9 @@ public class MemoryMapConfigMemoryItem implements Serializable {
     private String used = "";
     private String unused = "";
     private List<MemoryMapConfigMemoryItem> associatedSections;
+    
+
+    
 
     public MemoryMapConfigMemoryItem() { }
     
@@ -123,10 +127,21 @@ public class MemoryMapConfigMemoryItem implements Serializable {
      * 
      * @param endAddress of the segment (IAR)
      */
-    public void setEndAddress(String endAddress) {
+    public void setEndAddress(String endAddress) {        
         this.endAddress = endAddress;
     }
     
+    /**
+     * Calculates the "length" of a segment if the map file does not explicitly tell it to do so.
+     * @param startHex
+     * @param endHex 
+     */
+    public void setCalculatedLength(String startHex, String endHex) {
+        HexUtils.HexString sHex = new HexUtils.HexString(startHex);
+        HexUtils.HexString eHex = new HexUtils.HexString(endHex);
+        HexUtils.HexString length = sHex.getLengthAsHex(eHex);
+        setLength(length.rawString);
+    }
      
     /**
      * @return the associatedSections
@@ -141,19 +156,11 @@ public class MemoryMapConfigMemoryItem implements Serializable {
     public void setAssociatedSections(List<MemoryMapConfigMemoryItem> associatedSections) {
         this.setAssociatedSections(associatedSections);
     }
-    
-    /**
-     * 
-     * @return toString for the IAR parser 
-     */
-    public String toStringIAR(){
-        return String.format("%s [origin = %s, endAddress = %s, length = %s]",
-        getName(), getOrigin(), getEndAddress(), getLength());
-    }
+
     
     @Override
     public String toString() {
-        return String.format("%s [origin = %s, length = %s, used = %s, unused = %s]", getName(), getOrigin(), getLength(), getUsed(), getUnused());
+        return String.format("%s [origin = %s, length = %s, used = %s, unused = %s, endAddress = %s]", getName(), getOrigin(), getLength(), getUsed(), getUnused(), getEndAddress());
     }
 
     /**
@@ -181,7 +188,7 @@ public class MemoryMapConfigMemoryItem implements Serializable {
      * @param unused the unused to set
      */
     public void setUnused(String unused) {
-        this.unused = unused;
+        this.unused = unused;    
     }
 
     public boolean addChild(String parentName, MemoryMapConfigMemoryItem item) {
@@ -203,5 +210,18 @@ public class MemoryMapConfigMemoryItem implements Serializable {
             }
         }
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 83 * hash + (this.name != null ? this.name.hashCode() : 0);
+        hash = 83 * hash + (this.origin != null ? this.origin.hashCode() : 0);
+        hash = 83 * hash + (this.length != null ? this.length.hashCode() : 0);
+        hash = 83 * hash + (this.endAddress != null ? this.endAddress.hashCode() : 0);
+        hash = 83 * hash + (this.used != null ? this.used.hashCode() : 0);
+        hash = 83 * hash + (this.unused != null ? this.unused.hashCode() : 0);
+        hash = 83 * hash + (this.associatedSections != null ? this.associatedSections.hashCode() : 0);
+        return hash;
     }
 }
