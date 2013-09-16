@@ -32,15 +32,21 @@ import net.praqma.jenkins.memorymap.util.HexUtils;
  * @author Praqma
  */
 public class MemoryMapConfigMemoryItem implements Serializable {
-    
-    // added a endAddress variable for the IAR Parser
-    
+
     private String name;
+    
+    //The "start" address. Not always relavant but in some cases we use the 'origin' and the 'endAddress' to calculate the size
     private String origin;
-    private String length;
     private String endAddress;
+    
+    //The "length" attribute is used to display MAX values on graphs.    
+    private String length;   
+
+    //The used attributes is what is consumed by the component
     private String used = "";
     private String unused = "";
+    
+    //Model property for 
     private List<MemoryMapConfigMemoryItem> associatedSections;
     
 
@@ -139,8 +145,8 @@ public class MemoryMapConfigMemoryItem implements Serializable {
     public void setCalculatedLength(String startHex, String endHex) {
         HexUtils.HexString sHex = new HexUtils.HexString(startHex);
         HexUtils.HexString eHex = new HexUtils.HexString(endHex);
-        HexUtils.HexString length = sHex.getLengthAsHex(eHex);
-        setLength(length.rawString);
+        HexUtils.HexString len = sHex.getLengthAsHex(eHex);
+        setLength(len.rawString);
     }
      
     /**

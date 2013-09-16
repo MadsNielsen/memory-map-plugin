@@ -64,6 +64,7 @@ public abstract class AbstractMemoryMapParser implements Describable<AbstractMem
     private Integer wordSize;
     private Boolean bytesOnGraph;
 
+    public abstract int getDefaultWordSize();
     
     public AbstractMemoryMapParser () {  
         this.patterns = ListUtils.EMPTY_LIST;

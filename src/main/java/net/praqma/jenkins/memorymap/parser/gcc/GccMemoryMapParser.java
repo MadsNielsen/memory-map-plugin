@@ -38,6 +38,11 @@ public class GccMemoryMapParser extends AbstractMemoryMapParser implements Seria
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
+    public int getDefaultWordSize() {
+        return 8;
+    }
+
     @Extension
     public static final class DescriptorImpl extends MemoryMapParserDescriptor<GccMemoryMapParser> {
 

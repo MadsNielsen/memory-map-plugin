@@ -255,7 +255,8 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
             boolean found = false;
             
             while (matcher.find()) {
-                codeItem.setUsed(matcher.group(1));
+                HexUtils.HexString s = new HexUtils.HexString(Integer.parseInt(matcher.group(1).replaceAll("\\s", "")));
+                codeItem.setUsed(s.rawString);
                 found = true;
             }
             
@@ -267,6 +268,11 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
         }
         return config;
 
+    }
+
+    @Override
+    public int getDefaultWordSize() {
+       return 8;
     }
 
     @Extension
