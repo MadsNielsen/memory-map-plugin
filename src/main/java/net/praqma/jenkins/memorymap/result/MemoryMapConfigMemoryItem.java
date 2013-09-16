@@ -145,8 +145,8 @@ public class MemoryMapConfigMemoryItem implements Serializable {
     public void setCalculatedLength(String startHex, String endHex) {
         HexUtils.HexString sHex = new HexUtils.HexString(startHex);
         HexUtils.HexString eHex = new HexUtils.HexString(endHex);
-        HexUtils.HexString length = sHex.getLengthAsHex(eHex);
-        setLength(length.rawString);
+        HexUtils.HexString len = sHex.getLengthAsHex(eHex);
+        setLength(len.rawString);
     }
      
     /**
