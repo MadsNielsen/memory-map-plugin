@@ -82,7 +82,7 @@ public class MemoryMapRecorder extends Recorder {
         this.chosenParser = chosenParser;
         this.configurationFile = configurationFile;        
         this.showBytesOnGraph = showBytesOnGraph;
-        this.wordSize = StringUtils.isBlank(wordSize) ? 16 : Integer.parseInt(wordSize);   
+        this.wordSize = StringUtils.isBlank(wordSize) ? chosenParser.getDefaultWordSize() : Integer.parseInt(wordSize);   
         this.scale = scale;
     }
     

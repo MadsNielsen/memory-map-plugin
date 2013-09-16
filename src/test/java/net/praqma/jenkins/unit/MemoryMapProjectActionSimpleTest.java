@@ -32,7 +32,7 @@ import static org.junit.Assert.*;
  *
  * @author Praqma
  */
-public class MemomoryMapProjectActionSimpleTest {
+public class MemoryMapProjectActionSimpleTest {
     
     @Test
     public void memoryMapProjectAction_trivial_accessor_mutator_test()  {

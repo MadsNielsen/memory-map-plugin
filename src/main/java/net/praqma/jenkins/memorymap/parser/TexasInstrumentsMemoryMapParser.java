@@ -109,6 +109,11 @@ public class TexasInstrumentsMemoryMapParser extends AbstractMemoryMapParser {
         return super.parseMapFile(f, config);
     }
 
+    @Override
+    public int getDefaultWordSize() {
+        return 16;
+    }
+
     @Extension
     public static final class DescriptorImpl extends MemoryMapParserDescriptor<TexasInstrumentsMemoryMapParser> {
 
