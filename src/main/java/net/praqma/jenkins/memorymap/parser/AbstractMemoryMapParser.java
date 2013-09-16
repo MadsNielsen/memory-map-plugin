@@ -46,6 +46,7 @@ import jenkins.model.Jenkins;
 import net.praqma.jenkins.memorymap.graph.MemoryMapGraphConfiguration;
 import net.praqma.jenkins.memorymap.result.MemoryMapConfigMemory;
 import net.praqma.jenkins.memorymap.result.MemoryMapConfigMemoryItem;
+import net.praqma.jenkins.memorymap.util.MemoryMapMemorySelectionError;
 import org.apache.commons.collections.ListUtils;
 
 /**
@@ -123,7 +124,7 @@ public abstract class AbstractMemoryMapParser implements Describable<AbstractMem
                 }                
                 if(item == null) {
                     logger.logp(Level.WARNING, "parseConfigFile", AbstractMemoryMapParser.class.getName(), String.format("parseConfigFile(List<MemoryMapGraphConfiguration> graphConfig, File f) non existing item: %s",s));
-                    throw new IOException(String.format("No match found for program memory named %s",s));
+                    throw new MemoryMapMemorySelectionError(String.format("No match found for program memory named %s",s));
                 }
                 
             }
@@ -144,8 +145,8 @@ public abstract class AbstractMemoryMapParser implements Describable<AbstractMem
                 found = true;
             }
             if(!found) {
-                logger.logp(Level.WARNING, "parseMapFile", AbstractMemoryMapParser.class.getName(), String.format("parseMapFile(File f, MemoryMapConfigMemory configuration) non existing item: %s",item));
-                throw new IOException(String.format("Linker command element %s not found in .map file", item));
+                logger.logp(Level.WARNING, "parseMapFile", AbstractMemoryMapParser.class.getName(), String.format("parseMapFile(File f, MemoryMapConfigMemory configuration) non existing item: %s",item));                
+                throw new MemoryMapMemorySelectionError(String.format("Linker command element %s not found in .map file", item));
             }
         }
         return configuration;

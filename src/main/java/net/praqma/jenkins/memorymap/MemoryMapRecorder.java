@@ -23,7 +23,7 @@
  */
 package net.praqma.jenkins.memorymap;
 
-import com.sun.jna.StringArray;
+import hudson.AbortException;
 import hudson.Extension;
 import hudson.Launcher;
 import hudson.model.AbstractBuild;
@@ -36,26 +36,27 @@ import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Publisher;
 import hudson.tasks.Recorder;
-import hudson.util.FormValidation;
 import hudson.util.ListBoxModel;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.praqma.jenkins.memorymap.graph.MemoryMapGraphConfiguration;
 import net.praqma.jenkins.memorymap.parser.AbstractMemoryMapParser;
 import net.praqma.jenkins.memorymap.parser.MemoryMapConfigFileParserDelegate;
 import net.praqma.jenkins.memorymap.parser.MemoryMapMapParserDelegate;
 import net.praqma.jenkins.memorymap.parser.MemoryMapParserDescriptor;
 import net.praqma.jenkins.memorymap.result.MemoryMapConfigMemory;
-import net.praqma.jenkins.memorymap.result.MemoryMapGroup;
+import net.praqma.jenkins.memorymap.util.MemoryMapError;
+import net.praqma.util.ExceptionUtils;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
-import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
-
+import net.praqma.util.ExceptionUtils.*;
 /**
  *
  * @author Praqma
@@ -69,6 +70,7 @@ public class MemoryMapRecorder extends Recorder {
     public final String scale;
     private AbstractMemoryMapParser chosenParser;
     private List<MemoryMapGraphConfiguration> graphConfiguration;
+    private static final Logger log = Logger.getLogger(MemoryMapRecorder.class.getName());
         
     @Override
     public BuildStepMonitor getRequiredMonitorService() {
@@ -100,8 +102,16 @@ public class MemoryMapRecorder extends Recorder {
             config = build.getWorkspace().act(new MemoryMapConfigFileParserDelegate(graphConfiguration, chosenParser));
             config = build.getWorkspace().act(new MemoryMapMapParserDelegate(chosenParser, config));
         } catch(IOException ex) {
-            ex.printStackTrace(out);
-            failed = true;
+            //Catch all known errors (By using a marker interface)
+            if (ex instanceof MemoryMapError) {
+                out.println(ex.getMessage());
+            } else {
+                out.println("Unspecified error. Writing trace to log");
+                log.log(Level.SEVERE, "Abnormal plugin execution, trace written to log", ex);
+                throw new AbortException( String.format("Unspecified error. Please review error message.%nPlease install the logging plugin to record the standard java logger output stream."
+                        + "%nThe plugin is described here: https://wiki.jenkins-ci.org/display/JENKINS/Logging+plugin and requires core 1.483  "));
+            }       
+            return false;
         }
 
         out.println("Printing configuration");
@@ -114,13 +124,7 @@ public class MemoryMapRecorder extends Recorder {
 
         MemoryMapBuildAction mmba = new MemoryMapBuildAction(build, config);
         mmba.setRecorder(this);
-        mmba.setMemoryMapConfig(config);        
-        
-        if(failed) {
-            build.setResult(Result.FAILURE);
-            return false;
-        }
-        
+        mmba.setMemoryMapConfig(config);                
         build.getActions().add(mmba);
         
         return true;        

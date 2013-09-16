@@ -76,10 +76,17 @@
     </build>
     
     <repositories>
+        
         <repository>
             <id>repo.jenkins-ci.org</id>
             <url>http://repo.jenkins-ci.org/public/</url>
         </repository>
+        
+        <repository>
+            <id>praqma</id>
+            <url>http://code.praqma.net/repo/maven</url>
+        </repository>
+        
     </repositories>
   
     <pluginRepositories>
@@ -88,6 +95,14 @@
             <url>http://repo.jenkins-ci.org/public/</url>
         </pluginRepository>
     </pluginRepositories>
+    
+    <dependencies>
+        <dependency>
+            <groupId>net.praqma</groupId>
+            <artifactId>praqmajutils</artifactId>
+            <version>0.1.34</version>
+        </dependency>
+    </dependencies>
     
     <profiles>
         <profile>

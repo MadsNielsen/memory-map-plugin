@@ -59,17 +59,7 @@ public class MemoryMapMapParserDelegate extends FileFoundable<MemoryMapConfigMem
 
     @Override
     public MemoryMapConfigMemory invoke(File file, VirtualChannel vc) throws IOException, InterruptedException {        
-
-        try {
-            return getParser().parseMapFile(findFile(file, parser.getMapFile()), config); 
-        } catch (FileNotFoundException fnfex) {
-            log.logp(Level.WARNING, "invoke", MemoryMapConfigFileParserDelegate.class.getName(), "invoke caught file not found exception", fnfex);
-            throw new IOException(fnfex.getMessage());
-        } catch (IOException ex) {
-            log.logp(Level.WARNING, "invoke", MemoryMapConfigFileParserDelegate.class.getName(), "invoke caught IOException", ex);
-            throw new IOException(ex.getMessage());                    
-        }
- 
+        return getParser().parseMapFile(findFile(file, parser.getMapFile()), config); 
     }
 
     /**
