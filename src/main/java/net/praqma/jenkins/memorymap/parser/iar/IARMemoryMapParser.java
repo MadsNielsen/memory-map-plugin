@@ -90,27 +90,11 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
         super();
     }
 
-
-
-
-
     private static Pattern getPatternForMemoryTypeDividedConfig(String memoryTypeName) {
         String RegEx = String.format("(-[P+Z]).(%s).[\\w+,]+=(.)([A-f,0-9]{4,})\\-([A-f,0-9]{4,})(]/10000)$", memoryTypeName);
         Pattern memoryType = Pattern.compile(RegEx, Pattern.MULTILINE);
         return memoryType;
     }
-//    
-//    private static Pattern getPatternForConstMemoryDividedConfig(String memoryTypeName) {
-//        String RegEx = String.format("(-[P+Z]).(%s).[\\w+,]+=(.)([A-f,0-9]{4,})\\-([A-f,0-9]{4,})(]/10000)$", memoryTypeName);
-//        Pattern memoryType = Pattern.compile(RegEx, Pattern.MULTILINE);
-//        return memoryType;
-//    }
-//    
-//    private static Pattern getPatternForCodeMemoryDividedConfig(String memoryTypeName) {
-//        String RegEx = String.format("(-[P+Z]).(%s).[\\w+,]+=(.)([A-f,0-9]{4,})\\-([A-f,0-9]{4,})(]/10000)$", memoryTypeName);        
-//        Pattern memoryType = Pattern.compile(RegEx, Pattern.MULTILINE);
-//        return memoryType;
-//    }
 
     private static Pattern getPatternForConstMemoryConfig(String memoryTypeName) {
         String RegEx = String.format("(-[P+Z]).(%s).(\\w..)+=([A-f,0-9]{4,})\\-([A-f,0-9]{4,})$", memoryTypeName);
@@ -123,11 +107,6 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
         Pattern memoryType = Pattern.compile(RegEx, Pattern.MULTILINE);
         return memoryType;
     }
-//    private static Pattern getPatternForCodeMemoryConfig(String memoryTypeName) {
-//        String RegEx = String.format("(-[P+Z]).(%s).[\\w+,]+=([A-f,0-9]{4,})\\-([A-f,0-9]{4,})$", memoryTypeName);
-//        Pattern memoryType = Pattern.compile(RegEx, Pattern.MULTILINE);
-//        return memoryType;
-//    }
 
     private static Pattern getPatternForConstMemoryConfigSharp(String memoryTypeName) {
         String RegEx = String.format("(-[P+Z]).(%s).(\\w*)+#([A-f,0-9]{4,})$", memoryTypeName);
