@@ -205,10 +205,10 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
                         }
 
                         while (constMatcher2.find()) {
-                            constItem2 = new MemoryMapConfigMemoryItem(constMatcher2.group(2), constMatcher2.group(4));
-                            constItem2.setEndAddress(constMatcher2.group(5));
+                            constItem2 = new MemoryMapConfigMemoryItem(constMatcher2.group(2), constMatcher2.group(3));
+                            constItem2.setEndAddress(constMatcher2.group(4));
                             //constItem2.setLength(getSegmentLength(constMatcher2.group(4), constMatcher2.group(5)) + "");
-                            constItem2.setCalculatedLength(constMatcher2.group(4), constMatcher2.group(5));
+                            constItem2.setCalculatedLength(constMatcher2.group(3), constMatcher2.group(4));
                             config.add(constItem2);
                         }
 
