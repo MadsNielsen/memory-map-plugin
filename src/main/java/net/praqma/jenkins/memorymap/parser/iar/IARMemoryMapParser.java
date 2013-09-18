@@ -89,32 +89,32 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
     public IARMemoryMapParser() {
         super();
     }
-
-    private static Pattern getPatternForMemoryTypeDividedConfig(String memoryTypeName) {
+    
+    public static Pattern getPatternForMemoryTypeDividedConfig(String memoryTypeName) {
         String RegEx = String.format("(-[P+Z]).(%s).[\\w+,]+=(.)([A-f,0-9]{4,})\\-([A-f,0-9]{4,})(]/10000)$", memoryTypeName);
         Pattern memoryType = Pattern.compile(RegEx, Pattern.MULTILINE);
         return memoryType;
     }
 
-    private static Pattern getPatternForConstMemoryConfig(String memoryTypeName) {
+    public static Pattern getPatternForConstMemoryConfig(String memoryTypeName) {
         String RegEx = String.format("(-[P+Z]).(%s).(\\w..)+=([A-f,0-9]{4,})\\-([A-f,0-9]{4,})$", memoryTypeName);
         Pattern memoryType = Pattern.compile(RegEx, Pattern.MULTILINE);
         return memoryType;
     }
 
-    private static Pattern getPatternForDataAndCodeMemoryConfig(String memoryTypeName) {
+    public static Pattern getPatternForDataAndCodeMemoryConfig(String memoryTypeName) {
         String RegEx = String.format("(-[P+Z]).(%s).[\\w+,]+=([A-f,0-9]{4,})\\-([A-f,0-9]{4,})$", memoryTypeName);
         Pattern memoryType = Pattern.compile(RegEx, Pattern.MULTILINE);
         return memoryType;
     }
 
-    private static Pattern getPatternForConstMemoryConfigSharp(String memoryTypeName) {
+    public static Pattern getPatternForConstMemoryConfigSharp(String memoryTypeName) {
         String RegEx = String.format("(-[P+Z]).(%s).(\\w*)+#([A-f,0-9]{4,})$", memoryTypeName);
         Pattern memoryType = Pattern.compile(RegEx, Pattern.MULTILINE);
         return memoryType;
     }
 
-    private static Pattern getPatternForMemoryType(String memoryTypeName) {
+    public static Pattern getPatternForMemoryType(String memoryTypeName) {
         String RegEx = String.format("([\\d|\\s]*)\\sbytes of (%s)", memoryTypeName);
         Pattern memoryType = Pattern.compile(RegEx, Pattern.MULTILINE);
         return memoryType;
