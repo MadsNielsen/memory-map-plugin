@@ -90,10 +90,6 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
         super();
     }
 
-
-
-
-
     private static Pattern getPatternForDataMemoryDividedConfig(String memoryTypeName) {
         String RegEx = String.format("(-[P+Z]).(%s).[\\w+,]+=(.)([A-f,0-9]{4,})\\-([A-f,0-9]{4,})(]/10000)$", memoryTypeName);
         Pattern memoryType = Pattern.compile(RegEx, Pattern.MULTILINE);
@@ -148,8 +144,8 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
         for (MemoryMapGraphConfiguration graph : graphConfig) {
             String[] split = graph.getGraphDataList().split(",");
             for (String s : split) {
-                s.trim();
-                String[] multiSections = s.split("\\+");
+
+                String[] multiSections = s.trim().split("\\+");
                 for (String ms : multiSections) {
 
                     if (ms.matches("CODE")) {
@@ -159,28 +155,21 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
 
                         MemoryMapConfigMemoryItem codeItem1 = null;
                         MemoryMapConfigMemoryItem codeItem2 = null;
-                        
-                        int count = 0;
-                        int count2 = 0;
-                        
+       
                         while (codeMatcher1.find()) {
-                            count++;
                             codeItem1 = new MemoryMapConfigMemoryItem(codeMatcher1.group(2), codeMatcher1.group(4));
                             codeItem1.setEndAddress(codeMatcher1.group(5));
                             //codeItem1.setLength(getSegmentLength(codeMatcher1.group(4), codeMatcher1.group(5)) + "");
                             codeItem1.setCalculatedLength(codeMatcher1.group(4), codeMatcher1.group(5));
-                            config.add(codeItem1);
-                            System.out.println(count);                            
+                            config.add(codeItem1);                    
                         }
                         
                         while (codeMatcher2.find()) {
-                            count2++;
                             codeItem2 = new MemoryMapConfigMemoryItem(codeMatcher2.group(2), codeMatcher2.group(3));
                             codeItem2.setEndAddress(codeMatcher2.group(4));
                             //codeItem2.setLength(getSegmentLength(codeMatcher2.group(3), codeMatcher2.group(4)) + "");
                             codeItem2.setCalculatedLength(codeMatcher2.group(3), codeMatcher2.group(4));
                             config.add(codeItem2);
-                            System.out.println(count2);
                         }
                     }
 

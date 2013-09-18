@@ -24,28 +24,7 @@
 
     <f:dropdownDescriptorSelector title="${%Parser selection}" descriptors="${descriptor.getParsers()}" field="chosenParser" />
 
-    <f:entry title="List of configured graphs">
-        <f:repeatable varStatus="instStatus" var="inst" items="${instance.graphConfiguration}">
-            <table style="width:100%">
-                <tr> 
-                    <td style="width:15%;">
-                            Graph name
-                    </td>
-                    <td style="width:85%;">
-                        <f:textbox name="graph.config.graphCaption" value="${inst.graphCaption}"/>
-                    </td>
-                </tr>
-                <tr style="width:100%">
-                    <td style="width:15%;">
-                            Program memory selection
-                    </td>
-                    <td style="width:85%;">
-                        <f:textbox name="graph.config.graphDataList" value="${inst.graphDataList}"/>
-                    </td>
-                </tr>                    
-            </table>
-            <f:repeatableDeleteButton/>
-        </f:repeatable>
-            
-    </f:entry>   
+    <f:entry field="graphConfiguration" title="Configure graphs">
+        <f:hetero-list name="graphConfiguration" oneEach="false" items="${instance.graphConfiguration}" addCaption="Add graph" deleteCaption="Remove graph" descriptors="${descriptor.getGraphOptions()}"/>
+    </f:entry>
 </j:jelly>
