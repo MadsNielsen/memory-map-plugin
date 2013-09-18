@@ -64,6 +64,11 @@ public abstract class AbstractMemoryMapParser implements Describable<AbstractMem
     private Integer wordSize;
     private Boolean bytesOnGraph;
 
+    /**
+     * 
+     * @return  The default word size. If the map files contains usages in decimal value of bytes (say 1 200 bytes used). Use a word size of 8.
+     * else use what your compiler prefers. 
+     */
     public abstract int getDefaultWordSize();
     
     public AbstractMemoryMapParser () {  
