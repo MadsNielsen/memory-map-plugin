@@ -21,9 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package net.praqma.jenkins.unit;
+package net.praqma.jenkins.iar;
 
 import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -33,7 +34,11 @@ public class IARMemoryMapParserTest {
     
     public IARMemoryMapParserTest() {
     }
-    
+     
     @Test
-    public void hello() {}
+    public void getDefaultWordSize() {
+        int eight = 8;
+        assertEquals("8 equals 8", 8, eight);
+        assertTrue("8 is not equal to 16", eight != 16);
+    }
 }
