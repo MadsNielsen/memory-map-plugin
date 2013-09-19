@@ -26,6 +26,7 @@ package net.praqma.jenkins.memorymap.util;
 import hudson.FilePath;
 import java.io.File;
 import java.io.IOException;
+import org.apache.commons.lang.StringUtils;
 import org.apache.tools.ant.types.FileSet;
 
 /**
@@ -37,6 +38,10 @@ import org.apache.tools.ant.types.FileSet;
 public abstract class FileFoundable<T> implements FilePath.FileCallable<T>  {
     
     public File findFile(File file, String pattern) throws IOException {
+        if(StringUtils.isBlank(pattern)) {
+            throw new MemoryMapFileNotFoundError(String.format("Empty file pattern provided, this is not legal. Workspace was %s", file.getAbsolutePath()), file);            
+        }
+        
         FileSet fileSet = new FileSet();
         org.apache.tools.ant.Project project = new org.apache.tools.ant.Project();
         fileSet.setProject(project);

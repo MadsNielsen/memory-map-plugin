@@ -25,10 +25,8 @@ package net.praqma.jenkins.memorymap.parser;
 
 import hudson.remoting.VirtualChannel;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import net.praqma.jenkins.memorymap.result.MemoryMapConfigMemory;

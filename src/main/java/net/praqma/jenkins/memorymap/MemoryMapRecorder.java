@@ -35,11 +35,11 @@ import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Publisher;
 import hudson.tasks.Recorder;
+import hudson.util.FormValidation;
 import hudson.util.ListBoxModel;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -56,6 +56,7 @@ import org.apache.commons.lang.StringUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
 import net.praqma.util.ExceptionUtils.*;
+import org.kohsuke.stapler.QueryParameter;
 /**
  *
  * @author Praqma
@@ -241,8 +242,6 @@ public class MemoryMapRecorder extends Recorder {
             load();
         }
         
-        
-        
         private List<String> getScales(){
             List<String> scales = new ArrayList<String>();
             scales.add("default");
@@ -259,7 +258,10 @@ public class MemoryMapRecorder extends Recorder {
             }
             return items;
         }
-        
+         public FormValidation doCheckConfigurationFile(@QueryParameter String configurationFile) {
+             return FormValidation.validateRequired(configurationFile);
+         }
+                 
     }
     
     @Override

@@ -24,7 +24,9 @@
 package net.praqma.jenkins.memorymap.parser;
 
 import hudson.model.Descriptor;
+import hudson.util.FormValidation;
 import net.sf.json.JSONObject;
+import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
 
 /**
@@ -34,5 +36,14 @@ import org.kohsuke.stapler.StaplerRequest;
 public abstract class MemoryMapParserDescriptor<T extends AbstractMemoryMapParser> extends Descriptor<AbstractMemoryMapParser> {
     public AbstractMemoryMapParser newInstance( StaplerRequest req, JSONObject formData, AbstractMemoryMapParser instance ) throws FormException { 
         return super.newInstance( req, formData );
+    }
+    
+    /**
+     * This field is required 
+     * @param mapFile
+     * @return 
+     */
+    public FormValidation doCheckMapFile(@QueryParameter String mapFile) {
+        return FormValidation.validateRequired(mapFile);
     }
 }
