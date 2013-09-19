@@ -23,9 +23,21 @@
  */
 package net.praqma.jenkins.iar;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import net.praqma.jenkins.memorymap.graph.MemoryMapGraphConfiguration;
+import net.praqma.jenkins.memorymap.parser.AbstractMemoryMapParser;
+import net.praqma.jenkins.memorymap.parser.MemoryMapMapParserDelegate;
+import net.praqma.jenkins.memorymap.parser.TexasInstrumentsMemoryMapParser;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import net.praqma.jenkins.memorymap.parser.iar.*;
+import net.praqma.jenkins.memorymap.result.MemoryMapConfigMemoryItem;
+import net.praqma.jenkins.memorymap.util.MemoryMapFileNotFoundError;
 
 /**
  *
@@ -72,4 +84,52 @@ public class IARMemoryMapParserTest {
         assertEquals("8 equals parser.getDefaultWordSize()", 8, parser.getDefaultWordSize());
         assertTrue("8 is not equal to parser.getDefaultWordSize()", 16 != parser.getDefaultWordSize());
     }
+    
+//    @Test(expected = MemoryMapFileNotFoundError.class)
+//    public void testException(){
+//        try {
+//            File f = File.createTempFile("testfile", ".test");
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//        }
+//        IARMemoryMapParser parser = new IARMemoryMapParser("*.config","*.test",8,true);
+//        parser.par
+//          
+//        assertNull(parser.getMapFile());        
+//    }
+//    
+    
+//     @Test
+//    public void findFilesTest() throws IOException {
+//
+//        File f = File.createTempFile("testfile", ".test");
+//        
+//        
+//                
+//        System.out.println(f.getAbsolutePath());
+//        
+//        MemoryMapMapParserDelegate delegate = new MemoryMapMapParserDelegate();
+//        
+//        IARMemoryMapParser parser = new IARMemoryMapParser("*.config","*.test",8,true);
+//        delegate.setParser(parser);
+//        
+//        assertNotNull(delegate.getParser());
+//        assertNotNull(parser.getMapFile());
+//       // assertNotNull(parser.parseConfigFile(graphConfig, f));
+//        
+//        File test = new File(f.getAbsolutePath().substring(0,f.getAbsolutePath().lastIndexOf(File.separator)));
+//        assertTrue(test.isDirectory());
+//        
+//        
+//        try {
+//            delegate.findFile(test,"*.test");
+//            
+//        } catch(Exception ex) {
+//            
+//            fail("Parser did not find the file"+ex);
+//        } finally {
+//            f.deleteOnExit();
+//        }
+//        
+//    }
 }

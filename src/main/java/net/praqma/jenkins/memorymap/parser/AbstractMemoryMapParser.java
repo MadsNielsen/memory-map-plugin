@@ -29,6 +29,7 @@ import hudson.model.Describable;
 import hudson.model.Descriptor;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
@@ -105,9 +106,16 @@ public abstract class AbstractMemoryMapParser implements Describable<AbstractMem
                 cbuf = Charset.forName(charset).newDecoder().decode(bbuf);
             }
             
-        } catch (IOException ex) {
+            
+        } 
+        catch (FileNotFoundException ex)
+        {
+              throw ex;  
+        }
+        
+        catch (IOException ex) {
             throw ex;
-        } finally {
+        }  finally {
             if(fis != null) {
                 fis.close();
             }

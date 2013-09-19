@@ -25,8 +25,12 @@ package net.praqma.jenkins.unit;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.praqma.jenkins.memorymap.parser.MemoryMapMapParserDelegate;
 import net.praqma.jenkins.memorymap.parser.TexasInstrumentsMemoryMapParser;
+import net.praqma.jenkins.memorymap.parser.iar.IARMemoryMapParser;
+import net.praqma.jenkins.memorymap.util.MemoryMapFileNotFoundError;
 import org.apache.commons.lang.SerializationUtils;
 import static org.junit.Assert.*;
 import org.junit.Test;
@@ -36,40 +40,41 @@ import org.junit.Test;
  * @author Praqma
  */
 public class MemoryMapParserDelegateTest {
-    
+
     @Test
     public void isMemoryMapParserDelegateSerializable_test() {
         SerializationUtils.serialize(new MemoryMapMapParserDelegate());
     }
-    
+
     @Test
     public void findFilePatternWorks_test() throws IOException {
 
         File f = File.createTempFile("testfile", ".test");
-                
+
         System.out.println(f.getAbsolutePath());
-        
+
         MemoryMapMapParserDelegate delegate = new MemoryMapMapParserDelegate();
-        
-        TexasInstrumentsMemoryMapParser parser = new TexasInstrumentsMemoryMapParser("*.config","*.test",16,true);
+
+        TexasInstrumentsMemoryMapParser parser = new TexasInstrumentsMemoryMapParser("*.config", "*.test", 16, true);
         delegate.setParser(parser);
-        
+
         assertNotNull(delegate.getParser());
         assertNotNull(parser.getMapFile());
-        
-        File test = new File(f.getAbsolutePath().substring(0,f.getAbsolutePath().lastIndexOf(File.separator)));
+
+
+        File test = new File(f.getAbsolutePath().substring(0, f.getAbsolutePath().lastIndexOf(File.separator)));
         assertTrue(test.isDirectory());
-        
-        
+
+
         try {
-            File foundfile = delegate.findFile(test,"*.test");
-            
-        } catch(Exception ex) {
-            
-            fail("Parser did not find the file"+ex);
+            File foundfile = delegate.findFile(test, "*.test");
+
+        } catch (Exception ex) {
+
+            fail("Parser did not find the file" + ex);
         } finally {
             f.deleteOnExit();
         }
-        
+
     }
 }
