@@ -25,7 +25,6 @@ package net.praqma.jenkins.memorymap.parser.iar;
 
 import hudson.Extension;
 import hudson.model.Descriptor;
-import hudson.util.FormValidation;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -49,42 +48,9 @@ import org.kohsuke.stapler.StaplerRequest;
  */
 public class IARMemoryMapParser extends AbstractMemoryMapParser {
 
-    /*
-     * Flash // Rom
-     */
-    private static final Pattern INTVEC = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern OPTBYTE = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern SECUID = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern aseg = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern RCODE = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern CODE = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern NEAR_ID = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern NEAR_CONST = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern SWITCH = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern CHECKSUM = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern NEAR_A = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern SADDR_A = Pattern.compile("", Pattern.MULTILINE);
-    /*
-     * Ram
-     */
-    private static final Pattern FAR_HEAP_SIZE = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern NEAR_CONST_LOCATION_START = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern NEAR_CONST_LOCATION_END = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern NEAR_CONST_LOCATION = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern NEAR_HEAP_SIZE = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern CSTACK_SIZE = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern NEAR_I = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern NEAR_Z = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern NEAR_N = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern CSTACK = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern SADDR_I = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern SADDR_Z = Pattern.compile("", Pattern.MULTILINE);
-
     @DataBoundConstructor
     public IARMemoryMapParser(String mapFile, String configurationFile, Integer wordSize, Boolean bytesOnGraph, Pattern... pattern) {
-        super(mapFile, configurationFile, wordSize, bytesOnGraph, INTVEC, OPTBYTE, SECUID, aseg, RCODE, CODE, NEAR_ID, NEAR_CONST,
-                SWITCH, CHECKSUM, NEAR_A, SADDR_A, FAR_HEAP_SIZE, NEAR_CONST_LOCATION_START, NEAR_CONST_LOCATION_END, NEAR_CONST_LOCATION, NEAR_HEAP_SIZE,
-                CSTACK_SIZE, NEAR_I, NEAR_Z, NEAR_N, CSTACK, SADDR_I, SADDR_Z);
+        super(mapFile, configurationFile, wordSize, bytesOnGraph);
     }
 
     public IARMemoryMapParser() {
@@ -143,7 +109,6 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
                         while (codeMatcher1.find()) {
                             codeItem1 = new MemoryMapConfigMemoryItem(codeMatcher1.group(2), codeMatcher1.group(4));
                             codeItem1.setEndAddress(codeMatcher1.group(5));
-                            //codeItem1.setLength(getSegmentLength(codeMatcher1.group(4), codeMatcher1.group(5)) + "");
                             codeItem1.setCalculatedLength(codeMatcher1.group(4), codeMatcher1.group(5));
                             config.add(codeItem1);                    
                         }
@@ -151,7 +116,6 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
                         while (codeMatcher2.find()) {
                             codeItem2 = new MemoryMapConfigMemoryItem(codeMatcher2.group(2), codeMatcher2.group(3));
                             codeItem2.setEndAddress(codeMatcher2.group(4));
-                            //codeItem2.setLength(getSegmentLength(codeMatcher2.group(3), codeMatcher2.group(4)) + "");
                             codeItem2.setCalculatedLength(codeMatcher2.group(3), codeMatcher2.group(4));
                             config.add(codeItem2);
                         }
@@ -167,7 +131,6 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
                         while (dataMatcher1.find()) {
                             dataItem1 = new MemoryMapConfigMemoryItem(dataMatcher1.group(2), dataMatcher1.group(4));
                             dataItem1.setEndAddress(dataMatcher1.group(5));
-                            //dataItem1.setLength(getSegmentLength(dataMatcher1.group(4), dataMatcher1.group(5)) + "");
                             dataItem1.setCalculatedLength(dataMatcher1.group(4), dataMatcher1.group(5));
                             config.add(dataItem1);
                         }
@@ -175,7 +138,6 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
                         while (dataMatcher2.find()) {
                             dataItem2 = new MemoryMapConfigMemoryItem(dataMatcher2.group(2), dataMatcher2.group(3));
                             dataItem2.setEndAddress(dataMatcher2.group(4));
-                            //dataItem2.setLength(getSegmentLength(dataMatcher2.group(3), dataMatcher2.group(4)) + "");
                             dataItem2.setCalculatedLength(dataMatcher2.group(3), dataMatcher2.group(4));
                             config.add(dataItem2);
                         }
@@ -262,7 +224,5 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
             save();
             return parser;
         }
-        
-        
     }
 }

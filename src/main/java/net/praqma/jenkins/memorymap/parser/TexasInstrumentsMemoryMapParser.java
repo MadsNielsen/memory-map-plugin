@@ -31,8 +31,10 @@ import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.praqma.jenkins.memorymap.graph.MemoryMapGraphConfiguration;
+import static net.praqma.jenkins.memorymap.parser.AbstractMemoryMapParser.logger;
 import net.praqma.jenkins.memorymap.result.MemoryMapConfigMemory;
 import net.praqma.jenkins.memorymap.result.MemoryMapConfigMemoryItem;
+import net.praqma.jenkins.memorymap.util.MemoryMapMemorySelectionError;
 import net.sf.json.JSONObject;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
@@ -106,7 +108,22 @@ public class TexasInstrumentsMemoryMapParser extends AbstractMemoryMapParser {
 
     @Override
     public MemoryMapConfigMemory parseMapFile(File f, MemoryMapConfigMemory config) throws IOException {
-        return super.parseMapFile(f, config);
+        CharSequence sequence = createCharSequenceFromFile(f);
+        
+        for(MemoryMapConfigMemoryItem item : config) {            
+            Matcher matcher = MemoryMapMapParserDelegate.getPatternForMemorySection(item.getName()).matcher(sequence);
+            boolean found = false;
+            while(matcher.find()) {
+                item.setUsed(matcher.group(8));
+                item.setUnused(matcher.group(10));
+                found = true;
+            }
+            if(!found) {
+                logger.logp(Level.WARNING, "parseMapFile", AbstractMemoryMapParser.class.getName(), String.format("parseMapFile(File f, MemoryMapConfigMemory configuration) non existing item: %s",item));                
+                throw new MemoryMapMemorySelectionError(String.format("Linker command element %s not found in .map file", item));
+            }
+        }
+        return config;
     }
 
     @Override

@@ -38,22 +38,18 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import jenkins.model.Jenkins;
 import net.praqma.jenkins.memorymap.graph.MemoryMapGraphConfiguration;
 import net.praqma.jenkins.memorymap.result.MemoryMapConfigMemory;
-import net.praqma.jenkins.memorymap.result.MemoryMapConfigMemoryItem;
-import net.praqma.jenkins.memorymap.util.MemoryMapMemorySelectionError;
 import org.apache.commons.collections.ListUtils;
 
 /**
  *
  * @author Praqma
  */
-public abstract class AbstractMemoryMapParser implements Describable<AbstractMemoryMapParser>, ExtensionPoint, MemoryMapParsable, Serializable {
+public abstract class AbstractMemoryMapParser implements Describable<AbstractMemoryMapParser>, ExtensionPoint, Serializable {
 
     private static final String UTF_8_CHARSET = "UTF8";
     protected static final Logger logger = Logger.getLogger(AbstractMemoryMapParser.class.toString());
@@ -115,48 +111,9 @@ public abstract class AbstractMemoryMapParser implements Describable<AbstractMem
         return cbuf;
     }    
     
-    @Override
-    public MemoryMapConfigMemory parseConfigFile(List<MemoryMapGraphConfiguration> graphConfig, File f) throws IOException {
-        MemoryMapConfigMemory config =  new MemoryMapConfigMemory();
-        CharSequence sequence = createCharSequenceFromFile(f);
-        for(MemoryMapGraphConfiguration graph : graphConfig) {
-            String[] split = graph.getGraphDataList().split(",");
-            for(String s : split) {
-                Matcher m = MemoryMapConfigFileParserDelegate.getPatternForMemoryLayout(s).matcher(sequence);
-                MemoryMapConfigMemoryItem item = null;
-                while(m.find()) {
-                    item = new MemoryMapConfigMemoryItem(m.group(1), m.group(3), m.group(5));                    
-                    config.add(item);
-                }                
-                if(item == null) {
-                    logger.logp(Level.WARNING, "parseConfigFile", AbstractMemoryMapParser.class.getName(), String.format("parseConfigFile(List<MemoryMapGraphConfiguration> graphConfig, File f) non existing item: %s",s));
-                    throw new MemoryMapMemorySelectionError(String.format("No match found for program memory named %s",s));
-                }
-                
-            }
-        }
-        return config;
-    }
-    
-    @Override
-    public MemoryMapConfigMemory parseMapFile(File f, MemoryMapConfigMemory configuration) throws IOException {
-        CharSequence sequence = createCharSequenceFromFile(f);
-        
-        for(MemoryMapConfigMemoryItem item : configuration) {            
-            Matcher matcher = MemoryMapMapParserDelegate.getPatternForMemorySection(item.getName()).matcher(sequence);
-            boolean found = false;
-            while(matcher.find()) {
-                item.setUsed(matcher.group(8));
-                item.setUnused(matcher.group(10));
-                found = true;
-            }
-            if(!found) {
-                logger.logp(Level.WARNING, "parseMapFile", AbstractMemoryMapParser.class.getName(), String.format("parseMapFile(File f, MemoryMapConfigMemory configuration) non existing item: %s",item));                
-                throw new MemoryMapMemorySelectionError(String.format("Linker command element %s not found in .map file", item));
-            }
-        }
-        return configuration;
-    }
+    public abstract MemoryMapConfigMemory parseConfigFile(List<MemoryMapGraphConfiguration> graphConfig, File f) throws IOException;
+    public abstract MemoryMapConfigMemory parseMapFile(File f, MemoryMapConfigMemory configuration) throws IOException;
+
 
     /**
      * @return the includeFilePattern
