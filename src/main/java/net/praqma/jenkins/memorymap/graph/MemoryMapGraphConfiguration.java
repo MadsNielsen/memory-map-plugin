@@ -29,7 +29,6 @@ import hudson.ExtensionPoint;
 import hudson.model.Describable;
 import hudson.model.Descriptor;
 import hudson.model.Descriptor.FormException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import jenkins.model.Jenkins;
@@ -39,14 +38,6 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
 
 /**
- *
- * @author Praqma
- */
-/**
- * FIXME:
- *
- * This class should be a databound class, see FB case 8235 for references.
- *
  * @author Praqma
  */
 public class MemoryMapGraphConfiguration implements Describable<MemoryMapGraphConfiguration>, ExtensionPoint {
