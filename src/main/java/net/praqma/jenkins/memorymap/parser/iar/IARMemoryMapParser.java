@@ -90,31 +90,31 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
         super();
     }
     
-    private static Pattern getPatternForMemoryTypeDividedConfig(String memoryTypeName) {
+    public static Pattern getPatternForMemoryTypeDividedConfig(String memoryTypeName) {
         String RegEx = String.format("(-[P+Z]).(%s).[\\w+,]+=(.)([A-f,0-9]{4,})\\-([A-f,0-9]{4,})(]/10000)$", memoryTypeName);
         Pattern memoryType = Pattern.compile(RegEx, Pattern.MULTILINE);
         return memoryType;
     }
 
-    private static Pattern getPatternForConstMemoryConfig(String memoryTypeName) {
+    public static Pattern getPatternForConstMemoryConfig(String memoryTypeName) {
         String RegEx = String.format("(-[P+Z]).(%s).(\\w..)+=([A-f,0-9]{4,})\\-([A-f,0-9]{4,})$", memoryTypeName);
         Pattern memoryType = Pattern.compile(RegEx, Pattern.MULTILINE);
         return memoryType;
     }
-    
-    private static Pattern getPatternForDataAndCodeMemoryConfig(String memoryTypeName) {
+
+    public static Pattern getPatternForDataAndCodeMemoryConfig(String memoryTypeName) {
         String RegEx = String.format("(-[P+Z]).(%s).[\\w+,]+=([A-f,0-9]{4,})\\-([A-f,0-9]{4,})$", memoryTypeName);
         Pattern memoryType = Pattern.compile(RegEx, Pattern.MULTILINE);
         return memoryType;
     }
 
-    private static Pattern getPatternForConstMemoryConfigSharp(String memoryTypeName) {
+    public static Pattern getPatternForConstMemoryConfigSharp(String memoryTypeName) {
         String RegEx = String.format("(-[P+Z]).(%s).(\\w*)+#([A-f,0-9]{4,})$", memoryTypeName);
         Pattern memoryType = Pattern.compile(RegEx, Pattern.MULTILINE);
         return memoryType;
     }
 
-    private static Pattern getPatternForMemoryType(String memoryTypeName) {
+    public static Pattern getPatternForMemoryType(String memoryTypeName) {
         String RegEx = String.format("([\\d|\\s]*)\\sbytes of (%s)", memoryTypeName);
         Pattern memoryType = Pattern.compile(RegEx, Pattern.MULTILINE);
         return memoryType;
@@ -138,19 +138,17 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
 
                         MemoryMapConfigMemoryItem codeItem1 = null;
                         MemoryMapConfigMemoryItem codeItem2 = null;
-       
+
                         while (codeMatcher1.find()) {
                             codeItem1 = new MemoryMapConfigMemoryItem(codeMatcher1.group(2), codeMatcher1.group(4));
                             codeItem1.setEndAddress(codeMatcher1.group(5));
-                            //codeItem1.setLength(getSegmentLength(codeMatcher1.group(4), codeMatcher1.group(5)) + "");
                             codeItem1.setCalculatedLength(codeMatcher1.group(4), codeMatcher1.group(5));
                             config.add(codeItem1);                    
                         }
-                        
+
                         while (codeMatcher2.find()) {
                             codeItem2 = new MemoryMapConfigMemoryItem(codeMatcher2.group(2), codeMatcher2.group(3));
                             codeItem2.setEndAddress(codeMatcher2.group(4));
-                            //codeItem2.setLength(getSegmentLength(codeMatcher2.group(3), codeMatcher2.group(4)) + "");
                             codeItem2.setCalculatedLength(codeMatcher2.group(3), codeMatcher2.group(4));
                             config.add(codeItem2);
                         }
@@ -166,7 +164,6 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
                         while (dataMatcher1.find()) {
                             dataItem1 = new MemoryMapConfigMemoryItem(dataMatcher1.group(2), dataMatcher1.group(4));
                             dataItem1.setEndAddress(dataMatcher1.group(5));
-                            //dataItem1.setLength(getSegmentLength(dataMatcher1.group(4), dataMatcher1.group(5)) + "");
                             dataItem1.setCalculatedLength(dataMatcher1.group(4), dataMatcher1.group(5));
                             config.add(dataItem1);
                         }
@@ -174,7 +171,6 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
                         while (dataMatcher2.find()) {
                             dataItem2 = new MemoryMapConfigMemoryItem(dataMatcher2.group(2), dataMatcher2.group(3));
                             dataItem2.setEndAddress(dataMatcher2.group(4));
-                            //dataItem2.setLength(getSegmentLength(dataMatcher2.group(3), dataMatcher2.group(4)) + "");
                             dataItem2.setCalculatedLength(dataMatcher2.group(3), dataMatcher2.group(4));
                             config.add(dataItem2);
                         }
@@ -192,7 +188,6 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
                         while (constMatcher1.find()) {
                             constItem1 = new MemoryMapConfigMemoryItem(constMatcher1.group(2), constMatcher1.group(4));
                             constItem1.setEndAddress(constMatcher1.group(5));
-                            //constItem1.setLength(getSegmentLength(constMatcher1.group(4), constMatcher1.group(5)) + "");
                             constItem1.setCalculatedLength(constMatcher1.group(4), constMatcher1.group(5));
                             config.add(constItem1);
                         }
@@ -200,7 +195,6 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
                         while (constMatcher2.find()) {
                             constItem2 = new MemoryMapConfigMemoryItem(constMatcher2.group(2), constMatcher2.group(4));
                             constItem2.setEndAddress(constMatcher2.group(5));
-                            //constItem2.setLength(getSegmentLength(constMatcher2.group(4), constMatcher2.group(5)) + "");
                             constItem2.setCalculatedLength(constMatcher2.group(4), constMatcher2.group(5));
                             config.add(constItem2);
                         }
@@ -208,7 +202,6 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
                         while (constMatcher3.find()) {
                             constItem3 = new MemoryMapConfigMemoryItem(constMatcher3.group(2), constMatcher3.group(4));
                             constItem3.setEndAddress(constMatcher3.group(4));
-                            //constItem3.setLength(getSegmentLength(constMatcher3.group(4), constMatcher3.group(4)) + "");
                             constItem3.setCalculatedLength(constMatcher3.group(4), constMatcher3.group(4));
                             config.add(constItem3);
                         }
@@ -225,26 +218,24 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
         for (MemoryMapConfigMemoryItem codeItem : config) {
             Matcher matcher = getPatternForMemoryType(codeItem.getName()).matcher(sequence);
             boolean found = false;
-            
+
             while (matcher.find()) {
                 HexUtils.HexString s = new HexUtils.HexString(Integer.parseInt(matcher.group(1).replaceAll("\\s", "")));
                 codeItem.setUsed(s.rawString);
                 found = true;
             }
-            
-            if (!found) {                    
+
+            if (!found) {
                 logger.logp(Level.WARNING, "parseMapFile", IARMemoryMapParser.class.getName(), String.format("parseMapFile(File f, MemoryMapConfigMemory configuration) non existing item: %s", codeItem));
                 throw new MemoryMapMemorySelectionError(String.format("Linker command element %s not found in .map file", codeItem));
             }
-            
         }
         return config;
-
     }
 
     @Override
     public int getDefaultWordSize() {
-       return 8;
+        return 8;
     }
 
     @Extension
