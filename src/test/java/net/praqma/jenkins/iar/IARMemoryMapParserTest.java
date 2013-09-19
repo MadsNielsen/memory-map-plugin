@@ -23,7 +23,12 @@
  */
 package net.praqma.jenkins.iar;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 import java.util.regex.Matcher;
+import net.praqma.jenkins.memorymap.graph.MemoryMapGraphConfiguration;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import net.praqma.jenkins.memorymap.parser.iar.*;
@@ -68,13 +73,33 @@ public class IARMemoryMapParserTest {
     }
     
     @Test
-    public void testParseConfigFile(){
-
+    public void testParseConfigFile() throws IOException{
+        
+        IARMemoryMapParser parser = new IARMemoryMapParser();
+        String file = IARMemoryMapParserTest.class.getResource("lnk78f1215_48.xcl").getFile();
+        File f = new File(file);
+        
+        MemoryMapGraphConfiguration mmgc = new MemoryMapGraphConfiguration(null, null, true);
+        mmgc.setGraphDataList("CODE");
+        mmgc.setGraphCaption("Config Memory Graph");
+        List<MemoryMapGraphConfiguration> graphConfig = Collections.singletonList(mmgc);
+  
+        parser.parseConfigFile(graphConfig, f);  
     }
     
     @Test
-    public void testParseMapFile(){
+    public void testParseMapFile() throws IOException{
+        IARMemoryMapParser parser = new IARMemoryMapParser();
+        String file = IARMemoryMapParserTest.class.getResource("helloworld.map").getFile();
+        File f = new File(file);
         
+        MemoryMapConfigMemory mmcm = new MemoryMapConfigMemory();
+        mmcm = parser.parseMapFile(f, mmcm);
+        
+        for (MemoryMapConfigMemoryItem item : mmcm){
+            // do assertions
+        }
+            
     }
 
     @Test
