@@ -24,10 +24,12 @@
 package net.praqma.jenkins.unit;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import net.praqma.jenkins.memorymap.parser.MemoryMapMapParserDelegate;
 import net.praqma.jenkins.memorymap.parser.TexasInstrumentsMemoryMapParser;
 import org.apache.commons.lang.SerializationUtils;
+import net.praqma.jenkins.memorymap.util.*;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
@@ -46,8 +48,6 @@ public class MemoryMapParserDelegateTest {
     public void findFilePatternWorks_test() throws IOException {
 
         File f = File.createTempFile("testfile", ".test");
-                
-        System.out.println(f.getAbsolutePath());
         
         MemoryMapMapParserDelegate delegate = new MemoryMapMapParserDelegate();
         
@@ -62,7 +62,7 @@ public class MemoryMapParserDelegateTest {
         
         
         try {
-            File foundfile = delegate.findFile(test,"*.test");
+            delegate.findFile(test,"*.test");
             
         } catch(Exception ex) {
             
@@ -70,6 +70,17 @@ public class MemoryMapParserDelegateTest {
         } finally {
             f.deleteOnExit();
         }
+    }
+    
+    @Test (expected = MemoryMapFileNotFoundError.class)
+    public void testFileFound() throws IOException{
         
+        File f = File.createTempFile("testFile", ".map");
+        File filePath = new File(f.getAbsolutePath().substring(0,f.getAbsolutePath().lastIndexOf(File.separator)));
+        
+        System.out.println(filePath);
+        
+        MemoryMapMapParserDelegate delegate = new MemoryMapMapParserDelegate();
+        delegate.findFile(filePath, " ");
     }
 }

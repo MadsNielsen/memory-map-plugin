@@ -23,9 +23,11 @@
  */
 package net.praqma.jenkins.iar;
 
+import java.util.regex.Matcher;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import net.praqma.jenkins.memorymap.parser.iar.*;
+import net.praqma.jenkins.memorymap.result.*;
 
 /**
  *
@@ -63,6 +65,16 @@ public class IARMemoryMapParserTest {
     public void testGetPatternForMemoryType() {
         assertEquals("([\\d|\\s]*)\\sbytes of (DATA)",
                 IARMemoryMapParser.getPatternForMemoryType("DATA").pattern());
+    }
+    
+    @Test
+    public void testParseConfigFile(){
+
+    }
+    
+    @Test
+    public void testParseMapFile(){
+        
     }
 
     @Test
