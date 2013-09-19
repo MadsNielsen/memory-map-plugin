@@ -33,8 +33,7 @@ import net.praqma.jenkins.memorymap.parser.iar.*;
  */
 public class IARMemoryMapParserTest {
 
-    public IARMemoryMapParserTest() {
-    }
+    public IARMemoryMapParserTest() {}
 
     @Test
     public void testGetPatternForMemoryTypeDividedConfig() {

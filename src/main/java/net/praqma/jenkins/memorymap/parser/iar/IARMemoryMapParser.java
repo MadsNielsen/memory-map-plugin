@@ -152,7 +152,7 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
                             codeItem2.setCalculatedLength(codeMatcher2.group(3), codeMatcher2.group(4));
                             config.add(codeItem2);
                         }
-                    }
+                    }else
 
                     if (ms.matches("DATA")) {
 
@@ -174,7 +174,7 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
                             dataItem2.setCalculatedLength(dataMatcher2.group(3), dataMatcher2.group(4));
                             config.add(dataItem2);
                         }
-                    }
+                    }else
 
                     if (ms.matches("CONST")) {
 
@@ -205,6 +205,10 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
                             constItem3.setCalculatedLength(constMatcher3.group(4), constMatcher3.group(4));
                             config.add(constItem3);
                         }
+                    }else{
+                        logger.logp(Level.WARNING, "parseConfigFile", AbstractMemoryMapParser.class.getName(), 
+                        String.format("parseConfigFile(List<MemoryMapGraphConfiguration> graphConfig, File f) non existing item: %s", s));
+                        throw new IOException(String.format("No match found for program memory named %s", s));
                     }
                 }
             }
