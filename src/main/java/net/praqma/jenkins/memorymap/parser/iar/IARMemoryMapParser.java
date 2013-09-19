@@ -127,8 +127,8 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
         for (MemoryMapGraphConfiguration graph : graphConfig) {
             String[] split = graph.getGraphDataList().split(",");
             for (String s : split) {
-                s.trim();
-                String[] multiSections = s.split("\\+");
+
+                String[] multiSections = s.trim().split("\\+");
                 for (String ms : multiSections) {
 
                     if (ms.matches("CODE")) {
@@ -143,7 +143,7 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
                             codeItem1 = new MemoryMapConfigMemoryItem(codeMatcher1.group(2), codeMatcher1.group(4));
                             codeItem1.setEndAddress(codeMatcher1.group(5));
                             codeItem1.setCalculatedLength(codeMatcher1.group(4), codeMatcher1.group(5));
-                            config.add(codeItem1);
+                            config.add(codeItem1);                    
                         }
 
                         while (codeMatcher2.find()) {

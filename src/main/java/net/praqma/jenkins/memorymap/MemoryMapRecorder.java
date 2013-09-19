@@ -31,27 +31,26 @@ import hudson.model.AbstractProject;
 import hudson.model.Action;
 import hudson.model.BuildListener;
 import hudson.model.Hudson;
-import hudson.model.Result;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Publisher;
 import hudson.tasks.Recorder;
 import hudson.util.ListBoxModel;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.praqma.jenkins.memorymap.graph.MemoryMapGraphConfiguration;
+import net.praqma.jenkins.memorymap.graph.MemoryMapGraphConfigurationDescriptor;
 import net.praqma.jenkins.memorymap.parser.AbstractMemoryMapParser;
 import net.praqma.jenkins.memorymap.parser.MemoryMapConfigFileParserDelegate;
 import net.praqma.jenkins.memorymap.parser.MemoryMapMapParserDelegate;
 import net.praqma.jenkins.memorymap.parser.MemoryMapParserDescriptor;
 import net.praqma.jenkins.memorymap.result.MemoryMapConfigMemory;
 import net.praqma.jenkins.memorymap.util.MemoryMapError;
-import net.praqma.util.ExceptionUtils;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -69,8 +68,9 @@ public class MemoryMapRecorder extends Recorder {
     private boolean showBytesOnGraph;
     public final String scale;
     private AbstractMemoryMapParser chosenParser;
-    private List<MemoryMapGraphConfiguration> graphConfiguration;
+    public final List<MemoryMapGraphConfiguration> graphConfiguration;
     private static final Logger log = Logger.getLogger(MemoryMapRecorder.class.getName());
+    
         
     @Override
     public BuildStepMonitor getRequiredMonitorService() {
@@ -78,12 +78,13 @@ public class MemoryMapRecorder extends Recorder {
     }
     
     @DataBoundConstructor
-    public MemoryMapRecorder(AbstractMemoryMapParser chosenParser, String configurationFile, boolean showBytesOnGraph, String wordSize, final String scale ) {
+    public MemoryMapRecorder(AbstractMemoryMapParser chosenParser, String configurationFile, boolean showBytesOnGraph, String wordSize, final String scale , final List<MemoryMapGraphConfiguration> graphConfiguration) {
         this.chosenParser = chosenParser;
         this.configurationFile = configurationFile;        
         this.showBytesOnGraph = showBytesOnGraph;
         this.wordSize = StringUtils.isBlank(wordSize) ? chosenParser.getDefaultWordSize() : Integer.parseInt(wordSize);   
         this.scale = scale;
+        this.graphConfiguration = graphConfiguration;
     }
     
     @Override
@@ -95,7 +96,7 @@ public class MemoryMapRecorder extends Recorder {
         MemoryMapConfigMemory config = null;
         
         String version = Hudson.getInstance().getPlugin( "memory-map" ).getWrapper().getVersion();
-		out.println( "Memory Map Plugin version " + version );
+        out.println( "Memory Map Plugin version " + version );
         
         try { 
             chosenParser.setConfigurationFile(configurationFile);
@@ -178,14 +179,7 @@ public class MemoryMapRecorder extends Recorder {
     public List<MemoryMapGraphConfiguration> getGraphConfiguration() {
         return graphConfiguration;
     }
-
-    /**
-     * @param graphConfiguration the graphConfiguration to set
-     */
-    public void setGraphConfiguration(List<MemoryMapGraphConfiguration> graphConfiguration) {
-        this.graphConfiguration = graphConfiguration;
-    }
-
+    
     /**
      * @return the showBytesOnGraph
      */
@@ -231,14 +225,13 @@ public class MemoryMapRecorder extends Recorder {
             return AbstractMemoryMapParser.getDescriptors();
         }
         
+        public List<MemoryMapGraphConfigurationDescriptor<?>> getGraphOptions() {
+            return MemoryMapGraphConfiguration.getDescriptors();
+        }
+
         @Override
         public Publisher newInstance(StaplerRequest req, JSONObject formData) throws FormException {
-            MemoryMapRecorder instance = req.bindJSON(MemoryMapRecorder.class, formData);
-            
-            List<MemoryMapGraphConfiguration> graphConfiguration = req.bindParametersToList(MemoryMapGraphConfiguration.class, "graph.config.");                        
-            if(graphConfiguration != null) {
-                instance.setGraphConfiguration(graphConfiguration);
-            }
+            MemoryMapRecorder instance = req.bindJSON(MemoryMapRecorder.class, formData);   
             save();            
             return instance;
         }
