@@ -24,6 +24,7 @@
 package net.praqma.jenkins.unit;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,7 +33,10 @@ import net.praqma.jenkins.memorymap.parser.TexasInstrumentsMemoryMapParser;
 import net.praqma.jenkins.memorymap.parser.iar.IARMemoryMapParser;
 import net.praqma.jenkins.memorymap.util.MemoryMapFileNotFoundError;
 import org.apache.commons.lang.SerializationUtils;
+import net.praqma.jenkins.memorymap.util.*;
+import org.junit.After;
 import static org.junit.Assert.*;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -40,7 +44,23 @@ import org.junit.Test;
  * @author Praqma
  */
 public class MemoryMapParserDelegateTest {
-
+    File file = null;
+    
+    @Before
+    public void setUp(){
+        
+        try {
+            file = File.createTempFile("testFile", ".map");
+        } catch (IOException ex) {
+            fail("Parser did not find the file"+ex);
+        }
+    }
+    
+    @After
+    public void tearDown(){
+        file.deleteOnExit();
+    }
+    
     @Test
     public void isMemoryMapParserDelegateSerializable_test() {
         SerializationUtils.serialize(new MemoryMapMapParserDelegate());
@@ -48,33 +68,52 @@ public class MemoryMapParserDelegateTest {
 
     @Test
     public void findFilePatternWorks_test() throws IOException {
-
-        File f = File.createTempFile("testfile", ".test");
-
-        System.out.println(f.getAbsolutePath());
-
+        
         MemoryMapMapParserDelegate delegate = new MemoryMapMapParserDelegate();
-
-        TexasInstrumentsMemoryMapParser parser = new TexasInstrumentsMemoryMapParser("*.config", "*.test", 16, true);
+        
+        TexasInstrumentsMemoryMapParser parser = new TexasInstrumentsMemoryMapParser("*.config","*.map",16,true);
         delegate.setParser(parser);
 
         assertNotNull(delegate.getParser());
         assertNotNull(parser.getMapFile());
-
-
-        File test = new File(f.getAbsolutePath().substring(0, f.getAbsolutePath().lastIndexOf(File.separator)));
+        
+        File test = new File(file.getAbsolutePath().substring(0,file.getAbsolutePath().lastIndexOf(File.separator)));
         assertTrue(test.isDirectory());
 
 
         try {
-            File foundfile = delegate.findFile(test, "*.test");
-
-        } catch (Exception ex) {
-
-            fail("Parser did not find the file" + ex);
-        } finally {
-            f.deleteOnExit();
+            delegate.findFile(test,"*.map");
+            
+        } catch(Exception ex) {
+            
+            fail("Parser did not find the file"+ex);
         }
-
+    }
+    
+    @Test (expected = MemoryMapFileNotFoundError.class)
+    public void testFileNotFoundWithBlankPattern() throws IOException{
+        
+        File filePath = new File(file.getAbsolutePath().substring(0,file.getAbsolutePath().lastIndexOf(File.separator)));
+        
+        MemoryMapMapParserDelegate delegate = new MemoryMapMapParserDelegate();
+        delegate.findFile(filePath, " ");
+    }
+    
+    @Test (expected = MemoryMapFileNotFoundError.class)
+    public void testFileNotFoundWithNullPattern() throws IOException{
+        
+        File filePath = new File(file.getAbsolutePath().substring(0,file.getAbsolutePath().lastIndexOf(File.separator)));
+        
+        MemoryMapMapParserDelegate delegate = new MemoryMapMapParserDelegate();
+        delegate.findFile(filePath, null);
+    }
+    
+    @Test
+    public void testFileFound() throws IOException{
+        
+        File filePath = new File(file.getAbsolutePath().substring(0,file.getAbsolutePath().lastIndexOf(File.separator)));
+        
+        MemoryMapMapParserDelegate delegate = new MemoryMapMapParserDelegate();
+        delegate.findFile(filePath, file.getName());
     }
 }

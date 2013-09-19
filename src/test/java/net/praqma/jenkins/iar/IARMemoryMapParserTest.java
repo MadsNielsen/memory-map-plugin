@@ -23,6 +23,7 @@
  */
 package net.praqma.jenkins.iar;
 
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -38,6 +39,12 @@ import static org.junit.Assert.*;
 import net.praqma.jenkins.memorymap.parser.iar.*;
 import net.praqma.jenkins.memorymap.result.MemoryMapConfigMemoryItem;
 import net.praqma.jenkins.memorymap.util.MemoryMapFileNotFoundError;
+import java.util.regex.Matcher;
+import org.junit.Test;
+import static org.junit.Assert.*;
+import net.praqma.jenkins.memorymap.parser.iar.*;
+import net.praqma.jenkins.memorymap.result.*;
+
 
 /**
  *
@@ -45,8 +52,7 @@ import net.praqma.jenkins.memorymap.util.MemoryMapFileNotFoundError;
  */
 public class IARMemoryMapParserTest {
 
-    public IARMemoryMapParserTest() {
-    }
+    public IARMemoryMapParserTest() {}
 
     @Test
     public void testGetPatternForMemoryTypeDividedConfig() {
@@ -77,6 +83,16 @@ public class IARMemoryMapParserTest {
         assertEquals("([\\d|\\s]*)\\sbytes of (DATA)",
                 IARMemoryMapParser.getPatternForMemoryType("DATA").pattern());
     }
+    
+    @Test
+    public void testParseConfigFile(){
+
+    }
+    
+    @Test
+    public void testParseMapFile(){
+        
+    }
 
     @Test
     public void testGetDefaultWordSize() {
@@ -84,52 +100,4 @@ public class IARMemoryMapParserTest {
         assertEquals("8 equals parser.getDefaultWordSize()", 8, parser.getDefaultWordSize());
         assertTrue("8 is not equal to parser.getDefaultWordSize()", 16 != parser.getDefaultWordSize());
     }
-    
-//    @Test(expected = MemoryMapFileNotFoundError.class)
-//    public void testException(){
-//        try {
-//            File f = File.createTempFile("testfile", ".test");
-//        } catch (IOException ex) {
-//            ex.printStackTrace();
-//        }
-//        IARMemoryMapParser parser = new IARMemoryMapParser("*.config","*.test",8,true);
-//        parser.par
-//          
-//        assertNull(parser.getMapFile());        
-//    }
-//    
-    
-//     @Test
-//    public void findFilesTest() throws IOException {
-//
-//        File f = File.createTempFile("testfile", ".test");
-//        
-//        
-//                
-//        System.out.println(f.getAbsolutePath());
-//        
-//        MemoryMapMapParserDelegate delegate = new MemoryMapMapParserDelegate();
-//        
-//        IARMemoryMapParser parser = new IARMemoryMapParser("*.config","*.test",8,true);
-//        delegate.setParser(parser);
-//        
-//        assertNotNull(delegate.getParser());
-//        assertNotNull(parser.getMapFile());
-//       // assertNotNull(parser.parseConfigFile(graphConfig, f));
-//        
-//        File test = new File(f.getAbsolutePath().substring(0,f.getAbsolutePath().lastIndexOf(File.separator)));
-//        assertTrue(test.isDirectory());
-//        
-//        
-//        try {
-//            delegate.findFile(test,"*.test");
-//            
-//        } catch(Exception ex) {
-//            
-//            fail("Parser did not find the file"+ex);
-//        } finally {
-//            f.deleteOnExit();
-//        }
-//        
-//    }
 }

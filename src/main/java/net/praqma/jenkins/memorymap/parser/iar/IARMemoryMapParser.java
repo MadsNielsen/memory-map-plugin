@@ -48,42 +48,9 @@ import org.kohsuke.stapler.StaplerRequest;
  */
 public class IARMemoryMapParser extends AbstractMemoryMapParser {
 
-    /*
-     * Flash // Rom
-     */
-    private static final Pattern INTVEC = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern OPTBYTE = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern SECUID = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern aseg = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern RCODE = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern CODE = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern NEAR_ID = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern NEAR_CONST = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern SWITCH = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern CHECKSUM = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern NEAR_A = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern SADDR_A = Pattern.compile("", Pattern.MULTILINE);
-    /*
-     * Ram
-     */
-    private static final Pattern FAR_HEAP_SIZE = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern NEAR_CONST_LOCATION_START = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern NEAR_CONST_LOCATION_END = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern NEAR_CONST_LOCATION = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern NEAR_HEAP_SIZE = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern CSTACK_SIZE = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern NEAR_I = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern NEAR_Z = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern NEAR_N = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern CSTACK = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern SADDR_I = Pattern.compile("", Pattern.MULTILINE);
-    private static final Pattern SADDR_Z = Pattern.compile("", Pattern.MULTILINE);
-
     @DataBoundConstructor
     public IARMemoryMapParser(String mapFile, String configurationFile, Integer wordSize, Boolean bytesOnGraph, Pattern... pattern) {
-        super(mapFile, configurationFile, wordSize, bytesOnGraph, INTVEC, OPTBYTE, SECUID, aseg, RCODE, CODE, NEAR_ID, NEAR_CONST,
-                SWITCH, CHECKSUM, NEAR_A, SADDR_A, FAR_HEAP_SIZE, NEAR_CONST_LOCATION_START, NEAR_CONST_LOCATION_END, NEAR_CONST_LOCATION, NEAR_HEAP_SIZE,
-                CSTACK_SIZE, NEAR_I, NEAR_Z, NEAR_N, CSTACK, SADDR_I, SADDR_Z);
+        super(mapFile, configurationFile, wordSize, bytesOnGraph);
     }
 
     public IARMemoryMapParser() {
@@ -152,7 +119,7 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
                             codeItem2.setCalculatedLength(codeMatcher2.group(3), codeMatcher2.group(4));
                             config.add(codeItem2);
                         }
-                    }
+                    }else
 
                     if (ms.matches("DATA")) {
 
@@ -174,7 +141,7 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
                             dataItem2.setCalculatedLength(dataMatcher2.group(3), dataMatcher2.group(4));
                             config.add(dataItem2);
                         }
-                    }
+                    }else
 
                     if (ms.matches("CONST")) {
 
@@ -205,6 +172,10 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
                             constItem3.setCalculatedLength(constMatcher3.group(4), constMatcher3.group(4));
                             config.add(constItem3);
                         }
+                    }else{
+                        logger.logp(Level.WARNING, "parseConfigFile", AbstractMemoryMapParser.class.getName(), 
+                        String.format("parseConfigFile(List<MemoryMapGraphConfiguration> graphConfig, File f) non existing item: %s", s));
+                        throw new IOException(String.format("No match found for program memory named %s", s));
                     }
                 }
             }

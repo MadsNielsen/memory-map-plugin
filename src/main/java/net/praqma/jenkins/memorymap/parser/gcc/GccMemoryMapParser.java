@@ -4,7 +4,9 @@ import hudson.Extension;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.List;
 import java.util.regex.Pattern;
+import net.praqma.jenkins.memorymap.graph.MemoryMapGraphConfiguration;
 import net.praqma.jenkins.memorymap.parser.AbstractMemoryMapParser;
 import net.praqma.jenkins.memorymap.parser.MemoryMapParserDescriptor;
 import net.praqma.jenkins.memorymap.result.MemoryMapConfigMemory;
@@ -41,6 +43,11 @@ public class GccMemoryMapParser extends AbstractMemoryMapParser implements Seria
     @Override
     public int getDefaultWordSize() {
         return 8;
+    }
+
+    @Override
+    public MemoryMapConfigMemory parseConfigFile(List<MemoryMapGraphConfiguration> graphConfig, File f) throws IOException {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Extension
