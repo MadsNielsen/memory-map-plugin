@@ -112,7 +112,7 @@ public class HexUtilsTest {
     }
 
     /**
-     * Test aorund the conversion of the number 1024 to GBytes 
+     * Test arund the conversion of the number 1024 to GBytes 
      */
     @Test
     public void byteCountTestGiga() {

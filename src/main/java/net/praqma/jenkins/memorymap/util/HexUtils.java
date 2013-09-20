@@ -103,8 +103,8 @@ public class HexUtils {
                     newString = new HexifiableString(Integer.parseInt(rawString.replaceAll("[mM]", ""))*(int)MEGA);
                 } else if (rawString.contains("G") || rawString.contains("g")) {
                     newString = new HexifiableString(Integer.parseInt(rawString.replaceAll("[gG]", ""))*(int)GIGA);
-                } else if (rawString.contains("K") || rawString.contains("g")) {
-                    newString = new HexifiableString(Integer.parseInt(rawString.replaceAll("[gG]", ""))*(int)KILO);
+                } else if (rawString.contains("K") || rawString.contains("k")) {
+                    newString = new HexifiableString(Integer.parseInt(rawString.replaceAll("[kK]", ""))*(int)KILO);
                 } else {
                     throw new UnsupportedOperationException(String.format("The string %s contains invalid metric symbols", rawString));
                 }
