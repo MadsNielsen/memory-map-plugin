@@ -91,9 +91,8 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
     public MemoryMapConfigMemory parseConfigFile(List<MemoryMapGraphConfiguration> graphConfig, File f) throws IOException {
         MemoryMapConfigMemory config = new MemoryMapConfigMemory();
         CharSequence sequence = createCharSequenceFromFile(f);
-        for (MemoryMapGraphConfiguration graph : graphConfig) {
-            String[] split = graph.getGraphDataList().split(",");
-            for (String s : split) {
+        for (MemoryMapGraphConfiguration graph : graphConfig) {            
+            for (String s : graph.itemizeGraphDataList()) {
 
                 String[] multiSections = s.trim().split("\\+");
                 for (String ms : multiSections) {
@@ -190,7 +189,7 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
             boolean found = false;
             
             while (matcher.find()) {
-                HexUtils.HexString s = new HexUtils.HexString(Integer.parseInt(matcher.group(1).replaceAll("\\s", "")));
+                HexUtils.HexifiableString s = new HexUtils.HexifiableString(Integer.parseInt(matcher.group(1).replaceAll("\\s", "")));
                 codeItem.setUsed(s.rawString);
                 found = true;
             }

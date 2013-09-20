@@ -85,8 +85,7 @@ public class TexasInstrumentsMemoryMapParser extends AbstractMemoryMapParser {
         for (MemoryMapGraphConfiguration graph : graphConfig) {
             String[] split = graph.getGraphDataList().split(",");
             for (String s : split) {
-                s.trim();
-                String[] multiSections = s.split("\\+");
+                String[] multiSections = s.trim().split("\\+");
                 for (String ms : multiSections) {
                     Matcher m = MemoryMapConfigFileParserDelegate.getPatternForMemoryLayout(ms.replace(" ", "")).matcher(sequence);
                     MemoryMapConfigMemoryItem item = null;

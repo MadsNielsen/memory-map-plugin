@@ -50,6 +50,10 @@ public class MemoryMapGraphConfiguration implements Describable<MemoryMapGraphCo
         this.graphDataList = graphDataList;
         this.graphCaption = graphCaption;
     }
+    
+    public String[] itemizeGraphDataList() {
+        return graphDataList.split(",");
+    }
 
     /**
      * @return the graphCaption
