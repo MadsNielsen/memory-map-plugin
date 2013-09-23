@@ -4,7 +4,6 @@ import hudson.Extension;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -147,6 +146,7 @@ public class GccMemoryMapParser extends AbstractMemoryMapParser implements Seria
     public int getDefaultWordSize() {
         return 8;
     }
+
     @Extension
     public static final class DescriptorImpl extends MemoryMapParserDescriptor<GccMemoryMapParser> {
 

@@ -1,0 +1,888 @@
+################################################################################
+#                                                                              #
+#      IAR Universal Linker V5.4.1.30                                          #
+#                                                                              #
+#           Link time     =  21/Aug/2013  12:55:23                             #
+#           Target CPU    =  78000                                             #
+#           List file     =  "C:\Users\Unknown\Documents\IAR Embedded Workbenc #
+#                            h\Debug\List\helloworld.map"                      #
+#           Output file 1 =  "C:\Users\Unknown\Documents\IAR Embedded Workbenc #
+#                            h\Debug\Exe\helloworld.d26"                       #
+#                            Format: debug                                     #
+#                            UBROF version 10.0.6                              #
+#                            Using library modules for C-SPY (-rt)             #
+#           Command line  =  "C:\Users\Unknown\Documents\IAR Embedded Workbenc #
+#                            h\Debug\Obj\main.r26"                             #
+#                            -o                                                #
+#                            "C:\Users\Unknown\Documents\IAR Embedded Workbenc #
+#                            h\Debug\Exe\helloworld.d26"                       #
+#                            -l                                                #
+#                            "C:\Users\Unknown\Documents\IAR Embedded Workbenc #
+#                            h\Debug\List\helloworld.map"                      #
+#                            -xms                                              #
+#                            "-IC:\Program Files (x86)\IAR Systems\Embedded Wo #
+#                            rkbench 6.4\78k\LIB\"                             #
+#                            -f                                                #
+#                            "C:\Program Files (x86)\IAR Systems\Embedded Work #
+#                            bench 6.4\78k\CONFIG\lnk78f1215_48.xcl"           #
+#                            (-c78000 -Z(CODE)INTVEC=00000-0007F               #
+#                            -Z(CODE)CLTVEC=00080-000BF                        #
+#                            -Z(CODE)OPTBYTE=000C0-000C3                       #
+#                            -Z(CODE)SECUID=000C4-000CD                        #
+#                            -Z(CONST)FAR_ID#0FBFF -Z(DATA)FAR_I=FF300-FFE1F   #
+#                            -Z(CODE)RCODE,CODE=000D8-0FBFF                    #
+#                            -Z(CONST)NEAR_ID=[000D8-0FBFF]/10000              #
+#                            -Z(CONST)SADDR_ID=[000D8-0FBFF]/10000             #
+#                            -Z(CONST)DIFUNCT=[000D8-0FBFF]/10000              #
+#                            -Z(CONST)NEAR_CONST=_NEAR_CONST_LOCATION_START-_N #
+#                            EAR_CONST_LOCATION_END                            #
+#                            -Z(CONST)SWITCH=000D8-0FBFF                       #
+#                            -P(CONST)FAR_CONST,FSWITCH=[000D8-0FBFF]/10000    #
+#                            -P(CODE)XCODE=[000D8-0FBFF]/10000                 #
+#                            -Z(DATA)WRKSEG=FFE20-FFEDF                        #
+#                            -Z(DATA)SADDR_I,SADDR_Z,SADDR_N=FFE20-FFEDF       #
+#                            -Z(DATA)NEAR_I,NEAR_Z,NEAR_N=FF300-FFE1F          #
+#                            -Z(DATA)FAR_Z=[FF300-FFE1F]/10000                 #
+#                            -P(DATA)FAR_N=[FF300-FFE1F]/10000                 #
+#                            -Z(DATA)NEAR_HEAP+_NEAR_HEAP_SIZE=FF300-FFE1F     #
+#                            -Z(DATA)FAR_HEAP+_FAR_HEAP_SIZE=[FF300-FFE1F]/100 #
+#                            00                                                #
+#                            -Z(DATA)CSTACK+_CSTACK_SIZE=FF300-FFE1F)          #
+#                            -D_CSTACK_SIZE=80 -rt                             #
+#                            "C:\Program Files (x86)\IAR Systems\Embedded Work #
+#                            bench 6.4\78k\LIB\CLIB\cl78knn3.r26"              #
+#                            -D_NEAR_HEAP_SIZE=200 -s __program_start          #
+#                            -D_NEAR_CONST_LOCATION=1                          #
+#                            -D_NEAR_CONST_LOCATION_START=11000                #
+#                            -D_NEAR_CONST_LOCATION_END=1F2FF                  #
+#                            -D_FAR_HEAP_SIZE=1000                             #
+#                                                                              #
+#                           Copyright (C) 1987-2012 IAR Systems AB.            #
+################################################################################
+
+
+
+
+
+                ****************************************
+                *                                      *
+                *           CROSS REFERENCE            *
+                *                                      *
+                ****************************************
+
+       Program entry at :           000000D8  Relocatable, from module : ?CSTARTUP
+
+
+
+
+                ****************************************
+                *                                      *
+                *            RUNTIME MODEL             *
+                *                                      *
+                ****************************************
+
+  __clib           = yes
+  __code_model     = near
+  __core           = 78k0r
+  __data_alignment = enabled
+  __data_model     = near
+  __far_rt_calls   = false
+  __rt_version     = 1
+
+                ****************************************
+                *                                      *
+                *    AUTOMATIC SYMBOL REDIRECTIONS     *
+                *                                      *
+                ****************************************
+
+                  There are no automatic symbol redirections.
+
+
+
+                ****************************************
+                *                                      *
+                *              MODULE MAP              *
+                *                                      *
+                ****************************************
+
+
+  DEFINED ABSOLUTE ENTRIES
+    *************************************************************************
+
+  DEFINED ABSOLUTE ENTRIES
+  PROGRAM MODULE, NAME : ?ABS_ENTRY_MOD
+
+Absolute parts
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           _FAR_HEAP_SIZE          00001000 
+           _NEAR_CONST_LOCATION_END
+                                   0001F2FF 
+           _NEAR_CONST_LOCATION_START
+                                   00011000 
+           _NEAR_CONST_LOCATION    00000001        Segment part 3 (?CSTARTUP)
+           _NEAR_HEAP_SIZE         00000200 
+           _CSTACK_SIZE            00000080 
+    *************************************************************************
+
+  FILE NAME : C:\Users\Unknown\Documents\IAR Embedded Workbench\Debug\Obj\main.r26
+  PROGRAM MODULE, NAME : main
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address: 00000BCB - 00000C50 (0x86 bytes), align: 0
+  Segment part 3.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           main                    00000BCB        Segment part 1 (?__MAIN_CALL)
+               calls direct
+    -------------------------------------------------------------------------
+NEAR_CONST
+  Relative segment, address: 00011000 - 00011099 (0x9a bytes), align: 1
+  Segment part 2.             Intra module refs:   main
+
+    *************************************************************************
+
+  FILE NAME : C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.4\78k\LIB\CLIB\cl78knn3.r26
+  LIBRARY MODULE, NAME : ?largewr
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address: 00000C51 - 00000F83 (0x333 bytes), align: 0
+  Segment part 10.            Intra module refs:   _formatted_write
+           LOCAL                   ADDRESS         
+           =====                   =======         
+           float_conversion        00000C51 
+               CSTACK = 00000008 ( 00000016 )
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: 00000F84 - 00001527 (0x5a4 bytes), align: 0
+  Segment part 11.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           _formatted_write        00000F84        printf (?printf)
+               calls direct and indirect
+               CSTACK = 00000002 ( 000000AC )
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: 00001528 - 00001530 (0x9 bytes), align: 0
+  Segment part 12.            Intra module refs:   _formatted_write
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: 00001531 - 00001538 (0x8 bytes), align: 0
+  Segment part 13.            Intra module refs:   _formatted_write
+                                                   float_conversion
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: 00001539 - 00001541 (0x9 bytes), align: 0
+  Segment part 14.            Intra module refs:   _formatted_write
+                                                   float_conversion
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: 00001542 - 0000154A (0x9 bytes), align: 0
+  Segment part 15.            Intra module refs:   _formatted_write
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: 0000154B - 00001550 (0x6 bytes), align: 0
+  Segment part 16.            Intra module refs:   _formatted_write
+    -------------------------------------------------------------------------
+NEAR_ID
+  Relative segment, address: 00001574 - 00001585 (0x12 bytes), align: 1
+  Segment part 2.             Intra module refs:   Segment part 3
+    -------------------------------------------------------------------------
+NEAR_ID
+  Relative segment, address: 00001586 - 00001595 (0x10 bytes), align: 1
+  Segment part 4.             Intra module refs:   Segment part 5
+    -------------------------------------------------------------------------
+NEAR_ID
+  Relative segment, address: 00001596 - 000015A7 (0x12 bytes), align: 1
+  Segment part 6.             Intra module refs:   Segment part 7
+    -------------------------------------------------------------------------
+NEAR_ID
+  Relative segment, address: 000015A8 - 000015AB (0x4 bytes), align: 1
+  Segment part 8.             Intra module refs:   Segment part 9
+    -------------------------------------------------------------------------
+NEAR_I
+  Relative segment, address: 000FF300 - 000FF311 (0x12 bytes), align: 1
+  Segment part 3.             Intra module refs:   _formatted_write
+    -------------------------------------------------------------------------
+NEAR_I
+  Relative segment, address: 000FF312 - 000FF321 (0x10 bytes), align: 1
+  Segment part 5.             Intra module refs:   _formatted_write
+    -------------------------------------------------------------------------
+NEAR_I
+  Relative segment, address: 000FF322 - 000FF333 (0x12 bytes), align: 1
+  Segment part 7.             Intra module refs:   _formatted_write
+    -------------------------------------------------------------------------
+NEAR_I
+  Relative segment, address: 000FF334 - 000FF337 (0x4 bytes), align: 1
+  Segment part 9.             Intra module refs:   _formatted_write
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?printf
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address: 00001551 - 00001555 (0x5 bytes), align: 0
+  Segment part 2.             Intra module refs:   printf
+           LOCAL                   ADDRESS         
+           =====                   =======         
+           put_one_char            00001551 
+               calls direct
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: 00001556 - 00001572 (0x1d bytes), align: 0
+  Segment part 3.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           printf                  00001556        main (main)
+               calls direct
+               CSTACK = 00000000 ( 00000008 )
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?CSTARTUP
+
+  SEGMENTS IN THE MODULE
+  ======================
+CSTACK
+  Relative segment, address: 000FF338, align: 1
+  Segment part 1. ROOT.
+    -------------------------------------------------------------------------
+INTVEC
+  Common segment, address: 00000000 - 00000001 (0x2 bytes), align: 1
+  Segment part 2. ROOT.
+    -------------------------------------------------------------------------
+RCODE
+  Relative segment, address: 000000D8 - 00000106 (0x2f bytes), align: 0
+  Segment part 3. ROOT.       Intra module refs:   Segment part 2
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?C_STARTUP              000000D8 
+           @cstart                 000000D8 
+           __program_start         000000D8        Absolute parts (?ABS_ENTRY_MOD)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?__INIT_NEAR_I
+
+  SEGMENTS IN THE MODULE
+  ======================
+NEAR_I
+  Relative segment, address: 000FF338, align: 0
+  Segment part 1. ROOT.
+    -------------------------------------------------------------------------
+NEAR_ID
+  Relative segment, address: 000015AC, align: 0
+  Segment part 2. ROOT.
+    -------------------------------------------------------------------------
+RCODE
+  Relative segment, address: 00000107 - 00000120 (0x1a bytes), align: 0
+  Segment part 3.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           __INIT_NEAR_I           00000107        Segment part 3 (?largewr)
+                                                   Segment part 5 (?largewr)
+                                                   Segment part 7 (?largewr)
+                                                   Segment part 9 (?largewr)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?__MAIN_CALL
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: 00000121 - 00000126 (0x6 bytes), align: 0
+  Segment part 1.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           @cend                   00000127 
+           __MAIN_CALL             00000121        Segment part 3 (?CSTARTUP)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?__low_level_init_stub
+
+  SEGMENTS IN THE MODULE
+  ======================
+RCODE
+  Relative segment, address: 00000127 - 0000012A (0x4 bytes), align: 0
+  Segment part 1.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           __low_level_init        00000127        Segment part 3 (?CSTARTUP)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?putchar
+
+  SEGMENTS IN THE MODULE
+  ======================
+__aseg
+  Relative segment, address: 00000000, align: 0
+  Segment part 1. ROOT.
+    -------------------------------------------------------------------------
+RCODE
+  Relative segment, address: 0000012B - 0000012C (0x2 bytes), align: 0
+  Segment part 2.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?C_PUTCHAR              0000012B 
+           putchar                 0000012B        put_one_char (?printf)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?exit
+
+  SEGMENTS IN THE MODULE
+  ======================
+__aseg
+  Relative segment, address: 00000000, align: 0
+  Segment part 1. ROOT.
+    -------------------------------------------------------------------------
+RCODE
+  Relative segment, address: 0000012D - 00000130 (0x4 bytes), align: 0
+  Segment part 2.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?C_EXIT                 0000012D 
+           exit                    0000012D        Segment part 1 (?__MAIN_CALL)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?CL78K0R_V2_6_L00
+
+Absolute parts
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?CL78K0R_V2_6_L00       FFFFFFFF        Segment part 12 (?largewr)
+                                                   Segment part 13 (?largewr)
+                                                   Segment part 14 (?largewr)
+                                                   Segment part 15 (?largewr)
+                                                   Segment part 16 (?largewr)
+                                                   _formatted_write (?largewr)
+                                                   float_conversion (?largewr)
+                                                   main (main)
+                                                   printf (?printf)
+                                                   put_one_char (?printf)
+  SEGMENTS IN THE MODULE
+  ======================
+__aseg
+  Relative segment, address: 00000000, align: 0
+  Segment part 1. ROOT.
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?UCHAR_DIVUW_L01
+
+  SEGMENTS IN THE MODULE
+  ======================
+__aseg
+  Relative segment, address: 00000000, align: 0
+  Segment part 1. ROOT.
+    -------------------------------------------------------------------------
+RCODE
+  Relative segment, address: 00000131 - 00000195 (0x65 bytes), align: 0
+  Segment part 2.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?DIVUW_L01              00000131        ?INT_DIV_MOD_L02 (?INT_DIV_MOD_L02)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?INT_MUL_L02
+
+  SEGMENTS IN THE MODULE
+  ======================
+__aseg
+  Relative segment, address: 00000000, align: 0
+  Segment part 1. ROOT.
+    -------------------------------------------------------------------------
+RCODE
+  Relative segment, address: 00000196 - 000001B0 (0x1b bytes), align: 0
+  Segment part 2.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?I_MUL_L02              00000196        _formatted_write (?largewr)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?SINT_DIV_L02
+
+  SEGMENTS IN THE MODULE
+  ======================
+__aseg
+  Relative segment, address: 00000000, align: 0
+  Segment part 1. ROOT.
+    -------------------------------------------------------------------------
+RCODE
+  Relative segment, address: 000001B1 - 000001C8 (0x18 bytes), align: 0
+  Segment part 2.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?SI_DIV_L02             000001B1        float_conversion (?largewr)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?SINT_MOD_L02
+
+  SEGMENTS IN THE MODULE
+  ======================
+__aseg
+  Relative segment, address: 00000000, align: 0
+  Segment part 1. ROOT.
+    -------------------------------------------------------------------------
+RCODE
+  Relative segment, address: 000001C9 - 000001E0 (0x18 bytes), align: 0
+  Segment part 2.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?SI_MOD_L02             000001C9        float_conversion (?largewr)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?SINT_CMP_L02
+
+  SEGMENTS IN THE MODULE
+  ======================
+__aseg
+  Relative segment, address: 00000000, align: 0
+  Segment part 1. ROOT.
+    -------------------------------------------------------------------------
+RCODE
+  Relative segment, address: 000001E1 - 000001EC (0xc bytes), align: 0
+  Segment part 2.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?SI_CMP_L02             000001E1        _formatted_write (?largewr)
+                                                   float_conversion (?largewr)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?INT_NEGATE_DIV_MOD_L02
+
+  SEGMENTS IN THE MODULE
+  ======================
+__aseg
+  Relative segment, address: 00000000, align: 0
+  Segment part 1. ROOT.
+    -------------------------------------------------------------------------
+RCODE
+  Relative segment, address: 000001ED - 00000204 (0x18 bytes), align: 0
+  Segment part 2.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?INT_NEGATE_DIV_MOD_L02
+                                   000001ED        ?SI_DIV_L02 (?SINT_DIV_L02)
+                                                   ?SI_MOD_L02 (?SINT_MOD_L02)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?INT_DIV_MOD_L02
+
+  SEGMENTS IN THE MODULE
+  ======================
+__aseg
+  Relative segment, address: 00000000, align: 0
+  Segment part 1. ROOT.
+    -------------------------------------------------------------------------
+RCODE
+  Relative segment, address: 00000205 - 00000239 (0x35 bytes), align: 0
+  Segment part 2.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?INT_DIV_MOD_L02        00000205        ?SI_DIV_L02 (?SINT_DIV_L02)
+                                                   ?SI_MOD_L02 (?SINT_MOD_L02)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?ULONG_DIV_L03
+
+  SEGMENTS IN THE MODULE
+  ======================
+__aseg
+  Relative segment, address: 00000000, align: 0
+  Segment part 1. ROOT.
+    -------------------------------------------------------------------------
+RCODE
+  Relative segment, address: 0000023A - 00000246 (0xd bytes), align: 0
+  Segment part 2.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?UL_DIV_L03             0000023A        _formatted_write (?largewr)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?ULONG_MOD_L03
+
+  SEGMENTS IN THE MODULE
+  ======================
+__aseg
+  Relative segment, address: 00000000, align: 0
+  Segment part 1. ROOT.
+    -------------------------------------------------------------------------
+RCODE
+  Relative segment, address: 00000247 - 00000256 (0x10 bytes), align: 0
+  Segment part 2.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?UL_MOD_L03             00000247        _formatted_write (?largewr)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?SLONG_CMP_L03
+
+  SEGMENTS IN THE MODULE
+  ======================
+__aseg
+  Relative segment, address: 00000000, align: 0
+  Segment part 1. ROOT.
+    -------------------------------------------------------------------------
+RCODE
+  Relative segment, address: 00000257 - 00000289 (0x33 bytes), align: 0
+  Segment part 2.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?SL_CMP_L03             00000257        _formatted_write (?largewr)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?LONG_NEG_L03
+
+  SEGMENTS IN THE MODULE
+  ======================
+__aseg
+  Relative segment, address: 00000000, align: 0
+  Segment part 1. ROOT.
+    -------------------------------------------------------------------------
+RCODE
+  Relative segment, address: 0000028A - 000002A8 (0x1f bytes), align: 0
+  Segment part 2.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?L_NEG_L03              0000028A        _formatted_write (?largewr)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?LONG_LOAD_DIV_MOD_L03
+
+  SEGMENTS IN THE MODULE
+  ======================
+__aseg
+  Relative segment, address: 00000000, align: 0
+  Segment part 1. ROOT.
+    -------------------------------------------------------------------------
+RCODE
+  Relative segment, address: 000002A9 - 000002B8 (0x10 bytes), align: 0
+  Segment part 2.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?LONG_LOAD_DIV_MOD_L03
+                                   000002A9        ?UL_DIV_L03 (?ULONG_DIV_L03)
+                                                   ?UL_MOD_L03 (?ULONG_MOD_L03)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?LONG_DIV_L03
+
+  SEGMENTS IN THE MODULE
+  ======================
+__aseg
+  Relative segment, address: 00000000, align: 0
+  Segment part 1. ROOT.
+    -------------------------------------------------------------------------
+RCODE
+  Relative segment, address: 000002B9 - 00000345 (0x8d bytes), align: 0
+  Segment part 2.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?LONG_DIV_L03           000002B9        ?UL_DIV_L03 (?ULONG_DIV_L03)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?LONG_MOD_L03
+
+  SEGMENTS IN THE MODULE
+  ======================
+__aseg
+  Relative segment, address: 00000000, align: 0
+  Segment part 1. ROOT.
+    -------------------------------------------------------------------------
+RCODE
+  Relative segment, address: 00000346 - 000003CB (0x86 bytes), align: 0
+  Segment part 2.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?LONG_MOD_L03           00000346        ?UL_MOD_L03 (?ULONG_MOD_L03)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?FLOAT_MUL_L04
+
+  SEGMENTS IN THE MODULE
+  ======================
+__aseg
+  Relative segment, address: 00000000, align: 0
+  Segment part 1. ROOT.
+    -------------------------------------------------------------------------
+RCODE
+  Relative segment, address: 000003CC - 000004E5 (0x11a bytes), align: 0
+  Segment part 2.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?F_MUL_L04              000003CC        float_conversion (?largewr)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?FLOAT_DIV_L04
+
+  SEGMENTS IN THE MODULE
+  ======================
+__aseg
+  Relative segment, address: 00000000, align: 0
+  Segment part 1. ROOT.
+    -------------------------------------------------------------------------
+RCODE
+  Relative segment, address: 000004E6 - 00000676 (0x191 bytes), align: 0
+  Segment part 2.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?F_DIV_L04              000004E6        float_conversion (?largewr)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?FLOAT_ADD_SUB_L04
+
+  SEGMENTS IN THE MODULE
+  ======================
+__aseg
+  Relative segment, address: 00000000, align: 0
+  Segment part 1. ROOT.
+    -------------------------------------------------------------------------
+RCODE
+  Relative segment, address: 00000677 - 00000830 (0x1ba bytes), align: 0
+  Segment part 2.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?F_ADD_L04              0000068D 
+           ?F_SUB_L04              00000677        float_conversion (?largewr)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?FLOAT_CMP_L04
+
+  SEGMENTS IN THE MODULE
+  ======================
+__aseg
+  Relative segment, address: 00000000, align: 0
+  Segment part 1. ROOT.
+    -------------------------------------------------------------------------
+RCODE
+  Relative segment, address: 00000831 - 000008C8 (0x98 bytes), align: 0
+  Segment part 2.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?F_CMP_L04              00000831        _formatted_write (?largewr)
+                                                   float_conversion (?largewr)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?FLOAT_CAST_TO_LONG_L04
+
+  SEGMENTS IN THE MODULE
+  ======================
+__aseg
+  Relative segment, address: 00000000, align: 0
+  Segment part 1. ROOT.
+    -------------------------------------------------------------------------
+RCODE
+  Relative segment, address: 000008C9 - 00000980 (0xb8 bytes), align: 0
+  Segment part 2.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?F_TO_L_L04             000008C9        float_conversion (?largewr)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?FLOAT_NEG_L04
+
+  SEGMENTS IN THE MODULE
+  ======================
+__aseg
+  Relative segment, address: 00000000, align: 0
+  Segment part 1. ROOT.
+    -------------------------------------------------------------------------
+RCODE
+  Relative segment, address: 00000981 - 00000990 (0x10 bytes), align: 0
+  Segment part 2.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?F_NEG_L04              00000981        _formatted_write (?largewr)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?FLOAT_CAST_TO_FLOAT_L04
+
+  SEGMENTS IN THE MODULE
+  ======================
+__aseg
+  Relative segment, address: 00000000, align: 0
+  Segment part 1. ROOT.
+    -------------------------------------------------------------------------
+RCODE
+  Relative segment, address: 00000991 - 00000A3A (0xaa bytes), align: 0
+  Segment part 2.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?SL_TO_F_L04            00000991        float_conversion (?largewr)
+           ?UL_TO_F_L04            000009B2 
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?FLOAT_UNPACK_L04
+
+  SEGMENTS IN THE MODULE
+  ======================
+__aseg
+  Relative segment, address: 00000000, align: 0
+  Segment part 1. ROOT.
+    -------------------------------------------------------------------------
+RCODE
+  Relative segment, address: 00000A3B - 00000A93 (0x59 bytes), align: 0
+  Segment part 2.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?F_UNPACK_L04           00000A3B        ?F_DIV_L04 (?FLOAT_DIV_L04)
+                                                   ?F_MUL_L04 (?FLOAT_MUL_L04)
+                                                   Segment part 2 (?FLOAT_ADD_SUB_L04)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?FLOAT_ROUND_L04
+
+  SEGMENTS IN THE MODULE
+  ======================
+__aseg
+  Relative segment, address: 00000000, align: 0
+  Segment part 1. ROOT.
+    -------------------------------------------------------------------------
+RCODE
+  Relative segment, address: 00000A94 - 00000B05 (0x72 bytes), align: 0
+  Segment part 2.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?F_OVERFLOW_L04         00000AEC        ?F_DIV_L04 (?FLOAT_DIV_L04)
+                                                   ?F_MUL_L04 (?FLOAT_MUL_L04)
+                                                   Segment part 2 (?FLOAT_ADD_SUB_L04)
+           ?F_PACK_L04             00000AC3        ?F_DIV_L04 (?FLOAT_DIV_L04)
+                                                   Segment part 2 (?FLOAT_ADD_SUB_L04)
+           ?F_ROUND_2_L04          00000A9E        ?F_DIV_L04 (?FLOAT_DIV_L04)
+           ?F_ROUND_L04            00000A94        ?F_MUL_L04 (?FLOAT_MUL_L04)
+                                                   Segment part 2 (?FLOAT_ADD_SUB_L04)
+           ?F_R_TEST_L04           00000AA8        ?F_DIV_L04 (?FLOAT_DIV_L04)
+           ?F_UNDERFLOW_L04        00000AF9        ?F_DIV_L04 (?FLOAT_DIV_L04)
+                                                   ?F_MUL_L04 (?FLOAT_MUL_L04)
+                                                   Segment part 2 (?FLOAT_ADD_SUB_L04)
+           ?F_UP_ROUND_L04         00000AAA        ?F_DIV_L04 (?FLOAT_DIV_L04)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?FUNCTION_LEAVE_L06
+
+  SEGMENTS IN THE MODULE
+  ======================
+__aseg
+  Relative segment, address: 00000000, align: 0
+  Segment part 1. ROOT.
+    -------------------------------------------------------------------------
+RCODE
+  Relative segment, address: 00000B06 - 00000B2E (0x29 bytes), align: 0
+  Segment part 2.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?0SFUNC_LEAVE_L06       00000B06 
+           ?FUNC_LEAVE_L06         00000B06        _formatted_write (?largewr)
+                                                   float_conversion (?largewr)
+    -------------------------------------------------------------------------
+RCODE
+  Relative segment, address: 00000B2F - 00000B42 (0x14 bytes), align: 0
+  Segment part 3.             Intra module refs:   Segment part 2
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?0EFUNC_LEAVE_L06       00000B42 
+           ?1SFUNC_LEAVE_L06       00000B2F 
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?MOVE_LONG_OBJECT_L06
+
+  SEGMENTS IN THE MODULE
+  ======================
+__aseg
+  Relative segment, address: 00000000, align: 0
+  Segment part 1. ROOT.
+    -------------------------------------------------------------------------
+RCODE
+  Relative segment, address: 00000B43 - 00000B75 (0x33 bytes), align: 0
+  Segment part 2.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?0EMOVE_LONG_L06        00000B75 
+           ?0SMOVE_LONG_L06        00000B43 
+           ?1SMOVE_LONG_L06        00000B53 
+           ?2SMOVE_LONG_L06        00000B63 
+           ?3SMOVE_LONG_L06        00000B67 
+           ?4SMOVE_LONG_L06        00000B73 
+           ?MOVE_LONG_L06          00000B43        Segment part 3 (?FUNCTION_LEAVE_L06)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?LONG_FLOAT_DEALLOC_L06
+
+  SEGMENTS IN THE MODULE
+  ======================
+__aseg
+  Relative segment, address: 00000000, align: 0
+  Segment part 1. ROOT.
+    -------------------------------------------------------------------------
+RCODE
+  Relative segment, address: 00000B76 - 00000BA5 (0x30 bytes), align: 0
+  Segment part 2.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?0EL_F_DEALLOC_L06      00000BA5 
+           ?0SL_F_DEALLOC_L06      00000B76 
+           ?L_F_DEALLOC_L06        00000B76        ?UL_DIV_L03 (?ULONG_DIV_L03)
+                                                   ?UL_MOD_L03 (?ULONG_MOD_L03)
+                                                   Segment part 2 (?FLOAT_ROUND_L04)
+
+    -------------------------------------------------------------------------
+  LIBRARY MODULE, NAME : ?LONG_FLOAT_DEALLOC_STAT_L06
+
+  SEGMENTS IN THE MODULE
+  ======================
+__aseg
+  Relative segment, address: 00000000, align: 0
+  Segment part 1. ROOT.
+    -------------------------------------------------------------------------
+RCODE
+  Relative segment, address: 00000BA6 - 00000BCA (0x25 bytes), align: 0
+  Segment part 2.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?0EL_F_DEALLOC_STAT_L06
+                                   00000BCA 
+           ?0SL_F_DEALLOC_STAT_L06
+                                   00000BA6 
+           ?L_F_DEALLOC_STAT_L06   00000BA6        ?F_CMP_L04 (?FLOAT_CMP_L04)
+                                                   ?F_DIV_L04 (?FLOAT_DIV_L04)
+                                                   ?F_MUL_L04 (?FLOAT_MUL_L04)
+                                                   ?SL_CMP_L03 (?SLONG_CMP_L03)
+                                                   Segment part 2 (?FLOAT_ADD_SUB_L04)
+                                                   Segment part 2 (?FLOAT_ROUND_L04)
+
+
+
+
+                ****************************************
+                *                                      *
+                *      SEGMENTS IN ADDRESS ORDER       *
+                *                                      *
+                ****************************************
+
+
+SEGMENT              SPACE    START ADDRESS   END ADDRESS     SIZE  TYPE  ALIGN
+=======              =====    =============   ===========     ====  ====  =====
+__aseg                                  00000000                     rel    0
+INTVEC                             00000000 - 00000001           2   com    1
+RCODE                              000000D8 - 00000BCA         AF3   rel    0
+CODE                               00000BCB - 00001572         9A8   rel    0
+NEAR_ID                            00001574 - 000015AB          38   rel    1
+NEAR_CONST                         00011000 - 00011099          9A   rel    1
+NEAR_I                             000FF300 - 000FF337          38   rel    1
+CSTACK                             000FF338 - 000FF3B7          80   rel    1
+
+                ****************************************
+                *                                      *
+                *        END OF CROSS REFERENCE        *
+                *                                      *
+                ****************************************
+
+ 5 277 bytes of CODE  memory
+   184 bytes of DATA  memory
+   210 bytes of CONST memory
+
+Errors: none
+Warnings: none
+
