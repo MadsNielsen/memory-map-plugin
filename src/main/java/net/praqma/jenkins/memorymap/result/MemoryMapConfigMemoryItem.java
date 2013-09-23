@@ -31,8 +31,11 @@ import net.praqma.jenkins.memorymap.util.HexUtils;
  *
  * @author Praqma
  */
-public class MemoryMapConfigMemoryItem implements Serializable {
-
+public class MemoryMapConfigMemoryItem implements Serializable, Comparable<MemoryMapConfigMemoryItem> {
+    
+    private static long MEGA_MULTIPLIER = 1024*1024;
+    private static long KILO_MULTIPLIER = 1024;
+    
     private String name;
     
     //The "start" address. Not always relavant but in some cases we use the 'origin' and the 'endAddress' to calculate the size
@@ -48,9 +51,6 @@ public class MemoryMapConfigMemoryItem implements Serializable {
     
     //Model property for 
     private List<MemoryMapConfigMemoryItem> associatedSections;
-    
-
-    
 
     public MemoryMapConfigMemoryItem() { }
     
@@ -69,7 +69,7 @@ public class MemoryMapConfigMemoryItem implements Serializable {
     public MemoryMapConfigMemoryItem(String name, String origin, String length) {
         this.name = name != null ? name.trim() : "";
         this.origin = origin;
-        this.length = length;
+        this.length = length.trim();
     }
 
     public MemoryMapConfigMemoryItem(String name, String origin, String length, String used, String unused) {
@@ -143,9 +143,9 @@ public class MemoryMapConfigMemoryItem implements Serializable {
      * @param endHex 
      */
     public void setCalculatedLength(String startHex, String endHex) {
-        HexUtils.HexString sHex = new HexUtils.HexString(startHex);
-        HexUtils.HexString eHex = new HexUtils.HexString(endHex);
-        HexUtils.HexString len = sHex.getLengthAsHex(eHex);
+        HexUtils.HexifiableString sHex = new HexUtils.HexifiableString(startHex);
+        HexUtils.HexifiableString eHex = new HexUtils.HexifiableString(endHex);
+        HexUtils.HexifiableString len = sHex.getLengthAsHex(eHex);
         setLength(len.rawString);
     }
      
@@ -229,5 +229,17 @@ public class MemoryMapConfigMemoryItem implements Serializable {
         hash = 83 * hash + (this.unused != null ? this.unused.hashCode() : 0);
         hash = 83 * hash + (this.associatedSections != null ? this.associatedSections.hashCode() : 0);
         return hash;
+    }
+
+    /**
+     * We sort the memory sections by their placement in memory, in ascending order.
+     * @param t
+     * @return 
+     */
+    @Override
+    public int compareTo(MemoryMapConfigMemoryItem t) {        
+        HexUtils.HexifiableString hexStringThis = new HexUtils.HexifiableString(getOrigin());
+        HexUtils.HexifiableString hexStringOther = new HexUtils.HexifiableString(t.getOrigin());
+        return hexStringThis.compareTo(hexStringOther);
     }
 }
