@@ -29,7 +29,10 @@ import java.util.Collections;
 import java.util.List;
 import net.praqma.jenkins.memorymap.graph.MemoryMapGraphConfiguration;
 import net.praqma.jenkins.memorymap.parser.TexasInstrumentsMemoryMapParser;
+import net.praqma.jenkins.memorymap.result.MemoryMapConfigMemory;
+import net.praqma.jenkins.memorymap.result.MemoryMapConfigMemoryItem;
 import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -53,5 +56,28 @@ public class TexasInstrumentsMemoryMapParserTest {
         List<MemoryMapGraphConfiguration> graphConfig = Collections.singletonList(mmgc);
 
         parser.parseConfigFile(graphConfig, f);
+    }
+    
+    @Test
+    public void testParseMapFile() throws IOException{
+        TexasInstrumentsMemoryMapParser parser = new TexasInstrumentsMemoryMapParser();
+        String file = TexasInstrumentsMemoryMapParserTest.class.getResource("TexasInstrumentsMapFile.txt").getFile();
+        File f = new File(file);
+        
+        MemoryMapConfigMemory mmcm = new MemoryMapConfigMemory();
+        mmcm = parser.parseMapFile(f, mmcm);
+        
+        for (MemoryMapConfigMemoryItem item : mmcm){
+            
+        }
+            
+    }
+    
+    @Test
+    public void testGetDefaultWordSize(){
+        TexasInstrumentsMemoryMapParser parser = new TexasInstrumentsMemoryMapParser();
+        assertEquals("16 equals parser.getDefaultWordSize()", 16, parser.getDefaultWordSize());
+        assertTrue("8 is not equal to parser.getDefaultWordSize()", 8 != parser.getDefaultWordSize());
+        
     }
 }
