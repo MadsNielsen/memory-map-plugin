@@ -147,12 +147,6 @@ public class GccMemoryMapParser extends AbstractMemoryMapParser implements Seria
     public int getDefaultWordSize() {
         return 8;
     }
-
-    @Override
-    public MemoryMapConfigMemory parseConfigFile(List<MemoryMapGraphConfiguration> graphConfig, File f) throws IOException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
     @Extension
     public static final class DescriptorImpl extends MemoryMapParserDescriptor<GccMemoryMapParser> {
 
