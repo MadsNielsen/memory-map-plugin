@@ -25,6 +25,7 @@ package net.praqma.jenkins.memorymap.util;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -41,6 +42,8 @@ public class HexUtils {
     private static final double GIGA = MEGA*1024;
         
     private static final Map<String, Double> scale = new HashMap<String, Double>();
+    private static final Pattern VALID_HEX = Pattern.compile("^[0xX]*[0-9a-fA-F]+$");
+    private static final Pattern VALID_NUMERICAL = Pattern.compile("^\\d+[mMgGkK]+$");
     
     static {
         scale.put("default", DEFAULT);
@@ -62,15 +65,15 @@ public class HexUtils {
         return i;
     }
     
-    public static class HexString implements Comparable<HexString> {
+    public static class HexifiableString implements Comparable<HexifiableString> {
         
         public final String rawString;
         
-        public HexString(String rawString) {
-            this.rawString = rawString;
+        public HexifiableString(String rawString) {
+            this.rawString = rawString.replaceAll("\\s", "");
         }
         
-        public HexString(Integer value) {
+        public HexifiableString(Integer value) {
             this.rawString = Integer.toHexString(value);
         }
         
@@ -78,15 +81,54 @@ public class HexUtils {
             return Integer.parseInt(rawString, 16);
         }
         
-        public HexUtils.HexString getLengthAsHex(HexString other) {
-           int diff = Math.abs(getIntegerValue() - other.getIntegerValue());
-           return new HexUtils.HexString(diff);
+        public boolean isValidMetricValue() {
+            return VALID_NUMERICAL.matcher(rawString).matches();
+        }
+        
+        public boolean isValidHexString() {
+            return VALID_HEX.matcher(rawString).matches();
         }
 
         @Override
-        public int compareTo(HexString t) {
-            int current = Integer.parseInt(rawString, 16);
-            int other = Integer.parseInt(t.rawString, 16);
+        public String toString() {
+            return rawString;
+        }
+        
+        private HexifiableString convertToHexForm() {
+            if(isValidHexString()) {
+                return this;
+            } else {
+                HexifiableString newString = null;
+                if (rawString.contains("M") || rawString.contains("m")) {
+                    newString = new HexifiableString(Integer.parseInt(rawString.replaceAll("[mM]", ""))*(int)MEGA);
+                } else if (rawString.contains("G") || rawString.contains("g")) {
+                    newString = new HexifiableString(Integer.parseInt(rawString.replaceAll("[gG]", ""))*(int)GIGA);
+                } else if (rawString.contains("K") || rawString.contains("k")) {
+                    newString = new HexifiableString(Integer.parseInt(rawString.replaceAll("[kK]", ""))*(int)KILO);
+                } else {
+                    throw new UnsupportedOperationException(String.format("The string %s contains invalid metric symbols", rawString));
+                }
+                return newString;
+            }
+        }
+        
+        public HexifiableString toValidHexString() {
+            if(isValidHexString()) {
+                return this;
+            } else {
+                return convertToHexForm();
+            }
+        }
+        
+        public HexUtils.HexifiableString getLengthAsHex(HexifiableString other) {
+           int diff = Math.abs(getIntegerValue() - other.getIntegerValue());
+           return new HexUtils.HexifiableString(diff);
+        }
+
+        @Override
+        public int compareTo(HexifiableString t) {
+            int current = Integer.parseInt(rawString.trim().replace("0x",""), 16);
+            int other = Integer.parseInt(t.rawString.trim().replace("0x",""), 16);
             
             if (other > current) {
                 return 1;

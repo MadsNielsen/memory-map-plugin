@@ -27,10 +27,7 @@ import java.io.Serializable;
 import java.util.LinkedList;
 
 /**
- *
  * @author Praqma
- * 
- * This object is the big aggregation 
  */
 public class MemoryMapConfigMemory extends LinkedList<MemoryMapConfigMemoryItem> implements Serializable {
     public MemoryMapConfigMemory() {}
@@ -46,26 +43,14 @@ public class MemoryMapConfigMemory extends LinkedList<MemoryMapConfigMemoryItem>
         
         return builder.toString();
     }
-
-    /**
-     * 
-     * @param e
-     * @return
-     */
-    @Override
-    public boolean add(MemoryMapConfigMemoryItem e) {
-        /*
-        if(contains(e)) {
-            int index = indexOf(e);
-            MemoryMapConfigMemoryItem existing = this.get(index);
-            
-            return false;
-        } else {
-        * /
-            return super.add(e); /*
+    
+    public boolean containsSectionWithName(String name) {
+        for (MemoryMapConfigMemoryItem item : this) {
+            if(item.getName().equals(name)) {
+                return true;
+            }
         }
-        */ 
-        return super.add(e);
+        return false;
     }
 
 }
