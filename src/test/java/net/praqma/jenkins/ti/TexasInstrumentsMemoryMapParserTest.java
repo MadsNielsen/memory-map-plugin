@@ -76,8 +76,6 @@ public class TexasInstrumentsMemoryMapParserTest {
     @Test
     public void testGetDefaultWordSize(){
         TexasInstrumentsMemoryMapParser parser = new TexasInstrumentsMemoryMapParser();
-        assertEquals("16 equals parser.getDefaultWordSize()", 16, parser.getDefaultWordSize());
-        assertTrue("8 is not equal to parser.getDefaultWordSize()", 8 != parser.getDefaultWordSize());
-        
+        assertEquals("16 equals parser.getDefaultWordSize()", 16, parser.getDefaultWordSize());      
     }
 }
