@@ -321,7 +321,7 @@ public class MemoryMapBuildAction implements Action {
         }
         
         JFreeChart chart = new JFreeChart(plot);
-        chart.setPadding(new RectangleInsets(30, 15, 15, 15));
+        //chart.setPadding(new RectangleInsets(30, 15, 15, 15));
         chart.setTitle(title);
         return chart;
     }
@@ -353,9 +353,9 @@ public class MemoryMapBuildAction implements Action {
         CategoryAxis domainAxis = new ShiftedCategoryAxis(null);
         plot.setDomainAxis(domainAxis);
         domainAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_90);
-        domainAxis.setLowerMargin(0.0);
-        domainAxis.setUpperMargin(0.0);
-        domainAxis.setCategoryMargin(0.0);
+        //domainAxis.setLowerMargin(0.0);
+        //domainAxis.setUpperMargin(0.0);
+        //domainAxis.setCategoryMargin(0.0);
 
         final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
         rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
@@ -364,7 +364,7 @@ public class MemoryMapBuildAction implements Action {
 
         final StackedAreaRenderer renderer = (StackedAreaRenderer) plot.getRenderer();
         renderer.setBaseStroke(new BasicStroke(2.0f));
-        plot.setInsets(new RectangleInsets(5.0, 0, 0, 5.0));
+        //plot.setInsets(new RectangleInsets(5.0, 0, 0, 5.0));
         return chart;
     }
 

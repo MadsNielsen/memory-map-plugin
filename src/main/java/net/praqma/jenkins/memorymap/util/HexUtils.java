@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
- *
  * @author Praqma
  */
 public class HexUtils {

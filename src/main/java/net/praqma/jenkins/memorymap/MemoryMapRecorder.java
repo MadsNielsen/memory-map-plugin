@@ -118,10 +118,8 @@ public class MemoryMapRecorder extends Recorder {
 
         out.println("Printing configuration");
         if(config != null) {
-            out.println("== Configuration start ==");
             out.println();
             out.println(config.toString());
-            out.println("== Configuration end ==");
         }
 
         MemoryMapBuildAction mmba = new MemoryMapBuildAction(build, config);
