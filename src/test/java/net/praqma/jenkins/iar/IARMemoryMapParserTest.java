@@ -96,19 +96,33 @@ public class IARMemoryMapParserTest {
         String file = IARMemoryMapParserTest.class.getResource("helloworld.map").getFile();
         File f = new File(file);
         
+               
         MemoryMapConfigMemory mmcm = new MemoryMapConfigMemory();
-        mmcm = parser.parseMapFile(f, mmcm);
+        MemoryMapConfigMemory mmcm1 = new MemoryMapConfigMemory();
+        mmcm1 = parser.parseMapFile(f, mmcm);
+       
+        
+        
+        //mmcm = parser.parseConfigFile(null, f);
+        
+        
+        assertTrue(mmcm.size() > 0);
+        
         
         for (MemoryMapConfigMemoryItem item : mmcm){
-           if (item.getName().equals("CODE")){
-               assertEquals(item.getUsed(), "5277");
-           }else if(item.getName().equals("DATA")){
-               assertEquals(item.getUsed(), "184");
-           }else if (item.getName().equals("CONST")){
-               assertEquals(item.getUsed(), "210");
-           }else {
-               assertEquals(item, null);
-           }
+            
+            assertTrue(item.getName().equals("Hugo"));
+            assertFalse(true);
+            System.out.println("FIlhodappuuuutaaaaaa!!!!! " + item.toString());
+//           if (item.getName().equals("Martin")){
+//               assertEquals(item.getUsed(), "mooo");
+//           }else if(item.getName().equals("HUGO")){
+//               assertEquals(item.getUsed(), "mookokok");
+//           }else if (item.getName().equals("JOHN")){
+//               assertEquals(item.getUsed(), "pocaralho");
+//           }else {
+//               AssertionError(item, "vai ta foder");
+//           }
         }
             
     }
