@@ -185,19 +185,19 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
     @Override
     public MemoryMapConfigMemory parseMapFile(File f, MemoryMapConfigMemory config) throws IOException {
         CharSequence sequence = createCharSequenceFromFile(f);
-        for (MemoryMapConfigMemoryItem codeItem : config) {
-            Matcher matcher = getPatternForMemoryType(codeItem.getName()).matcher(sequence);
+        for (MemoryMapConfigMemoryItem item : config) {
+            Matcher matcher = getPatternForMemoryType(item.getName()).matcher(sequence);
             boolean found = false;
 
             while (matcher.find()) {
                 HexUtils.HexifiableString s = new HexUtils.HexifiableString(Integer.parseInt(matcher.group(1).replaceAll("\\s", "")));
-                codeItem.setUsed(s.rawString);
+                item.setUsed(s.rawString);
                 found = true;
             }
 
             if (!found) {
-                logger.logp(Level.WARNING, "parseMapFile", IARMemoryMapParser.class.getName(), String.format("parseMapFile(File f, MemoryMapConfigMemory configuration) non existing item: %s", codeItem));
-                throw new MemoryMapMemorySelectionError(String.format("Linker command element %s not found in .map file", codeItem));
+                logger.logp(Level.WARNING, "parseMapFile", IARMemoryMapParser.class.getName(), String.format("parseMapFile(File f, MemoryMapConfigMemory configuration) non existing item: %s", item));
+                throw new MemoryMapMemorySelectionError(String.format("Linker command element %s not found in .map file", item));
             }
         }
         return config;

@@ -98,39 +98,28 @@ public class IARMemoryMapParserTest {
         
                
         MemoryMapConfigMemory mmcm = new MemoryMapConfigMemory();
-        MemoryMapConfigMemory mmcm1 = new MemoryMapConfigMemory();
-        mmcm1 = parser.parseMapFile(f, mmcm);
-       
-        
-        
-        //mmcm = parser.parseConfigFile(null, f);
-        
-        
+        mmcm.add(new MemoryMapConfigMemoryItem("CODE", "", "", "5277", ""));
+        mmcm.add(new MemoryMapConfigMemoryItem("DATA", "", "", "184", ""));
+        mmcm.add(new MemoryMapConfigMemoryItem("CONST", "", "", "210", ""));
+        mmcm = parser.parseMapFile(f, mmcm);
         assertTrue(mmcm.size() > 0);
         
-        
         for (MemoryMapConfigMemoryItem item : mmcm){
-            
-            assertTrue(item.getName().equals("Hugo"));
-            assertFalse(true);
-            System.out.println("FIlhodappuuuutaaaaaa!!!!! " + item.toString());
-//           if (item.getName().equals("Martin")){
-//               assertEquals(item.getUsed(), "mooo");
-//           }else if(item.getName().equals("HUGO")){
-//               assertEquals(item.getUsed(), "mookokok");
-//           }else if (item.getName().equals("JOHN")){
-//               assertEquals(item.getUsed(), "pocaralho");
-//           }else {
-//               AssertionError(item, "vai ta foder");
-//           }
-        }
-            
+           if (item.getName().equals("CODE")){
+               assertEquals(item.getUsed(), "149d");
+           }else if(item.getName().equals("DATA")){
+               assertEquals(item.getUsed(), "b8");
+           }else if (item.getName().equals("CONST")){
+               assertEquals(item.getUsed(), "d2");
+           }else {
+               assertEquals(item, null);
+           }
+        }      
     }
 
     @Test
     public void testGetDefaultWordSize() {
         IARMemoryMapParser parser = new IARMemoryMapParser();
         assertEquals("8 equals parser.getDefaultWordSize()", 8, parser.getDefaultWordSize());
-        assertTrue("8 is not equal to parser.getDefaultWordSize()", 16 != parser.getDefaultWordSize());
     }
 }

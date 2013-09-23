@@ -65,10 +65,16 @@ public class TexasInstrumentsMemoryMapParserTest {
         File f = new File(file);
         
         MemoryMapConfigMemory mmcm = new MemoryMapConfigMemory();
+        mmcm.add(new MemoryMapConfigMemoryItem("RAMM0", "00000050", "000003b0", "00000195", "0000021b"));
         mmcm = parser.parseMapFile(f, mmcm);
+        assertTrue(mmcm.size() > 0);
         
+        System.out.println(mmcm.toString());
         for (MemoryMapConfigMemoryItem item : mmcm){
-          
+          if(item.getName().equals("RAMM0")){
+              assertEquals(item.getUsed(), "00000195");
+              assertEquals(item.getUnused(), "0000021b");
+          }
         }
             
     }
@@ -76,8 +82,6 @@ public class TexasInstrumentsMemoryMapParserTest {
     @Test
     public void testGetDefaultWordSize(){
         TexasInstrumentsMemoryMapParser parser = new TexasInstrumentsMemoryMapParser();
-        assertEquals("16 equals parser.getDefaultWordSize()", 16, parser.getDefaultWordSize());
-        assertTrue("8 is not equal to parser.getDefaultWordSize()", 8 != parser.getDefaultWordSize());
-        
+        assertEquals("16 equals parser.getDefaultWordSize()", 16, parser.getDefaultWordSize());      
     }
 }
