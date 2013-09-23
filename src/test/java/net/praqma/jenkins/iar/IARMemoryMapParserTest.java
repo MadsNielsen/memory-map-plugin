@@ -78,7 +78,7 @@ public class IARMemoryMapParserTest {
         MemoryMapGraphConfiguration mmgc = new MemoryMapGraphConfiguration(null, null, true);
         String file = IARMemoryMapParserTest.class.getResource("lnk78f1215_48.xcl").getFile();
         
-        mmgc.setGraphDataList("DATA");
+        mmgc.setGraphDataList("CODE,DATA,CONST");
         mmgc.setGraphCaption("Config Memory Graph");
 
         File f = new File(file);
@@ -97,7 +97,7 @@ public class IARMemoryMapParserTest {
         mmcm = parser.parseMapFile(f, mmcm);
         
         for (MemoryMapConfigMemoryItem item : mmcm){
-            
+            // to do some assertions
         }
             
     }
