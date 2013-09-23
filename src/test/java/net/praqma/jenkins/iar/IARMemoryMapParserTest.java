@@ -76,16 +76,15 @@ public class IARMemoryMapParserTest {
     }
     
     @Test
-    public void testParseConfigFile() throws IOException{
-        
+    public void testParseConfigFile() throws IOException{    
         IARMemoryMapParser parser = new IARMemoryMapParser();
-        String file = IARMemoryMapParserTest.class.getResource("lnk78f1215_48.xcl").getFile();
-        File f = new File(file);
-        
         MemoryMapGraphConfiguration mmgc = new MemoryMapGraphConfiguration(null, null, true);
+        String file = IARMemoryMapParserTest.class.getResource("lnk78f1215_48.xcl").getFile();
+        
         mmgc.setGraphDataList("CODE,DATA,CONST");
         mmgc.setGraphCaption("Config Memory Graph");
- 
+
+        File f = new File(file);
         List<MemoryMapGraphConfiguration> graphConfig = Collections.singletonList(mmgc);
   
         parser.parseConfigFile(graphConfig, f);
@@ -101,7 +100,7 @@ public class IARMemoryMapParserTest {
         mmcm = parser.parseMapFile(f, mmcm);
         
         for (MemoryMapConfigMemoryItem item : mmcm){
-            // do assertions
+            
         }
             
     }
