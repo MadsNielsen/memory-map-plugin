@@ -68,7 +68,7 @@ public class TexasInstrumentsMemoryMapParserTest {
         mmcm = parser.parseMapFile(f, mmcm);
         
         for (MemoryMapConfigMemoryItem item : mmcm){
-            
+          
         }
             
     }
