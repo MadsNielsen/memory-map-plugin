@@ -97,7 +97,7 @@ public class IARMemoryMapParserTest {
         mmcm = parser.parseMapFile(f, mmcm);
         
         for (MemoryMapConfigMemoryItem item : mmcm){
-            // to do some assertions
+            
         }
             
     }
