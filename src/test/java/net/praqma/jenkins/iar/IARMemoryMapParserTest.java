@@ -100,7 +100,15 @@ public class IARMemoryMapParserTest {
         mmcm = parser.parseMapFile(f, mmcm);
         
         for (MemoryMapConfigMemoryItem item : mmcm){
-            
+           if (item.getName().equals("CODE")){
+               assertEquals(item.getUsed(), "5277");
+           }else if(item.getName().equals("DATA")){
+               assertEquals(item.getUsed(), "184");
+           }else if (item.getName().equals("CONST")){
+               assertEquals(item.getUsed(), "210");
+           }else {
+               assertEquals(item, null);
+           }
         }
             
     }
