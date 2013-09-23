@@ -106,8 +106,7 @@ public class IARMemoryMapParserTest {
            }else {
                assertEquals(item, null);
            }
-        }
-            
+        }      
     }
 
     @Test
