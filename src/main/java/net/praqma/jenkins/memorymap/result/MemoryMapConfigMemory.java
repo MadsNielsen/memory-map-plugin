@@ -34,6 +34,7 @@ import java.util.logging.Logger;
  */
 public class MemoryMapConfigMemory extends LinkedList<MemoryMapConfigMemoryItem> implements Serializable {
     private static final Logger LOG = Logger.getLogger(MemoryMapConfigMemory.class.getName());
+    
     public MemoryMapConfigMemory() {}
 
     @Override

@@ -51,7 +51,7 @@ public class MemoryMapConfigMemoryItem implements Serializable, Comparable<Memor
     
     //Model property for 
     private List<MemoryMapConfigMemoryItem> associatedSections;
-
+    
     public MemoryMapConfigMemoryItem() { }
     
     /**
@@ -78,6 +78,10 @@ public class MemoryMapConfigMemoryItem implements Serializable, Comparable<Memor
         this.length = length;
         this.unused = unused;
         this.used = used;
+    }
+    
+    public boolean isRoot() {
+        return !associatedSections.isEmpty();
     }
 
     /**

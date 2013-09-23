@@ -6,11 +6,7 @@
         td.setting-name {
             vertical-align:middle;
         }             
-    </style>
-     
-    <f:entry title="${%Linker command file}" field="configurationFile" name="configurationFile">            
-        <f:textbox/>
-    </f:entry>        
+    </style>        
     <f:entry title="${%Word size}" field="wordSize" name="wordSize">            
         <f:textbox/>
     </f:entry>
@@ -21,10 +17,10 @@
     <f:entry field="scale" title="Choose Scale Type">
         <f:select />
     </f:entry>
-
-    <f:dropdownDescriptorSelector title="${%Parser selection}" descriptors="${descriptor.getParsers()}" field="chosenParser" />
-
-    <f:entry field="graphConfiguration" title="Configure graphs">
-        <f:hetero-list name="graphConfiguration" oneEach="false" items="${instance.graphConfiguration}" addCaption="Add graph" deleteCaption="Remove graph" descriptors="${descriptor.getGraphOptions()}"/>
+    <f:entry field="chosenParsers" title="Configured parsers">
+        <f:hetero-list name="chosenParsers" oneEach="false" items="${instance.chosenParsers}" addCaption="Add parser" deleteCaption="Remove parser" descriptors="${descriptor.getParsers()}"/>
     </f:entry>
+    
+
+
 </j:jelly>

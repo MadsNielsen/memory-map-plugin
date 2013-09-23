@@ -28,10 +28,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
-import net.praqma.jenkins.memorymap.graph.MemoryMapGraphConfiguration;
 import net.praqma.jenkins.memorymap.result.MemoryMapConfigMemory;
 import net.praqma.jenkins.memorymap.util.FileFoundable;
 
@@ -39,38 +37,35 @@ import net.praqma.jenkins.memorymap.util.FileFoundable;
  *
  * @author Praqma
  */
-public class MemoryMapConfigFileParserDelegate extends FileFoundable<MemoryMapConfigMemory>  {
+public class MemoryMapConfigFileParserDelegate extends FileFoundable<HashMap<String, MemoryMapConfigMemory>>  {
 
     private static final Logger log = Logger.getLogger(MemoryMapMapParserDelegate.class.getName());
-    private AbstractMemoryMapParser parser;
-    private List<MemoryMapGraphConfiguration> graphConfig;
+    private List<AbstractMemoryMapParser> parsers;
     private static HashMap<String,Pattern> patternRegistry;
     
     public MemoryMapConfigFileParserDelegate() { }
     
-    public MemoryMapConfigFileParserDelegate(List<MemoryMapGraphConfiguration> graphConfig, AbstractMemoryMapParser parser) { 
-        this.parser = parser;
-        this.graphConfig = graphConfig;
+    public MemoryMapConfigFileParserDelegate(List<AbstractMemoryMapParser> parsers) { 
+        this.parsers = parsers;
     }
     
     @Override
-    public MemoryMapConfigMemory invoke(File f, VirtualChannel channel) throws IOException, InterruptedException {
-        MemoryMapConfigMemory mmcm  = parser.parseConfigFile(graphConfig, findFile(f, parser.getConfigurationFile()));
-        return mmcm;
+    public HashMap<String, MemoryMapConfigMemory> invoke(File f, VirtualChannel channel) throws IOException, InterruptedException {
+        HashMap<String, MemoryMapConfigMemory> memorys = new HashMap<String, MemoryMapConfigMemory>();
+        
+        for(int i=0; i< parsers.size(); i++) {           
+            String uuid =  parsers.get(i).getUniqueName();
+            memorys.put(parsers.get(i).getUniqueName(), parsers.get(i).parseConfigFile(findFile(f, parsers.get(i).getConfigurationFile()))); 
+        } 
+        return memorys;
     }
-
-    /**
-     * @return the parser
-     */
-    public AbstractMemoryMapParser getParser() {
-        return parser;
+    
+    public List<AbstractMemoryMapParser> getParsers() {
+        return parsers;
     }
-
-    /**
-     * @param parser the parser to set
-     */
-    public void setParser(AbstractMemoryMapParser parser) {
-        this.parser = parser;
+    
+    public void setParsers(List<AbstractMemoryMapParser> parsers) {
+        this.parsers = parsers;
     }
     
     public static Pattern getPatternForMemoryLayout(String sectionName) {

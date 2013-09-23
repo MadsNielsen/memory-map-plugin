@@ -115,4 +115,11 @@ public class MemoryMapGraphConfiguration implements Describable<MemoryMapGraphCo
         }
         return list;
     }
+
+    @Override
+    public String toString() {
+        return String.format("[%s] %s", getGraphCaption(), getGraphDataList());
+    }
+    
+    
 }

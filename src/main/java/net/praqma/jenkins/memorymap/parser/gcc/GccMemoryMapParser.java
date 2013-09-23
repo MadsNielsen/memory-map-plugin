@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.praqma.jenkins.memorymap.graph.MemoryMapGraphConfiguration;
+import net.praqma.jenkins.memorymap.graph.MemoryMapGraphConfigurationDescriptor;
 import net.praqma.jenkins.memorymap.parser.AbstractMemoryMapParser;
 import net.praqma.jenkins.memorymap.parser.MemoryMapParserDescriptor;
 import net.praqma.jenkins.memorymap.result.MemoryMapConfigMemory;
@@ -27,8 +28,8 @@ public class GccMemoryMapParser extends AbstractMemoryMapParser implements Seria
     //private static final Pattern MEM_SECTIONS = Pattern.compile("(\\S+)( : \\{[^\\}]\\n)+");    
     private static final Pattern MEM_SECTIONS = Pattern.compile("(\\s+)(\\S+)( :)(\\s+AT \\(\\S+\\))*");    
     @DataBoundConstructor    
-    public GccMemoryMapParser(String mapFile, String configurationFile, Integer wordSize, Boolean bytesOnGraph) {
-        super(mapFile, configurationFile, wordSize, bytesOnGraph);
+    public GccMemoryMapParser(String mapFile, String configurationFile, Integer wordSize, Boolean bytesOnGraph, List<MemoryMapGraphConfiguration> graphConfiguration) {
+        super(mapFile, configurationFile, wordSize, bytesOnGraph, graphConfiguration);
     }
     
     /**
@@ -63,7 +64,6 @@ public class GccMemoryMapParser extends AbstractMemoryMapParser implements Seria
         CharSequence m = createCharSequenceFromFile(f);
         Matcher match = MEM_SECTIONS.matcher(m);
         while(match.find()) {
-            System.out.println(match.group(1));
             MemoryMapConfigMemoryItem it = new MemoryMapConfigMemoryItem(match.group(2), "0");
             items.add(it);
         }
@@ -110,7 +110,6 @@ public class GccMemoryMapParser extends AbstractMemoryMapParser implements Seria
         for(MemoryMapConfigMemoryItem item : configuration) {
             Matcher m = getLinePatternForMapFile(item.getName()).matcher(createCharSequenceFromFile(f));            
             while(m.find()) {
-                System.out.println( String.format( "Setting origin to: %s used to %s for item %s", m.group(3), m.group(5), item.getName()) );
                 item.setOrigin(m.group(3));
                 item.setUsed(m.group(5));
             }
@@ -119,14 +118,14 @@ public class GccMemoryMapParser extends AbstractMemoryMapParser implements Seria
     }
     
     @Override
-    public MemoryMapConfigMemory parseConfigFile(List<MemoryMapGraphConfiguration> graphConfig, File f) throws IOException {
+    public MemoryMapConfigMemory parseConfigFile(File f) throws IOException {
         
         //Collect sections from both the MEMORY and the SECTIONS areas from the command file.
         //The memory are the top level components, sections belong to one of thsese sections
         MemoryMapConfigMemory memconfig = getMemory(f);
         memconfig.addAll(getSections(f));
         
-        for(MemoryMapGraphConfiguration g : graphConfig) {
+        for(MemoryMapGraphConfiguration g : gConf) {
             for(String gItem : g.itemizeGraphDataList()) {
                 for (String gSplitItem : gItem.split("\\+") ) {
                     //We will fail if the name of the data section does not match any of the named items in the map file.
@@ -158,7 +157,7 @@ public class GccMemoryMapParser extends AbstractMemoryMapParser implements Seria
             GccMemoryMapParser parser = (GccMemoryMapParser)instance;
             save();
             return parser;
-        } 
+        }
     }    
 }
 

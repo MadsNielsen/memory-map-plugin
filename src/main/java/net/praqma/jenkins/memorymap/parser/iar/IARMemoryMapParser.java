@@ -32,6 +32,7 @@ import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.praqma.jenkins.memorymap.graph.MemoryMapGraphConfiguration;
+import net.praqma.jenkins.memorymap.graph.MemoryMapGraphConfigurationDescriptor;
 import net.praqma.jenkins.memorymap.parser.AbstractMemoryMapParser;
 import net.praqma.jenkins.memorymap.parser.MemoryMapParserDescriptor;
 import net.praqma.jenkins.memorymap.result.MemoryMapConfigMemory;
@@ -49,8 +50,8 @@ import org.kohsuke.stapler.StaplerRequest;
 public class IARMemoryMapParser extends AbstractMemoryMapParser {
 
     @DataBoundConstructor
-    public IARMemoryMapParser(String mapFile, String configurationFile, Integer wordSize, Boolean bytesOnGraph, Pattern... pattern) {
-        super(mapFile, configurationFile, wordSize, bytesOnGraph);
+    public IARMemoryMapParser(String mapFile, String configurationFile, Integer wordSize, Boolean bytesOnGraph, List<MemoryMapGraphConfiguration> graphConfiguration, Pattern... pattern) {
+        super(mapFile, configurationFile, wordSize, bytesOnGraph, graphConfiguration);
     }
 
     public IARMemoryMapParser() {
@@ -88,10 +89,10 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
     }
 
     @Override
-    public MemoryMapConfigMemory parseConfigFile(List<MemoryMapGraphConfiguration> graphConfig, File f) throws IOException {
+    public MemoryMapConfigMemory parseConfigFile(File f) throws IOException {
         MemoryMapConfigMemory config = new MemoryMapConfigMemory();
         CharSequence sequence = createCharSequenceFromFile(f);
-        for (MemoryMapGraphConfiguration graph : graphConfig) {            
+        for (MemoryMapGraphConfiguration graph : gConf) {            
             for (String s : graph.itemizeGraphDataList()) {
 
                 String[] multiSections = s.trim().split("\\+");
@@ -223,5 +224,6 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
             save();
             return parser;
         }
+
     }
 }

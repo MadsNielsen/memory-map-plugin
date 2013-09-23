@@ -40,6 +40,7 @@ import hudson.util.ListBoxModel;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -65,13 +66,11 @@ public class MemoryMapRecorder extends Recorder {
 
     private String mapFile;
     private Integer wordSize;
-    private String configurationFile;
     private boolean showBytesOnGraph;
     public final String scale;
-    private AbstractMemoryMapParser chosenParser;
+    public final List<AbstractMemoryMapParser> chosenParsers;
     public final List<MemoryMapGraphConfiguration> graphConfiguration;
     private static final Logger log = Logger.getLogger(MemoryMapRecorder.class.getName());
-    
         
     @Override
     public BuildStepMonitor getRequiredMonitorService() {
@@ -79,11 +78,11 @@ public class MemoryMapRecorder extends Recorder {
     }
     
     @DataBoundConstructor
-    public MemoryMapRecorder(AbstractMemoryMapParser chosenParser, String configurationFile, boolean showBytesOnGraph, String wordSize, final String scale , final List<MemoryMapGraphConfiguration> graphConfiguration) {
-        this.chosenParser = chosenParser;
-        this.configurationFile = configurationFile;        
+    public MemoryMapRecorder(List<AbstractMemoryMapParser> chosenParsers, String configurationFile, boolean showBytesOnGraph, String wordSize, final String scale , final List<MemoryMapGraphConfiguration> graphConfiguration) {
+        this.chosenParsers = chosenParsers;
         this.showBytesOnGraph = showBytesOnGraph;
-        this.wordSize = StringUtils.isBlank(wordSize) ? chosenParser.getDefaultWordSize() : Integer.parseInt(wordSize);   
+        //TODO: This should be chose at parse-time. The 8 that is...
+        this.wordSize = StringUtils.isBlank(wordSize) ? 8 : Integer.parseInt(wordSize);   
         this.scale = scale;
         this.graphConfiguration = graphConfiguration;
     }
@@ -94,15 +93,14 @@ public class MemoryMapRecorder extends Recorder {
         boolean failed = false;
         PrintStream out = listener.getLogger();
                 
-        MemoryMapConfigMemory config = null;
+        HashMap<String, MemoryMapConfigMemory> config = null;
         
         String version = Hudson.getInstance().getPlugin( "memory-map" ).getWrapper().getVersion();
         out.println( "Memory Map Plugin version " + version );
         
-        try { 
-            chosenParser.setConfigurationFile(configurationFile);
-            config = build.getWorkspace().act(new MemoryMapConfigFileParserDelegate(graphConfiguration, chosenParser));
-            config = build.getWorkspace().act(new MemoryMapMapParserDelegate(chosenParser, config));
+        try {
+            config = build.getWorkspace().act(new MemoryMapConfigFileParserDelegate(chosenParsers));
+            config = build.getWorkspace().act(new MemoryMapMapParserDelegate(chosenParsers, config));            
         } catch(IOException ex) {
             //Catch all known errors (By using a marker interface)
             if (ex instanceof MemoryMapError) {
@@ -143,41 +141,6 @@ public class MemoryMapRecorder extends Recorder {
     public void setMapFile(String mapFile) {
         this.mapFile = mapFile;
     }
-
-    /**
-     * @return the chosenParser
-     */
-    public AbstractMemoryMapParser getChosenParser() {
-        return chosenParser;
-    }
-
-    /**
-     * @param chosenParser the chosenParser to set
-     */
-    public void setChosenParser(AbstractMemoryMapParser chosenParser) {
-        this.chosenParser = chosenParser;
-    }
-
-    /**
-     * @return the configurationFile
-     */
-    public String getConfigurationFile() {
-        return configurationFile;
-    }
-
-    /**
-     * @param configurationFile the configurationFile to set
-     */
-    public void setConfigurationFile(String configurationFile) {
-        this.configurationFile = configurationFile;
-    }
-
-    /**
-     * @return the graphConfiguration
-     */    
-    public List<MemoryMapGraphConfiguration> getGraphConfiguration() {
-        return graphConfiguration;
-    }
     
     /**
      * @return the showBytesOnGraph
@@ -210,6 +173,7 @@ public class MemoryMapRecorder extends Recorder {
     @Extension
     public static final class DescriptorImpl extends BuildStepDescriptor<Publisher> {
 
+        
         @Override
         public boolean isApplicable(Class<? extends AbstractProject> type) {
             return true;
@@ -224,9 +188,7 @@ public class MemoryMapRecorder extends Recorder {
             return AbstractMemoryMapParser.getDescriptors();
         }
         
-        public List<MemoryMapGraphConfigurationDescriptor<?>> getGraphOptions() {
-            return MemoryMapGraphConfiguration.getDescriptors();
-        }
+
 
         @Override
         public Publisher newInstance(StaplerRequest req, JSONObject formData) throws FormException {

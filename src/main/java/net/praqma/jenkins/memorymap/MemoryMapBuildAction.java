@@ -33,6 +33,7 @@ import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -64,14 +65,13 @@ import org.kohsuke.stapler.StaplerResponse;
 public class MemoryMapBuildAction implements Action {
 
     private static final double labelOffset = 1.2d;
-    private MemoryMapConfigMemory memoryMapConfig;
+    private HashMap<String, MemoryMapConfigMemory> memoryMapConfig;
     private AbstractBuild<?, ?> build;
     private MemoryMapRecorder recorder;
 
-    public MemoryMapBuildAction(AbstractBuild<?, ?> build, MemoryMapConfigMemory memoryMapConfig) {
+    public MemoryMapBuildAction(AbstractBuild<?, ?> build, HashMap<String, MemoryMapConfigMemory> memoryMapConfig) {
         this.build = build;
         this.memoryMapConfig = memoryMapConfig;
-
     }
 
     @Override
@@ -173,6 +173,8 @@ public class MemoryMapBuildAction implements Action {
 
         String members = req.getParameter("categories");
         String graphTitle = req.getParameter("title");
+        String uniqueDataSet = req.getParameter("dataset");
+        
 
         int w = Integer.parseInt(req.getParameter("width"));
         int h = Integer.parseInt(req.getParameter("height"));
@@ -193,7 +195,8 @@ public class MemoryMapBuildAction implements Action {
 
         for (MemoryMapBuildAction membuild = this; membuild != null; membuild = membuild.getPreviousAction()) {
             ChartUtil.NumberOnlyBuildLabel label = new ChartUtil.NumberOnlyBuildLabel(membuild.build);
-            MemoryMapConfigMemory result = membuild.getMemoryMapConfig();
+
+            MemoryMapConfigMemory result = membuild.getMemoryMapConfig().get(uniqueDataSet);
             MemoryMapConfigMemory resultBlacklist = new MemoryMapConfigMemory();
             for (List<String> list : memberLists) {
                 double value = 0.0d;
@@ -385,14 +388,14 @@ public class MemoryMapBuildAction implements Action {
     /**
      * @return the memoryMapConfig
      */
-    public MemoryMapConfigMemory getMemoryMapConfig() {
+    public HashMap<String, MemoryMapConfigMemory> getMemoryMapConfig() {
         return memoryMapConfig;
     }
 
     /**
      * @param memoryMapConfig the memoryMapConfig to set
      */
-    public void setMemoryMapConfig(MemoryMapConfigMemory memoryMapConfig) {
+    public void setMemoryMapConfig(HashMap<String, MemoryMapConfigMemory> memoryMapConfig) {
         this.memoryMapConfig = memoryMapConfig;
     }
 

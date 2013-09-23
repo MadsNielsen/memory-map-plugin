@@ -42,6 +42,7 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import jenkins.model.Jenkins;
 import net.praqma.jenkins.memorymap.graph.MemoryMapGraphConfiguration;
+import net.praqma.jenkins.memorymap.graph.MemoryMapGraphConfigurationDescriptor;
 import net.praqma.jenkins.memorymap.result.MemoryMapConfigMemory;
 import org.apache.commons.collections.ListUtils;
 
@@ -52,9 +53,11 @@ import org.apache.commons.collections.ListUtils;
 public abstract class AbstractMemoryMapParser implements Describable<AbstractMemoryMapParser>, ExtensionPoint, Serializable {
 
     private static final String UTF_8_CHARSET = "UTF8";
+   
     protected static final Logger logger = Logger.getLogger(AbstractMemoryMapParser.class.toString());
     
     protected List<Pattern> patterns;
+    public final List<MemoryMapGraphConfiguration> gConf;
     protected String mapFile;
     private String configurationFile;
     private Integer wordSize;
@@ -69,19 +72,29 @@ public abstract class AbstractMemoryMapParser implements Describable<AbstractMem
     
     public AbstractMemoryMapParser () {  
         this.patterns = ListUtils.EMPTY_LIST;
+        this.gConf = new ArrayList<MemoryMapGraphConfiguration>();
     }
     
-    public AbstractMemoryMapParser(String mapFile, String configurationFile, Integer wordSize, Boolean bytesOnGraph, Pattern... pattern) {
+    public AbstractMemoryMapParser(String mapFile, String configurationFile, Integer wordSize, Boolean bytesOnGraph, List<MemoryMapGraphConfiguration> graphConfiguration, Pattern... pattern) {
         this.patterns = Arrays.asList(pattern);
         this.mapFile = mapFile;
         this.configurationFile = configurationFile;
         this.wordSize = wordSize;
         this.bytesOnGraph = bytesOnGraph;
+        this.gConf = graphConfiguration;
+    }
+    
+    /**
+     * Implemented in order to get a unique name for the chosen parser
+     * @return 
+     */
+    public String getUniqueName() {
+        return String.format("%s_%s_%s", this.getClass().getSimpleName().replace(".class", ""), mapFile, configurationFile);
     }
      
     protected CharSequence createCharSequenceFromFile(File f) throws IOException {
         return createCharSequenceFromFile(UTF_8_CHARSET, f);
-    }    
+    }
      
     protected CharSequence createCharSequenceFromFile(String charset, File f) throws IOException {
         String chosenCharset = charset;
@@ -111,7 +124,7 @@ public abstract class AbstractMemoryMapParser implements Describable<AbstractMem
         return cbuf;
     }    
     
-    public abstract MemoryMapConfigMemory parseConfigFile(List<MemoryMapGraphConfiguration> graphConfig, File f) throws IOException;
+    public abstract MemoryMapConfigMemory parseConfigFile(File f) throws IOException;
     public abstract MemoryMapConfigMemory parseMapFile(File f, MemoryMapConfigMemory configuration) throws IOException;
 
 
@@ -189,5 +202,14 @@ public abstract class AbstractMemoryMapParser implements Describable<AbstractMem
      */
     public void setConfigurationFile(String configurationFile) {
         this.configurationFile = configurationFile;
+    } 
+   
+    public List<MemoryMapGraphConfigurationDescriptor<?>> getGraphOptions() {
+        return MemoryMapGraphConfiguration.getDescriptors();
+    }
+
+    @Override
+    public String toString() {
+        return getUniqueName();
     }
 }

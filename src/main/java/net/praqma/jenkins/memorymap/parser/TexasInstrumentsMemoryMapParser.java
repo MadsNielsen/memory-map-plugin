@@ -31,6 +31,7 @@ import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.praqma.jenkins.memorymap.graph.MemoryMapGraphConfiguration;
+import net.praqma.jenkins.memorymap.graph.MemoryMapGraphConfigurationDescriptor;
 import static net.praqma.jenkins.memorymap.parser.AbstractMemoryMapParser.logger;
 import net.praqma.jenkins.memorymap.result.MemoryMapConfigMemory;
 import net.praqma.jenkins.memorymap.result.MemoryMapConfigMemoryItem;
@@ -70,8 +71,8 @@ public class TexasInstrumentsMemoryMapParser extends AbstractMemoryMapParser {
     private static final Pattern DATA = Pattern.compile("^\\.data\\s+\\S+\\s+\\S+\\s+(\\S+)", Pattern.MULTILINE);
 
     @DataBoundConstructor
-    public TexasInstrumentsMemoryMapParser(String mapFile, String configurationFile, Integer wordSize, Boolean bytesOnGraph) {
-        super(mapFile, configurationFile, wordSize, bytesOnGraph, TEXT_DOT, CONST_DOT, ECONST_DOT, PINIT, SWITCH, CINIT_DOT, STACK_DOT, BSS_DOT, EBSS_DOT, SYSMEM, ESYSMEM, CIO, DATA);
+    public TexasInstrumentsMemoryMapParser(String mapFile, String configurationFile, Integer wordSize, List<MemoryMapGraphConfiguration> graphConfiguration,  Boolean bytesOnGraph) {
+        super(mapFile, configurationFile, wordSize, bytesOnGraph, graphConfiguration, TEXT_DOT, CONST_DOT, ECONST_DOT, PINIT, SWITCH, CINIT_DOT, STACK_DOT, BSS_DOT, EBSS_DOT, SYSMEM, ESYSMEM, CIO, DATA);
     }
 
     public TexasInstrumentsMemoryMapParser() {
@@ -79,10 +80,10 @@ public class TexasInstrumentsMemoryMapParser extends AbstractMemoryMapParser {
     }
 
     @Override
-    public MemoryMapConfigMemory parseConfigFile(List<MemoryMapGraphConfiguration> graphConfig, File f) throws IOException {
+    public MemoryMapConfigMemory parseConfigFile(File f) throws IOException {
         MemoryMapConfigMemory config = new MemoryMapConfigMemory();
         CharSequence sequence = createCharSequenceFromFile(f);
-        for (MemoryMapGraphConfiguration graph : graphConfig) {
+        for (MemoryMapGraphConfiguration graph : gConf) {
             String[] split = graph.getGraphDataList().split(",");
             for (String s : split) {
                 String[] multiSections = s.trim().split("\\+");

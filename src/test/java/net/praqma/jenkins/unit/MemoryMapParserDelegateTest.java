@@ -51,10 +51,10 @@ public class MemoryMapParserDelegateTest {
         
         MemoryMapMapParserDelegate delegate = new MemoryMapMapParserDelegate();
         
-        TexasInstrumentsMemoryMapParser parser = new TexasInstrumentsMemoryMapParser("*.config","*.test",16,true);
-        delegate.setParser(parser);
+        TexasInstrumentsMemoryMapParser parser = new TexasInstrumentsMemoryMapParser("*.config","*.test",16,null,true);
         
-        assertNotNull(delegate.getParser());
+        
+        assertNotNull(delegate.getParsers());
         assertNotNull(parser.getMapFile());
         
         File test = new File(f.getAbsolutePath().substring(0,f.getAbsolutePath().lastIndexOf(File.separator)));

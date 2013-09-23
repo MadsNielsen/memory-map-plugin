@@ -47,7 +47,7 @@ public class MemoryMapGccParserTest {
         String fileNameMap = MemoryMapGccParserTest.class.getResource("prom.map").getFile();
         
         File f = new File(fileNameLinker);
-        MemoryMapConfigMemory mem = parser.parseConfigFile(singletonList, f);
+        MemoryMapConfigMemory mem = parser.parseConfigFile(f);
         
         File f2 = new File(fileNameMap);
         mem = parser.parseMapFile(f2, mem);
