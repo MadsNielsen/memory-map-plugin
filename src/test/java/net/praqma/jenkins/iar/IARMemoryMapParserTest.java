@@ -25,26 +25,11 @@ package net.praqma.jenkins.iar;
 
 
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import net.praqma.jenkins.memorymap.graph.MemoryMapGraphConfiguration;
-import net.praqma.jenkins.memorymap.parser.AbstractMemoryMapParser;
-import net.praqma.jenkins.memorymap.parser.MemoryMapMapParserDelegate;
-import net.praqma.jenkins.memorymap.parser.TexasInstrumentsMemoryMapParser;
-import org.junit.Test;
-import static org.junit.Assert.*;
-import net.praqma.jenkins.memorymap.parser.iar.*;
 import net.praqma.jenkins.memorymap.result.MemoryMapConfigMemoryItem;
-import net.praqma.jenkins.memorymap.util.MemoryMapFileNotFoundError;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
-import java.util.regex.Matcher;
 import net.praqma.jenkins.memorymap.graph.MemoryMapGraphConfiguration;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -98,11 +83,12 @@ public class IARMemoryMapParserTest {
         File f = new File(file);
         
         MemoryMapGraphConfiguration mmgc = new MemoryMapGraphConfiguration(null, null, true);
-        mmgc.setGraphDataList("CODE");
+        mmgc.setGraphDataList("CODE,DATA,CONST");
         mmgc.setGraphCaption("Config Memory Graph");
+ 
         List<MemoryMapGraphConfiguration> graphConfig = Collections.singletonList(mmgc);
   
-        parser.parseConfigFile(graphConfig, f);  
+        parser.parseConfigFile(graphConfig, f);
     }
     
     @Test
