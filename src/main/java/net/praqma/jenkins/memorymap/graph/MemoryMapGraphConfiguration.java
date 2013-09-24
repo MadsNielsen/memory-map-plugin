@@ -29,6 +29,7 @@ import hudson.ExtensionPoint;
 import hudson.model.Describable;
 import hudson.model.Descriptor;
 import hudson.model.Descriptor.FormException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import jenkins.model.Jenkins;
@@ -40,16 +41,20 @@ import org.kohsuke.stapler.StaplerRequest;
 /**
  * @author Praqma
  */
-public class MemoryMapGraphConfiguration implements Describable<MemoryMapGraphConfiguration>, ExtensionPoint {
+public class MemoryMapGraphConfiguration implements Describable<MemoryMapGraphConfiguration>, ExtensionPoint, Serializable {
 
     private String graphCaption = "Specify graph caption";
     private String graphDataList = "Specify graph datasets for graph";
+    
+    
 
     @DataBoundConstructor
     public MemoryMapGraphConfiguration(String graphDataList, String graphCaption, Boolean displayUsageInBytes) {
         this.graphDataList = graphDataList;
         this.graphCaption = graphCaption;
     }
+    
+    public MemoryMapGraphConfiguration() { }
     
     public String[] itemizeGraphDataList() {
         return graphDataList.split(",");

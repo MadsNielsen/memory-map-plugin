@@ -195,13 +195,16 @@ public class MemoryMapBuildAction implements Action {
 
         for (MemoryMapBuildAction membuild = this; membuild != null; membuild = membuild.getPreviousAction()) {
             ChartUtil.NumberOnlyBuildLabel label = new ChartUtil.NumberOnlyBuildLabel(membuild.build);
-
             MemoryMapConfigMemory result = membuild.getMemoryMapConfig().get(uniqueDataSet);
+            
+            if(result != null) { 
+            
             MemoryMapConfigMemory resultBlacklist = new MemoryMapConfigMemory();
             for (List<String> list : memberLists) {
                 double value = 0.0d;
                 double maxx = 0.0d;
                 String labelName = "";
+                
                 for (MemoryMapConfigMemoryItem res : result) {
                     if (list.contains(res.getName()) && !resultBlacklist.contains(res)) {
                         resultBlacklist.add(res);
@@ -263,6 +266,7 @@ public class MemoryMapBuildAction implements Action {
                 }
             }
         }
+    }
 
         String s = "";
         if (scale.equalsIgnoreCase("kilo")) {

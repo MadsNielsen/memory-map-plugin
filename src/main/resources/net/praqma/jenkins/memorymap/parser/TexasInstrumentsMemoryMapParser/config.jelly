@@ -6,11 +6,6 @@
     <f:entry title="${%Path to map file}">        
         <f:textbox field="mapFile" name="mapFile" description="Path to map file"/>
     </f:entry>
-    
-    <f:entry title="test">
-        <h2>Hello tehere</h2> ${descriptor}
-    </f:entry> 
-    <!-- Graph selctions -->
     <f:entry field="graphConfiguration" title="Configure graphs">
         <f:hetero-list name="graphConfiguration" oneEach="false" items="${instance.gConf}" addCaption="Add graph" deleteCaption="Remove graph" descriptors="${descriptor.getGraphOptions()}"/>
     </f:entry>

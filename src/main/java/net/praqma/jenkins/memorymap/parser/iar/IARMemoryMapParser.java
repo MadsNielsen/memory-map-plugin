@@ -32,7 +32,6 @@ import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.praqma.jenkins.memorymap.graph.MemoryMapGraphConfiguration;
-import net.praqma.jenkins.memorymap.graph.MemoryMapGraphConfigurationDescriptor;
 import net.praqma.jenkins.memorymap.parser.AbstractMemoryMapParser;
 import net.praqma.jenkins.memorymap.parser.MemoryMapParserDescriptor;
 import net.praqma.jenkins.memorymap.result.MemoryMapConfigMemory;
@@ -155,7 +154,6 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
                         while (constMatcher1.find()) {
                             constItem1 = new MemoryMapConfigMemoryItem(constMatcher1.group(2), constMatcher1.group(4));
                             constItem1.setEndAddress(constMatcher1.group(5));
-                            //constItem1.setLength(getSegmentLength(constMatcher1.group(4), constMatcher1.group(5)) + "");
                             constItem1.setCalculatedLength(constMatcher1.group(4), constMatcher1.group(5));
                             config.add(constItem1);
                         }
@@ -163,7 +161,6 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
                         while (constMatcher2.find()) {
                             constItem2 = new MemoryMapConfigMemoryItem(constMatcher2.group(2), constMatcher2.group(4));
                             constItem2.setEndAddress(constMatcher2.group(5));
-                            //constItem2.setLength(getSegmentLength(constMatcher2.group(4), constMatcher2.group(5)) + "");
                             constItem2.setCalculatedLength(constMatcher2.group(4), constMatcher2.group(5));
                             config.add(constItem2);
                         }
@@ -171,7 +168,6 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
                         while (constMatcher3.find()) {
                             constItem3 = new MemoryMapConfigMemoryItem(constMatcher3.group(2), constMatcher3.group(4));
                             constItem3.setEndAddress(constMatcher3.group(4));
-                            //constItem3.setLength(getSegmentLength(constMatcher3.group(4), constMatcher3.group(4)) + "");
                             constItem3.setCalculatedLength(constMatcher3.group(4), constMatcher3.group(4));
                             config.add(constItem3);
                         }
