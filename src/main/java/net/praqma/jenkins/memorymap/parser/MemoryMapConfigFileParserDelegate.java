@@ -54,8 +54,8 @@ public class MemoryMapConfigFileParserDelegate extends FileFoundable<HashMap<Str
         HashMap<String, MemoryMapConfigMemory> memorys = new HashMap<String, MemoryMapConfigMemory>();
         
         for(int i=0; i< parsers.size(); i++) {           
-            String uuid =  parsers.get(i).getUniqueName();
-            memorys.put(parsers.get(i).getUniqueName(), parsers.get(i).parseConfigFile(findFile(f, parsers.get(i).getConfigurationFile()))); 
+            String uuid =  parsers.get(i).parserUniqueName;
+            memorys.put(uuid, parsers.get(i).parseConfigFile(findFile(f, parsers.get(i).getConfigurationFile()))); 
         } 
         return memorys;
     }

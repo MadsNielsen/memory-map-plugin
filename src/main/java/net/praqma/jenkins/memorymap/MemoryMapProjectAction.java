@@ -110,7 +110,7 @@ public class MemoryMapProjectAction extends Actionable implements ProminentProje
         List<String> graphTitles = new ArrayList<String>();
         List<AbstractMemoryMapParser> parsers =  project.getPublishersList().get(MemoryMapRecorder.class).chosenParsers;
         for(AbstractMemoryMapParser parser : parsers) {
-            if(parser.getUniqueName().equals(parserId)) {                
+            if(parser.parserUniqueName.equals(parserId)) {                
                 for(MemoryMapGraphConfiguration conf : parser.gConf) {
                     graphTitles.add(conf.getGraphCaption());
                 }
@@ -123,7 +123,7 @@ public class MemoryMapProjectAction extends Actionable implements ProminentProje
         String result = null;
         List<AbstractMemoryMapParser> parsers =  project.getPublishersList().get(MemoryMapRecorder.class).chosenParsers;
         for(AbstractMemoryMapParser parser : parsers) {
-            if(parser.getUniqueName().equals(id)) {                
+            if(parser.parserUniqueName.equals(id)) {                
                 for(MemoryMapGraphConfiguration conf : parser.gConf) {
                     if(conf.getGraphCaption().equals(graphTitle)) {
                         result = conf.getGraphDataList();

@@ -4,13 +4,12 @@
         <l:main-panel>
             <j:forEach var="pc" items="${it.parsersChosen()}">
                 <div style="float:left;text-align:center;border-style:solid;border-width:1px;margin:5px;padding:5px">
-                <h3>${pc.getUniqueName()}</h3>
-                <j:set var="uuid" value="${pc.getUniqueName()}"/>
-                <j:set var="t" value="${it.getGraphTitles(uuid)}"/>
- 
-                <j:forEach var="gTitle" items="${t}">              
-                    <img src="drawMemoryMapUsageGraph?categories=${it.getAssociatedMemoryAreas(gTitle,uuid)}&amp;title=${gTitle}&amp;width=600&amp;height=450&amp;dataset=${uuid}"/>
-                </j:forEach>
+                    <h3>${pc.parserUniqueName}</h3>
+                    <j:set var="uuid" value="${pc.parserUniqueName}"/>
+                    <j:set var="t" value="${it.getGraphTitles(uuid)}"/>
+                    <j:forEach var="gTitle" items="${t}">              
+                        <img src="drawMemoryMapUsageGraph?categories=${it.getAssociatedMemoryAreas(gTitle,uuid)}&amp;title=${gTitle}&amp;width=600&amp;height=450&amp;dataset=${uuid}"/>
+                    </j:forEach>
                 </div>
             </j:forEach>            
         </l:main-panel>
