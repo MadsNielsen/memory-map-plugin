@@ -26,8 +26,13 @@ package net.praqma.jenkins.unit;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.AbstractList;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.praqma.jenkins.memorymap.graph.MemoryMapGraphConfiguration;
+import net.praqma.jenkins.memorymap.parser.AbstractMemoryMapParser;
 import net.praqma.jenkins.memorymap.parser.MemoryMapMapParserDelegate;
 import net.praqma.jenkins.memorymap.parser.TexasInstrumentsMemoryMapParser;
 import net.praqma.jenkins.memorymap.parser.iar.IARMemoryMapParser;
@@ -71,10 +76,16 @@ public class MemoryMapParserDelegateTest {
         
         MemoryMapMapParserDelegate delegate = new MemoryMapMapParserDelegate();
         
-        TexasInstrumentsMemoryMapParser parser = new TexasInstrumentsMemoryMapParser("*.config","*.map",16,true);
-        delegate.setParser(parser);
+        MemoryMapGraphConfiguration mmgc = new MemoryMapGraphConfiguration(null, null, true);
+        mmgc.setGraphDataList("CODE,DATA,CONST");
+        mmgc.setGraphCaption("Config Memory Graph");
+        List<MemoryMapGraphConfiguration> graphConfig = Collections.singletonList(mmgc);
+        
+        AbstractMemoryMapParser parser = new TexasInstrumentsMemoryMapParser("TI", "TexasInstrumentsMapFile.txt", "28069_RAM_lnk.cmd", 16, graphConfig, Boolean.TRUE);
+        List<AbstractMemoryMapParser> parsers = Collections.singletonList(parser);
+        delegate.setParsers(parsers);
 
-        assertNotNull(delegate.getParser());
+        assertNotNull(delegate.getParsers());
         assertNotNull(parser.getMapFile());
         
         File test = new File(file.getAbsolutePath().substring(0,file.getAbsolutePath().lastIndexOf(File.separator)));

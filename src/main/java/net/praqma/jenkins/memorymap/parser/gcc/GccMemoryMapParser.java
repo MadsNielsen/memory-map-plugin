@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.praqma.jenkins.memorymap.graph.MemoryMapGraphConfiguration;
+import net.praqma.jenkins.memorymap.graph.MemoryMapGraphConfigurationDescriptor;
 import net.praqma.jenkins.memorymap.parser.AbstractMemoryMapParser;
 import net.praqma.jenkins.memorymap.parser.MemoryMapParserDescriptor;
 import net.praqma.jenkins.memorymap.result.MemoryMapConfigMemory;
@@ -24,11 +25,11 @@ import org.kohsuke.stapler.StaplerRequest;
  * @author Praqma
  */
 public class GccMemoryMapParser extends AbstractMemoryMapParser implements Serializable {    
-    private static final Pattern MEM_SECTIONS = Pattern.compile("(\\S+)( : \\{[^\\}]\\n)+");    
-    
-    @DataBoundConstructor
-    public GccMemoryMapParser(String mapFile, String configurationFile, Integer wordSize, Boolean bytesOnGraph) {
-        super(mapFile, configurationFile, wordSize, bytesOnGraph);
+    //private static final Pattern MEM_SECTIONS = Pattern.compile("(\\S+)( : \\{[^\\}]\\n)+");    
+    private static final Pattern MEM_SECTIONS = Pattern.compile("(\\s+)(\\S+)( :)(\\s+AT \\(\\S+\\))*");    
+    @DataBoundConstructor    
+    public GccMemoryMapParser(String parserUniqueName, String mapFile, String configurationFile, Integer wordSize, Boolean bytesOnGraph, List<MemoryMapGraphConfiguration> graphConfiguration) {
+        super(parserUniqueName, mapFile, configurationFile, wordSize, bytesOnGraph, graphConfiguration);
     }
     
     /**
@@ -58,17 +59,12 @@ public class GccMemoryMapParser extends AbstractMemoryMapParser implements Seria
         }   
      * 
      */
-    
-    /**
-     * For now hardcoded sections this pattern: (.text : {[^}]*}) matches the entire contents of the .text section. 
-     * @return 
-     */
     public List<MemoryMapConfigMemoryItem> getSections(File f) throws IOException {
         List<MemoryMapConfigMemoryItem> items = new ArrayList<MemoryMapConfigMemoryItem>();
         CharSequence m = createCharSequenceFromFile(f);
         Matcher match = MEM_SECTIONS.matcher(m);
         while(match.find()) {
-            MemoryMapConfigMemoryItem it = new MemoryMapConfigMemoryItem(match.group(1), "0");
+            MemoryMapConfigMemoryItem it = new MemoryMapConfigMemoryItem(match.group(2), "0");
             items.add(it);
         }
   
@@ -81,7 +77,7 @@ public class GccMemoryMapParser extends AbstractMemoryMapParser implements Seria
     }
     
     public Pattern getLinePatternForMapFile(String sectionName) {
-        Pattern p = Pattern.compile(String.format ( "^(%s)(\\s+)(\\S+)(\\s+)(\\S+)(\\S*)", sectionName), Pattern.MULTILINE );
+        Pattern p = Pattern.compile(String.format ( "^(%s)(\\s+)(\\w+)(\\s+)(\\w+)(\\w*)", sectionName), Pattern.MULTILINE );
         return p;
     }
     /**
@@ -122,18 +118,19 @@ public class GccMemoryMapParser extends AbstractMemoryMapParser implements Seria
     }
     
     @Override
-    public MemoryMapConfigMemory parseConfigFile(List<MemoryMapGraphConfiguration> graphConfig, File f) throws IOException {
+    public MemoryMapConfigMemory parseConfigFile(File f) throws IOException {
         
         //Collect sections from both the MEMORY and the SECTIONS areas from the command file.
+        //The memory are the top level components, sections belong to one of thsese sections
         MemoryMapConfigMemory memconfig = getMemory(f);
         memconfig.addAll(getSections(f));
         
-        for(MemoryMapGraphConfiguration g : graphConfig) {
+        for(MemoryMapGraphConfiguration g : gConf) {
             for(String gItem : g.itemizeGraphDataList()) {
                 for (String gSplitItem : gItem.split("\\+") ) {
                     //We will fail if the name of the data section does not match any of the named items in the map file.
                     if(!memconfig.containsSectionWithName(gSplitItem)) {
-                        throw new MemoryMapMemorySelectionError(String.format( "The memory section named %s not found in map file", gSplitItem)); 
+                        throw new MemoryMapMemorySelectionError(String.format( "The memory section named %s not found in map file%nAvailable sections are:%n%s", gSplitItem, memconfig.getItemNames())); 
                     }
                 }
             }
@@ -160,7 +157,7 @@ public class GccMemoryMapParser extends AbstractMemoryMapParser implements Seria
             GccMemoryMapParser parser = (GccMemoryMapParser)instance;
             save();
             return parser;
-        } 
+        }
     }    
 }
 

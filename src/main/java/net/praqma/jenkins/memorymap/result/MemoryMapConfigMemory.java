@@ -24,12 +24,17 @@
 package net.praqma.jenkins.memorymap.result;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * @author Praqma
  */
 public class MemoryMapConfigMemory extends LinkedList<MemoryMapConfigMemoryItem> implements Serializable {
+    private static final Logger LOG = Logger.getLogger(MemoryMapConfigMemory.class.getName());
+    
     public MemoryMapConfigMemory() {}
 
     @Override
@@ -37,11 +42,23 @@ public class MemoryMapConfigMemory extends LinkedList<MemoryMapConfigMemoryItem>
         StringBuilder builder = new StringBuilder();
         
         for (MemoryMapConfigMemoryItem item : this) {
-            builder.append(item.toString());
-            builder.append("\n");
+            if(item.getLength() != null) {
+                builder.append(item.toString());
+                builder.append("\n");
+            } else {
+                LOG.warning(String.format("Warning - the item %s do does not have a specified length", item.getName() ));
+            }
         }
         
         return builder.toString();
+    }
+    
+    public List<String> getItemNames() {
+        List<String> items = new ArrayList<String>();
+        for(MemoryMapConfigMemoryItem item : this) {
+            items.add(item.getName());
+        }
+        return items;
     }
     
     public boolean containsSectionWithName(String name) {
@@ -52,5 +69,15 @@ public class MemoryMapConfigMemory extends LinkedList<MemoryMapConfigMemoryItem>
         }
         return false;
     }
+
+    @Override
+    public boolean add(MemoryMapConfigMemoryItem e) {
+        if(this.contains(e)) {
+            return false;
+        }
+        return super.add(e); 
+    }
+    
+    
 
 }

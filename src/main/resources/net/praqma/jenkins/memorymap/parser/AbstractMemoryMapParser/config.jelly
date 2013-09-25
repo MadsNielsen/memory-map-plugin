@@ -1,0 +1,18 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout"
+         xmlns:t="/lib/hudson" xmlns:f="/lib/form">    
+    <f:entry field="parserUniqueName" title="${%Unique parser name}">
+        <f:textbox/>
+    </f:entry>
+    
+    <f:entry title="${%Linker command file}" field="configurationFile" name="configurationFile">            
+        <f:textbox/>
+    </f:entry>
+      
+    <f:entry title="${%Path to map file}">
+        <f:textbox field="mapFile" name="mapFile" description="Descritpion goes here"/>
+    </f:entry>
+    
+    <f:entry field="graphConfiguration" title="Configure graphs">
+        <f:hetero-list name="graphConfiguration" oneEach="false" items="${instance.gConf}" addCaption="Add graph" deleteCaption="Remove graph" descriptors="${descriptor.getGraphOptions()}"/>
+    </f:entry>          
+</j:jelly>

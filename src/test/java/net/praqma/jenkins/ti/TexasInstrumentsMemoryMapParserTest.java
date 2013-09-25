@@ -46,16 +46,10 @@ public class TexasInstrumentsMemoryMapParserTest {
     @Test
     public void testParseConfigFile() throws IOException {
         TexasInstrumentsMemoryMapParser parser = new TexasInstrumentsMemoryMapParser();
-        MemoryMapGraphConfiguration mmgc = new MemoryMapGraphConfiguration(null, null, true);
         String file = TexasInstrumentsMemoryMapParserTest.class.getResource("28069_RAM_lnk.cmd").getFile();
 
-        mmgc.setGraphDataList("RAMM1");
-        mmgc.setGraphCaption("TI Memory Graph");
-
         File f = new File(file);
-        List<MemoryMapGraphConfiguration> graphConfig = Collections.singletonList(mmgc);
-
-        parser.parseConfigFile(graphConfig, f);
+        parser.parseConfigFile(f);
     }
     
     @Test

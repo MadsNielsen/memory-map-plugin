@@ -49,8 +49,8 @@ import org.kohsuke.stapler.StaplerRequest;
 public class IARMemoryMapParser extends AbstractMemoryMapParser {
 
     @DataBoundConstructor
-    public IARMemoryMapParser(String mapFile, String configurationFile, Integer wordSize, Boolean bytesOnGraph, Pattern... pattern) {
-        super(mapFile, configurationFile, wordSize, bytesOnGraph);
+    public IARMemoryMapParser(String parserUniqueName, String mapFile, String configurationFile, Integer wordSize, Boolean bytesOnGraph, List<MemoryMapGraphConfiguration> graphConfiguration, Pattern... pattern) {
+        super(parserUniqueName, mapFile, configurationFile, wordSize, bytesOnGraph, graphConfiguration);
     }
 
     public IARMemoryMapParser() {
@@ -88,10 +88,10 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
     }
 
     @Override
-    public MemoryMapConfigMemory parseConfigFile(List<MemoryMapGraphConfiguration> graphConfig, File f) throws IOException {
+    public MemoryMapConfigMemory parseConfigFile(File f) throws IOException {
         MemoryMapConfigMemory config = new MemoryMapConfigMemory();
         CharSequence sequence = createCharSequenceFromFile(f);
-        for (MemoryMapGraphConfiguration graph : graphConfig) {            
+        for (MemoryMapGraphConfiguration graph : gConf) {            
             for (String s : graph.itemizeGraphDataList()) {
 
                 String[] multiSections = s.trim().split("\\+");
@@ -222,5 +222,6 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
             save();
             return parser;
         }
+
     }
 }
