@@ -58,4 +58,10 @@ public abstract class MemoryMapParserDescriptor<T extends AbstractMemoryMapParse
         return FormValidation.validateRequired(parserUniqueName);
     }
     
+    public FormValidation doCheckConfigurationFile(@QueryParameter String configurationFile) {
+        return FormValidation.validateRequired(configurationFile);
+    }
+    
 }
+
+    
