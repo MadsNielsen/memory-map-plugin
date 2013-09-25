@@ -45,7 +45,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.praqma.jenkins.memorymap.graph.MemoryMapGraphConfiguration;
-import net.praqma.jenkins.memorymap.graph.MemoryMapGraphConfigurationDescriptor;
 import net.praqma.jenkins.memorymap.parser.AbstractMemoryMapParser;
 import net.praqma.jenkins.memorymap.parser.MemoryMapConfigFileParserDelegate;
 import net.praqma.jenkins.memorymap.parser.MemoryMapMapParserDelegate;
