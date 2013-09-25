@@ -34,4 +34,8 @@ public class MemoryMapFileNotFoundError extends IOException implements MemoryMap
     public MemoryMapFileNotFoundError(String msg, File file) {
         super(msg);
     }
+
+    public MemoryMapFileNotFoundError() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

@@ -45,8 +45,29 @@
             <roles>
                 <role>developer</role>
             </roles>  
+        </developer>
+        
+        <developer>
+            <id>hleote</id>            
+            <name>Hugo Leote</name>
+            <email>hleote@praqma.net</email>                
+            <organization>Praqma</organization>
+            <organizationUrl>http://www.praqma.com</organizationUrl>
+            <roles>
+                <role>intern/developer</role>
+            </roles>  
         </developer>        
         
+        <developer>
+            <id>mvgeorgiev</id>            
+            <name>Martin Georgiev</name>
+            <email>mvgeorgiev@praqma.net</email>                
+            <organization>Praqma</organization>
+            <organizationUrl>http://www.praqma.com</organizationUrl>
+            <roles>
+                <role>intern/developer</role>
+            </roles>  
+        </developer>    
     </developers>
     
     <build>
