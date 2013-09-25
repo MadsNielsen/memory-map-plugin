@@ -25,6 +25,7 @@ package net.praqma.jenkins.memorymap.parser;
 
 import hudson.DescriptorExtensionList;
 import hudson.ExtensionPoint;
+import hudson.model.AbstractBuild;
 import hudson.model.Describable;
 import hudson.model.Descriptor;
 import java.io.File;

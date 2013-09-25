@@ -96,7 +96,7 @@ public class TexasInstrumentsMemoryMapParser extends AbstractMemoryMapParser {
 
                     if (item == null) {
                         logger.logp(Level.WARNING, "parseConfigFile", AbstractMemoryMapParser.class.getName(), String.format("parseConfigFile(List<MemoryMapGraphConfiguration> graphConfig, File f) non existing item: %s", s));
-                        throw new IOException(String.format("No match found for program memory named %s", s));
+                        throw new MemoryMapMemorySelectionError(String.format("No match found for program memory named %s", s));
                     }
                 }
 

@@ -46,8 +46,6 @@ public class MemoryMapGraphConfiguration implements Describable<MemoryMapGraphCo
     private String graphCaption = "Specify graph caption";
     private String graphDataList = "Specify graph datasets for graph";
     
-    
-
     @DataBoundConstructor
     public MemoryMapGraphConfiguration(String graphDataList, String graphCaption, Boolean displayUsageInBytes) {
         this.graphDataList = graphDataList;
@@ -59,7 +57,6 @@ public class MemoryMapGraphConfiguration implements Describable<MemoryMapGraphCo
     public String[] itemizeGraphDataList() {
         return graphDataList.split(",");
     }
-
     /**
      * @return the graphCaption
      */

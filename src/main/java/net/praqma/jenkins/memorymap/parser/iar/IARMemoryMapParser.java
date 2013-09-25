@@ -171,10 +171,10 @@ public class IARMemoryMapParser extends AbstractMemoryMapParser {
                             constItem3.setCalculatedLength(constMatcher3.group(4), constMatcher3.group(4));
                             config.add(constItem3);
                         }
-                    }else{
+                    } else {
                         logger.logp(Level.WARNING, "parseConfigFile", AbstractMemoryMapParser.class.getName(), 
                         String.format("parseConfigFile(List<MemoryMapGraphConfiguration> graphConfig, File f) non existing item: %s", s));
-                        throw new IOException(String.format("No match found for program memory named %s", s));
+                        throw new MemoryMapMemorySelectionError(String.format("No match found for program memory named %s", s));
                     }
                 }
             }
