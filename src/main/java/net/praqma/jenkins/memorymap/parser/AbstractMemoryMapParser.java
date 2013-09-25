@@ -58,6 +58,7 @@ public abstract class AbstractMemoryMapParser implements Describable<AbstractMem
     
     protected List<Pattern> patterns;
     public final List<MemoryMapGraphConfiguration> gConf;
+    public final String parserUniqueName;
     protected String mapFile;
     private String configurationFile;
     private Integer wordSize;
@@ -73,15 +74,17 @@ public abstract class AbstractMemoryMapParser implements Describable<AbstractMem
     public AbstractMemoryMapParser () {  
         this.patterns = ListUtils.EMPTY_LIST;
         this.gConf = new ArrayList<MemoryMapGraphConfiguration>();
+        this.parserUniqueName = "Unspecified";
     }
     
-    public AbstractMemoryMapParser(String mapFile, String configurationFile, Integer wordSize, Boolean bytesOnGraph, List<MemoryMapGraphConfiguration> graphConfiguration, Pattern... pattern) {
+    public AbstractMemoryMapParser(String parserUniqueName, String mapFile, String configurationFile, Integer wordSize, Boolean bytesOnGraph, List<MemoryMapGraphConfiguration> graphConfiguration, Pattern... pattern) {
         this.patterns = Arrays.asList(pattern);
         this.mapFile = mapFile;
         this.configurationFile = configurationFile;
         this.wordSize = wordSize;
         this.bytesOnGraph = bytesOnGraph;
         this.gConf = graphConfiguration;
+        this.parserUniqueName = parserUniqueName;
     }
     
     /**

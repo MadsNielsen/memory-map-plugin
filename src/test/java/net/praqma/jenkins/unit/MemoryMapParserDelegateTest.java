@@ -51,7 +51,7 @@ public class MemoryMapParserDelegateTest {
         
         MemoryMapMapParserDelegate delegate = new MemoryMapMapParserDelegate();
         
-        TexasInstrumentsMemoryMapParser parser = new TexasInstrumentsMemoryMapParser("*.config","*.test",16,null,true);
+        TexasInstrumentsMemoryMapParser parser = new TexasInstrumentsMemoryMapParser("test","*.config","*.test",16,null,true);
         
         
         //assertNotNull(delegate.getParsers());

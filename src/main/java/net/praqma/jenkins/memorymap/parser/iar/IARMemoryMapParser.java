@@ -49,8 +49,8 @@ import org.kohsuke.stapler.StaplerRequest;
 public class IARMemoryMapParser extends AbstractMemoryMapParser {
 
     @DataBoundConstructor
-    public IARMemoryMapParser(String mapFile, String configurationFile, Integer wordSize, Boolean bytesOnGraph, List<MemoryMapGraphConfiguration> graphConfiguration, Pattern... pattern) {
-        super(mapFile, configurationFile, wordSize, bytesOnGraph, graphConfiguration);
+    public IARMemoryMapParser(String parserUniqueName, String mapFile, String configurationFile, Integer wordSize, Boolean bytesOnGraph, List<MemoryMapGraphConfiguration> graphConfiguration, Pattern... pattern) {
+        super(parserUniqueName, mapFile, configurationFile, wordSize, bytesOnGraph, graphConfiguration);
     }
 
     public IARMemoryMapParser() {
