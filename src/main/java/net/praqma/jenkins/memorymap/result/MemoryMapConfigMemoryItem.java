@@ -33,6 +33,7 @@ import net.praqma.jenkins.memorymap.util.HexUtils;
  */
 public class MemoryMapConfigMemoryItem implements Serializable, Comparable<MemoryMapConfigMemoryItem> {
     
+    private MemoryMapConfigMemoryItem parent;    
     private static long MEGA_MULTIPLIER = 1024*1024;
     private static long KILO_MULTIPLIER = 1024;
     
@@ -200,16 +201,19 @@ public class MemoryMapConfigMemoryItem implements Serializable, Comparable<Memor
     public void setUnused(String unused) {
         this.unused = unused;    
     }
-
-    public boolean addChild(String parentName, MemoryMapConfigMemoryItem item) {
-        for (MemoryMapConfigMemoryItem it : getAssociatedSections()) {
-            if (it.name.equals(parentName)) {
-                it.getAssociatedSections().add(item);
-                return true;
-            }
+    
+    /**
+     *
+     */ 
+    public String getTopLevelMemoryMax() {
+        MemoryMapConfigMemoryItem item = this;
+        String max = null;
+        while(item != null) {
+            max = item.getLength();
+            item = item.getParent();
         }
-        return false;
-    }
+        return max;
+    }  
 
     @Override
     public boolean equals(Object obj) {
@@ -246,4 +250,20 @@ public class MemoryMapConfigMemoryItem implements Serializable, Comparable<Memor
         HexUtils.HexifiableString hexStringOther = new HexUtils.HexifiableString(t.getOrigin());
         return hexStringThis.compareTo(hexStringOther);
     }
+
+    /**
+     * @return the parent
+     */
+    public MemoryMapConfigMemoryItem getParent() {
+        return parent;
+    }
+
+    /**
+     * @param parent the parent to set
+     */
+    public void setParent(MemoryMapConfigMemoryItem parent) {
+        this.parent = parent;
+    }
+    
+    
 }

@@ -46,7 +46,7 @@ public class MemoryMapConfigMemory extends LinkedList<MemoryMapConfigMemoryItem>
                 builder.append(item.toString());
                 builder.append("\n");
             } else {
-                LOG.warning(String.format("Warning - the item %s do does not have a specified length", item.getName() ));
+                LOG.info(String.format("The item %s do does not have a specified length", item.getName() ));
             }
         }
         

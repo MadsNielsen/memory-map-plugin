@@ -80,6 +80,7 @@ public class GccMemoryMapParser extends AbstractMemoryMapParser implements Seria
         Pattern p = Pattern.compile(String.format ( "^(%s)(\\s+)(\\w+)(\\s+)(\\w+)(\\w*)", sectionName), Pattern.MULTILINE );
         return p;
     }
+    
     /**
      * Given an item with length == null. 
      * Look down in the list. If we find an item whoose length is not null, set the items length to that
@@ -94,7 +95,7 @@ public class GccMemoryMapParser extends AbstractMemoryMapParser implements Seria
                 
                 for(int i = itemIndex; i < memory.size(); i++) {
                     if(memory.get(i).getLength() != null) {
-                        item.setLength(memory.get(i).getLength());
+                        item.setParent(memory.get(i));
                         break;
                     }
                 } 

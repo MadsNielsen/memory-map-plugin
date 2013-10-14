@@ -43,6 +43,7 @@ import net.praqma.jenkins.memorymap.util.HexUtils;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
+import org.jfree.chart.axis.CategoryAxis3D;
 import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.CategoryPlot;
@@ -90,11 +91,12 @@ public class MemoryMapBuildAction implements Action {
     }
 
     /**
-     * Returns an indication wheather as to the requirements are met. You do one check per set of values you wish to compare. 
-     * 
+     * Returns an indication wheather as to the requirements are met. You do one
+     * check per set of values you wish to compare.
+     *
      * @param threshold
      * @param valuenames
-     * @return 
+     * @return
      */
     public boolean validateThreshold(int threshold, String... valuenames) {
         return sumOfValues(valuenames) <= threshold;
@@ -107,13 +109,13 @@ public class MemoryMapBuildAction implements Action {
     public int sumOfValues(String... valuenames) {
         int sum = 0;
         /*
-        for(MemoryMapParsingResult res : getResults()) {
-        for(String s : valuenames) {
-        if(res.getName().equals(s)) {
-        sum+=res.getValue();
-        }
-        }
-        }
+         for(MemoryMapParsingResult res : getResults()) {
+         for(String s : valuenames) {
+         if(res.getName().equals(s)) {
+         sum+=res.getValue();
+         }
+         }
+         }
          */
         return sum;
     }
@@ -121,20 +123,21 @@ public class MemoryMapBuildAction implements Action {
     public int sumOfValues(List<String> values) {
         int sum = 0;
         /*
-        for(MemoryMapParsingResult res : getResults()) {
-        for(String s : values) {
-        if(res.getName().equals(s)) {
-        sum+=res.getValue();
-        }
-        }
-        }
+         for(MemoryMapParsingResult res : getResults()) {
+         for(String s : values) {
+         if(res.getName().equals(s)) {
+         sum+=res.getValue();
+         }
+         }
+         }
          */
         return sum;
     }
 
     /**
-     * Fetches the previous MemoryMap build. Takes all succesful, but failed builds. 
-     * 
+     * Fetches the previous MemoryMap build. Takes all succesful, but failed
+     * builds.
+     *
      * Goes to the end of list.
      */
     public MemoryMapBuildAction getPreviousAction(AbstractBuild<?, ?> base) {
@@ -174,7 +177,7 @@ public class MemoryMapBuildAction implements Action {
         String members = req.getParameter("categories");
         String graphTitle = req.getParameter("title");
         String uniqueDataSet = req.getParameter("dataset");
-        
+
 
         int w = Integer.parseInt(req.getParameter("width"));
         int h = Integer.parseInt(req.getParameter("height"));
@@ -196,77 +199,79 @@ public class MemoryMapBuildAction implements Action {
         for (MemoryMapBuildAction membuild = this; membuild != null; membuild = membuild.getPreviousAction()) {
             ChartUtil.NumberOnlyBuildLabel label = new ChartUtil.NumberOnlyBuildLabel(membuild.build);
             MemoryMapConfigMemory result = membuild.getMemoryMapConfig().get(uniqueDataSet);
-            
-            if(result != null) { 
-            
-            MemoryMapConfigMemory resultBlacklist = new MemoryMapConfigMemory();
-            for (List<String> list : memberLists) {
-                double value = 0.0d;
-                double maxx = 0.0d;
-                String labelName = "";
-                
-                for (MemoryMapConfigMemoryItem res : result) {
-                    if (list.contains(res.getName()) && !resultBlacklist.contains(res)) {
-                        resultBlacklist.add(res);
-                        if (labelName.equals("")) {
-                            labelName = res.getName();
+
+            if (result != null) {
+
+                MemoryMapConfigMemory resultBlacklist = new MemoryMapConfigMemory();
+                for (List<String> list : memberLists) {
+                    double value = 0.0d;
+                    double maxx = 0.0d;
+                    String labelName = "";
+
+                    for (MemoryMapConfigMemoryItem res : result) {
+                        if (list.contains(res.getName()) && !resultBlacklist.contains(res)) {
+                            resultBlacklist.add(res);
+                            if (labelName.equals("")) {
+                                labelName = res.getName();
+                            } else {
+                                labelName = String.format("%s+%s", labelName, res.getName());
+                            }
+
+                            if (getRecorder().getShowBytesOnGraph()) {
+                                //maxx = maxx + HexUtils.byteCount(res.getLength(), getRecorder().getWordSize(), scale);
+                                maxx = HexUtils.byteCount(res.getTopLevelMemoryMax(), getRecorder().getWordSize(), scale);
+                                value = value + HexUtils.byteCount(res.getUsed(), getRecorder().getWordSize(), scale);
+                            } else {
+                                //maxx = maxx + HexUtils.wordCount(res.getLength(), getRecorder().getWordSize(), scale);
+                                maxx = HexUtils.wordCount(res.getTopLevelMemoryMax(), getRecorder().getWordSize(), scale);
+                                value = value + HexUtils.wordCount(res.getUsed(), getRecorder().getWordSize(), scale);
+                            }
                         } else {
-                            labelName = String.format("%s+%s", labelName, res.getName());
                         }
 
-                        if (getRecorder().getShowBytesOnGraph()) {
-                            maxx = maxx + HexUtils.byteCount(res.getLength(), getRecorder().getWordSize(), scale);
-                            value = value + HexUtils.byteCount(res.getUsed(), getRecorder().getWordSize(), scale);
-                        } else {
-                            maxx = maxx + HexUtils.wordCount(res.getLength(), getRecorder().getWordSize(), scale);
-                            value = value + HexUtils.wordCount(res.getUsed(), getRecorder().getWordSize(), scale);
+                        if (maxx > max) {
+                            max = maxx;
                         }
-                    } else {
+                    }
+                    if (!labelName.equals("")) {
+                        dataset.add(value, labelName, label);
                     }
 
-                    if (maxx > max) {
-                        max = maxx;
+                    boolean makeMarker = true;
+                    for (ValueMarker vm : markers) {
+                        if (maxx == vm.getValue() && !vm.getLabel().contains(labelName) && !labelName.equals("")) {
+                            drawnMarker.add(vm.getLabel().replace("(MAX) - ", "") + " - " + labelName);
+                            String s = vm.getLabel().replace("(MAX) - ", "");
+
+                            vm.setLabel(String.format("%s - %s", vm.getLabel(), labelName));
+                            //this is the size of chars used for setting the offset right
+                            double i = vm.getLabel().length() * labelOffset + 40;
+                            vm.setLabelOffset(new RectangleInsets(5, i, -20, 5));
+
+                            makeMarker = false;
+                        }
                     }
-                }
-                if (!labelName.equals("")) {
-                    dataset.add(value, labelName, label);
-                }
 
-                boolean makeMarker = true;
-                for (ValueMarker vm : markers) {
-                    if (maxx == vm.getValue() && !vm.getLabel().contains(labelName) && !labelName.equals("")) {
-                        drawnMarker.add(vm.getLabel().replace("(MAX) - ", "") + " - " + labelName);
-                        String s = vm.getLabel().replace("(MAX) - ", "");
+                    if ((!labelName.equals("")) && (drawnMarker.add(labelName))) {
+                        if (makeMarker) {
+                            ValueMarker vm = new ValueMarker((double) maxx, Color.BLACK, new BasicStroke(
+                                    1.2f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER,
+                                    1.0f, new float[]{6.0f, 6.0f}, 0.0f));
 
-                        vm.setLabel(String.format("%s - %s", vm.getLabel(), labelName));
-                        //this is the size of chars used for setting the offset right
-                        double i = vm.getLabel().length() * labelOffset + 40;
-                        vm.setLabelOffset(new RectangleInsets(5, i, -20, 5));
+                            vm.setLabel(String.format("(MAX) - %s", labelName));
 
-                        makeMarker = false;
-                    }
-                }
-
-                if ((!labelName.equals("")) && (drawnMarker.add(labelName))) {
-                    if (makeMarker) {
-                        ValueMarker vm = new ValueMarker((double) maxx, Color.BLACK, new BasicStroke(
-                                1.2f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER,
-                                1.0f, new float[]{6.0f, 6.0f}, 0.0f));
-
-                        vm.setLabel(String.format("(MAX) - %s", labelName));
-
-                        double i = vm.getLabel().length() * labelOffset + 40;
-                        vm.setLabelOffset(new RectangleInsets(5, i, -20, 5));
-                        vm.setLabelAnchor(RectangleAnchor.TOP_LEFT);
-                        vm.setPaint(Color.BLACK);
-                        vm.setOutlinePaint(Color.BLACK);
-                        vm.setAlpha(1.0f);
-                        markers.add(vm);
+                            double i = vm.getLabel().length() * labelOffset + 40;
+                            vm.setLabelOffset(new RectangleInsets(5, i, -20, 5));
+                            vm.setLabelAnchor(RectangleAnchor.TOP_LEFT);
+                            vm.setPaint(Color.BLACK);
+                            vm.setOutlinePaint(Color.BLACK);
+                            vm.setAlpha(1.0f);
+                            markers.add(vm);
+                        }
                     }
                 }
             }
         }
-    }
 
         String s = "";
         if (scale.equalsIgnoreCase("kilo")) {
@@ -283,7 +288,7 @@ public class MemoryMapBuildAction implements Action {
         String legend = getRecorder().getShowBytesOnGraph() ? byteLegend : wordLegend;
 
         JFreeChart chart = createPairedBarCharts(graphTitle, legend, max * 1.1d, 0d, dataset.build(), markers);
-        
+
 
         chart.setBackgroundPaint(Color.WHITE);
         chart.getLegend().setPosition(RectangleEdge.BOTTOM);
@@ -291,7 +296,8 @@ public class MemoryMapBuildAction implements Action {
     }
 
     protected JFreeChart createPairedBarCharts(String title, String yaxis, double max, double min, CategoryDataset dataset, List<ValueMarker> markers) {
-        final CategoryAxis domainAxis = new ShiftedCategoryAxis(null);
+        //final CategoryAxis domainAxis = new ShiftedCategoryAxis(null);
+        final CategoryAxis domainAxis = new CategoryAxis3D();
         final NumberAxis rangeAxis = new NumberAxis(yaxis);
         rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
         rangeAxis.setUpperBound(max);
@@ -310,12 +316,12 @@ public class MemoryMapBuildAction implements Action {
 
         //StackedAreaRenderer2 renderer = new StackedAreaRenderer2();
         BarRenderer renderer = new BarRenderer();
-        
 
-        CategoryPlot plot = new CategoryPlot(dataset, domainAxis, rangeAxis, renderer);        
+
+        CategoryPlot plot = new CategoryPlot(dataset, domainAxis, rangeAxis, renderer);
         plot.setDomainAxis(domainAxis);
         domainAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_90);
-        
+
         plot.setOrientation(PlotOrientation.VERTICAL);
         plot.setBackgroundPaint(Color.WHITE);
         plot.setOutlinePaint(null);
@@ -323,12 +329,12 @@ public class MemoryMapBuildAction implements Action {
         plot.setRangeGridlinePaint(Color.black);
 
 
+
         for (ValueMarker mkr : markers) {
             plot.addRangeMarker(mkr);
         }
-        
-        JFreeChart chart = new JFreeChart(plot);
-        //chart.setPadding(new RectangleInsets(30, 15, 15, 15));
+
+        JFreeChart chart = new JFreeChart(plot);        
         chart.setTitle(title);
         return chart;
     }
