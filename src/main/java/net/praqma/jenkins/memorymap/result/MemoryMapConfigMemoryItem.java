@@ -213,7 +213,34 @@ public class MemoryMapConfigMemoryItem implements Serializable, Comparable<Memor
             item = item.getParent();
         }
         return max;
-    }  
+    }
+    
+    /**
+     * Utility methods checks to see if all items belong to the same parent
+     * @param items
+     * @return 
+     */
+    public static boolean allBelongSameParent(MemoryMapConfigMemoryItem... items) {
+        
+        MemoryMapConfigMemoryItem parent = null;
+        
+        for(MemoryMapConfigMemoryItem it : items) {
+            if(it.getParent() == null) {
+                //This is a parent return false
+                return false;
+            }
+            
+            if(parent == null) {            
+                parent = it.getParent();
+            }
+            
+            if(parent != null && !parent.getName().equals(it.getParent().getName())) {
+                return false;
+            }  
+        }
+
+        return true;
+    }
 
     @Override
     public boolean equals(Object obj) {

@@ -33,6 +33,7 @@ import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -170,7 +171,33 @@ public class MemoryMapBuildAction implements Action {
             }
         }
     }
+    
+    /**
+     * We need to filter markers. If they have the same max value. We need to remove the marker, and concat the label.
+     */
+    private void filterMarkers(HashMap<String, ValueMarker> markers) {
+        
+        HashMap<Integer, String> maxLabel = new HashMap<Integer, String>();
 
+        for(String markerLabel : markers.keySet()) {
+            int max = (int)markers.get(markerLabel).getValue();
+            if(maxLabel.containsKey(max)) {
+                //If the label already is contained. Store the Original value. And add the new one.
+                String current = maxLabel.get(max);
+                
+                maxLabel.put(max, current + " "+ markerLabel);
+            } else {
+                maxLabel.put(max, markerLabel);
+            }
+        }
+
+        markers.clear();
+        for(Integer key : maxLabel.keySet()) {
+            makeMarker(maxLabel.get(key), (double)key , markers);
+        }
+        
+    }
+    
     public void doDrawMemoryMapUsageGraph(StaplerRequest req, StaplerResponse rsp) throws IOException {
         DataSetBuilder<String, ChartUtil.NumberOnlyBuildLabel> dataset = new DataSetBuilder<String, ChartUtil.NumberOnlyBuildLabel>();
 
@@ -178,100 +205,17 @@ public class MemoryMapBuildAction implements Action {
         String graphTitle = req.getParameter("title");
         String uniqueDataSet = req.getParameter("dataset");
 
-
         int w = Integer.parseInt(req.getParameter("width"));
         int h = Integer.parseInt(req.getParameter("height"));
 
         List<String> memberList = Arrays.asList(members.split(","));
-        List<List<String>> memberLists = new ArrayList<List<String>>();
-
-        for (String s : memberList) {
-            memberLists.add(Arrays.asList(s.split(" ")));
-        }
-
-        List<ValueMarker> markers = new ArrayList<ValueMarker>();
-
-        double max = Double.MIN_VALUE;
-        Set<String> drawnMarker = new HashSet<String>();
+        
+        HashMap<String,ValueMarker> markers = new HashMap<String, ValueMarker>();
 
         String scale = getRecorder().scale;
-
-        for (MemoryMapBuildAction membuild = this; membuild != null; membuild = membuild.getPreviousAction()) {
-            ChartUtil.NumberOnlyBuildLabel label = new ChartUtil.NumberOnlyBuildLabel(membuild.build);
-            MemoryMapConfigMemory result = membuild.getMemoryMapConfig().get(uniqueDataSet);
-
-            if (result != null) {
-
-                MemoryMapConfigMemory resultBlacklist = new MemoryMapConfigMemory();
-                for (List<String> list : memberLists) {
-                    double value = 0.0d;
-                    double maxx = 0.0d;
-                    String labelName = "";
-
-                    for (MemoryMapConfigMemoryItem res : result) {
-                        if (list.contains(res.getName()) && !resultBlacklist.contains(res)) {
-                            resultBlacklist.add(res);
-                            if (labelName.equals("")) {
-                                labelName = res.getName();
-                            } else {
-                                labelName = String.format("%s+%s", labelName, res.getName());
-                            }
-
-                            if (getRecorder().getShowBytesOnGraph()) {
-                                //maxx = maxx + HexUtils.byteCount(res.getLength(), getRecorder().getWordSize(), scale);
-                                maxx = HexUtils.byteCount(res.getTopLevelMemoryMax(), getRecorder().getWordSize(), scale);
-                                value = value + HexUtils.byteCount(res.getUsed(), getRecorder().getWordSize(), scale);
-                            } else {
-                                //maxx = maxx + HexUtils.wordCount(res.getLength(), getRecorder().getWordSize(), scale);
-                                maxx = HexUtils.wordCount(res.getTopLevelMemoryMax(), getRecorder().getWordSize(), scale);
-                                value = value + HexUtils.wordCount(res.getUsed(), getRecorder().getWordSize(), scale);
-                            }
-                        } else {
-                        }
-
-                        if (maxx > max) {
-                            max = maxx;
-                        }
-                    }
-                    if (!labelName.equals("")) {
-                        dataset.add(value, labelName, label);
-                    }
-
-                    boolean makeMarker = true;
-                    for (ValueMarker vm : markers) {
-                        if (maxx == vm.getValue() && !vm.getLabel().contains(labelName) && !labelName.equals("")) {
-                            drawnMarker.add(vm.getLabel().replace("(MAX) - ", "") + " - " + labelName);
-                            String s = vm.getLabel().replace("(MAX) - ", "");
-
-                            vm.setLabel(String.format("%s - %s", vm.getLabel(), labelName));
-                            //this is the size of chars used for setting the offset right
-                            double i = vm.getLabel().length() * labelOffset + 40;
-                            vm.setLabelOffset(new RectangleInsets(5, i, -20, 5));
-
-                            makeMarker = false;
-                        }
-                    }
-
-                    if ((!labelName.equals("")) && (drawnMarker.add(labelName))) {
-                        if (makeMarker) {
-                            ValueMarker vm = new ValueMarker((double) maxx, Color.BLACK, new BasicStroke(
-                                    1.2f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER,
-                                    1.0f, new float[]{6.0f, 6.0f}, 0.0f));
-
-                            vm.setLabel(String.format("(MAX) - %s", labelName));
-
-                            double i = vm.getLabel().length() * labelOffset + 40;
-                            vm.setLabelOffset(new RectangleInsets(5, i, -20, 5));
-                            vm.setLabelAnchor(RectangleAnchor.TOP_LEFT);
-                            vm.setPaint(Color.BLACK);
-                            vm.setOutlinePaint(Color.BLACK);
-                            vm.setAlpha(1.0f);
-                            markers.add(vm);
-                        }
-                    }
-                }
-            }
-        }
+        
+        double max = buildDataSet(memberList, uniqueDataSet, dataset, markers);
+        filterMarkers(markers);
 
         String s = "";
         if (scale.equalsIgnoreCase("kilo")) {
@@ -287,36 +231,20 @@ public class MemoryMapBuildAction implements Action {
 
         String legend = getRecorder().getShowBytesOnGraph() ? byteLegend : wordLegend;
 
-        JFreeChart chart = createPairedBarCharts(graphTitle, legend, max * 1.1d, 0d, dataset.build(), markers);
-
-
+        JFreeChart chart = createPairedBarCharts(graphTitle, legend, max * 1.1d, 0d, dataset.build(), markers.values());
+        
         chart.setBackgroundPaint(Color.WHITE);
         chart.getLegend().setPosition(RectangleEdge.BOTTOM);
         ChartUtil.generateGraph(req, rsp, chart, w, h);
     }
 
-    protected JFreeChart createPairedBarCharts(String title, String yaxis, double max, double min, CategoryDataset dataset, List<ValueMarker> markers) {
-        //final CategoryAxis domainAxis = new ShiftedCategoryAxis(null);
+    protected JFreeChart createPairedBarCharts(String title, String yaxis, double max, double min, CategoryDataset dataset, Collection<ValueMarker> markers) {
         final CategoryAxis domainAxis = new CategoryAxis3D();
         final NumberAxis rangeAxis = new NumberAxis(yaxis);
         rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
         rangeAxis.setUpperBound(max);
         rangeAxis.setLowerBound(min);
-        /*TODO : wrong scale choosen - Jes
-         * if the user selects Mega or Giga as the scale, but there only are 
-         * a couple of Kilo in the graph it would have no ticks on the axis.
-         * this can be solved by. redefining the ticks,
-         * We have not done this because it's a bit tricky to figure out the rigth 
-         * factor to devid with
-         * 
-         * but the method wuld be 
-         * double factor = 10
-         * rangeAxis.setStandardTickUnits(new StandardTickUnitSource(max / factor));
-         */
-
-        //StackedAreaRenderer2 renderer = new StackedAreaRenderer2();
         BarRenderer renderer = new BarRenderer();
-
 
         CategoryPlot plot = new CategoryPlot(dataset, domainAxis, rangeAxis, renderer);
         plot.setDomainAxis(domainAxis);
@@ -328,56 +256,12 @@ public class MemoryMapBuildAction implements Action {
         plot.setRangeGridlinesVisible(true);
         plot.setRangeGridlinePaint(Color.black);
 
-
-
         for (ValueMarker mkr : markers) {
             plot.addRangeMarker(mkr);
         }
 
         JFreeChart chart = new JFreeChart(plot);        
         chart.setTitle(title);
-        return chart;
-    }
-
-    protected JFreeChart createChart(CategoryDataset dataset, String title, String yaxis, int max, int min) {
-        final JFreeChart chart = ChartFactory.createStackedAreaChart(title, // chart                                                                                                                                       // title
-                null, // unused
-                yaxis, // range axis label
-                dataset, // data
-                PlotOrientation.VERTICAL, // orientation
-                true, // include legend
-                true, // tooltips
-                false // urls
-                );
-
-        final LegendTitle legend = chart.getLegend();
-
-        legend.setPosition(RectangleEdge.BOTTOM);
-
-        chart.setBackgroundPaint(Color.white);
-
-        final CategoryPlot plot = chart.getCategoryPlot();
-
-        plot.setBackgroundPaint(Color.WHITE);
-        plot.setOutlinePaint(null);
-        plot.setRangeGridlinesVisible(true);
-        plot.setRangeGridlinePaint(Color.black);
-
-        CategoryAxis domainAxis = new ShiftedCategoryAxis(null);
-        plot.setDomainAxis(domainAxis);
-        domainAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_90);
-        //domainAxis.setLowerMargin(0.0);
-        //domainAxis.setUpperMargin(0.0);
-        //domainAxis.setCategoryMargin(0.0);
-
-        final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-        rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
-        rangeAxis.setUpperBound(max);
-        rangeAxis.setLowerBound(min);
-
-        final StackedAreaRenderer renderer = (StackedAreaRenderer) plot.getRenderer();
-        renderer.setBaseStroke(new BasicStroke(2.0f));
-        //plot.setInsets(new RectangleInsets(5.0, 0, 0, 5.0));
         return chart;
     }
 
@@ -411,5 +295,153 @@ public class MemoryMapBuildAction implements Action {
 
     public boolean isValidConfigurationWithData() {
         return memoryMapConfig != null && memoryMapConfig.size() >= 1;
+    }
+    
+    private String constructMaxLabel(String... parts) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("(MAX)");
+        for(String part : parts) {
+            builder.append(" ").append(part);
+        }
+        
+        return builder.toString();
+    }
+    
+    private String constructCategoryLabel(String... parts) {
+        StringBuilder builder = new StringBuilder();
+        for(String part : parts) {
+            if(parts.length > 1) {
+                builder.append(part).append("+");
+            } else {
+                builder.append(part);
+            }            
+        }
+        
+        if(parts.length >  1) {
+            int plusIndex = builder.lastIndexOf("+");
+            return builder.substring(0, plusIndex).toString();
+        }
+        
+        return builder.toString();        
+    }
+    /**
+     * Extracts the value from a given memory map item. If multiple objects are passed in, values get added.
+     * @param item
+     * @return 
+     */
+    private double extractValue(MemoryMapConfigMemoryItem... item) {
+        double value = 0d;
+        String scale = getRecorder().scale;
+        for(MemoryMapConfigMemoryItem it : item) {
+
+            if (getRecorder().getShowBytesOnGraph()) {
+                value = value + HexUtils.byteCount(it.getUsed(), getRecorder().getWordSize(), scale);
+            } else {
+                value = value + HexUtils.wordCount(it.getUsed(), getRecorder().getWordSize(), scale);
+            }
+        }
+        return value;
+    }
+    
+    private double extractMaxValue(MemoryMapConfigMemoryItem... item) {
+        double value = 0d;
+        String scale = getRecorder().scale;
+        for(MemoryMapConfigMemoryItem it : item) {
+            if (getRecorder().getShowBytesOnGraph()) {
+                value = HexUtils.byteCount(it.getTopLevelMemoryMax(), getRecorder().getWordSize(), scale);
+            } else {
+                value = value + HexUtils.wordCount(it.getTopLevelMemoryMax(), getRecorder().getWordSize(), scale);
+            }
+        }
+        return value;
+    }
+    
+    public void makeMarker(String labelName, double value, HashMap<String,ValueMarker> markers) {
+        if(!markers.containsKey(labelName)) {
+            ValueMarker vm = new ValueMarker((double) value, Color.BLACK, new BasicStroke(
+                                1.2f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER,
+                                1.0f, new float[]{6.0f, 6.0f}, 0.0f));
+            vm.setLabel(labelName);
+
+            double i = vm.getLabel().length() * labelOffset + 40;
+            vm.setLabelOffset(new RectangleInsets(5, i, -20, 5));
+            vm.setLabelAnchor(RectangleAnchor.TOP_LEFT);
+            vm.setPaint(Color.BLACK);
+            vm.setOutlinePaint(Color.BLACK);
+            vm.setAlpha(1.0f);
+            markers.put(labelName, vm);
+        }
+    }
+    
+    /**
+     * Builds the dataset. Returns the maximum value.
+     * @param graphData
+     * @param dataset
+     * @param graphDataset
+     * @param markers
+     * @return 
+     */
+    public double buildDataSet(List<String> graphData, String dataset, DataSetBuilder<String, ChartUtil.NumberOnlyBuildLabel> graphDataset, HashMap<String,ValueMarker> markers) {
+        double max = 0d;
+        String scale = getRecorder().scale;
+        
+        for(String s : graphData) {
+            if(s.contains(" ")) {
+                String[] parts = s.split(" ");
+                
+                String maxLabel = constructMaxLabel(parts);
+                String categoryLabel = constructCategoryLabel(parts);
+                
+                for (MemoryMapBuildAction membuild = this; membuild != null; membuild = membuild.getPreviousAction()) {
+                    MemoryMapConfigMemory result = membuild.getMemoryMapConfig().get(dataset);
+                    ChartUtil.NumberOnlyBuildLabel label = new ChartUtil.NumberOnlyBuildLabel(membuild.build);
+                    if(result != null) {
+                        List<MemoryMapConfigMemoryItem> ourItems = result.getItemByNames(parts);
+                        MemoryMapConfigMemoryItem[] ourItemsArray = ourItems.toArray(new MemoryMapConfigMemoryItem[ourItems.size()]);
+                        double value = extractValue(ourItemsArray);
+
+                        boolean allBelongSameParent = MemoryMapConfigMemoryItem.allBelongSameParent(ourItemsArray);
+                        
+                        
+                        if(allBelongSameParent) {
+                            max = extractMaxValue(ourItems.get(0));
+                        } else {
+                            max = extractMaxValue(ourItemsArray);
+                        }
+
+                        graphDataset.add(value, categoryLabel, label);
+                        makeMarker(maxLabel, max, markers);
+                    }                    
+                }
+                
+            } else {
+                HashMap<String, String> maximumValues = new HashMap<String, String>();
+                for (MemoryMapBuildAction membuild = this; membuild != null; membuild = membuild.getPreviousAction()) {
+                    MemoryMapConfigMemory result = membuild.getMemoryMapConfig().get(dataset);
+                    ChartUtil.NumberOnlyBuildLabel label = new ChartUtil.NumberOnlyBuildLabel(membuild.build);
+                    
+                    if(result != null) {
+                        //Do something we have a result                        
+                        
+                        for(MemoryMapConfigMemoryItem item : result) {
+                            //The name of the item matches the configured grap item
+                           
+                            if(item.getName().equals(s)) {
+                                String maxLabel = constructMaxLabel(item.getName());
+                                max = extractMaxValue(item);
+                                double value = extractValue(item);
+                                String categoryLabel = constructCategoryLabel(item.getName());                                
+                                graphDataset.add(value, categoryLabel, label);
+                                makeMarker(maxLabel, max, markers);
+                                
+                            }
+                            
+                        }
+
+                    }
+                }
+            }
+        }
+        return max;
     }
 }

@@ -5,7 +5,7 @@
         <j:when test="${from.getLastApplicableMemoryMapResult() != null}">
             
             <j:forEach var="pc" items="${from.parsersChosen()}">
-                <div style="float:left;text-align:center;border-style:solid;border-width:1px;margin:5px;padding:5px">
+                <div style="float:right;clear:right;clear:right;max-width:450px;text-align:center;border-style:solid;border-width:1px;margin:5px;padding:5px">
                 <h3>${pc.parserUniqueName}</h3>
                 <j:set var="uuid" value="${pc.parserUniqueName}"/>
                 <j:set var="t" value="${from.getGraphTitles(uuid)}"/>

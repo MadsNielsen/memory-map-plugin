@@ -69,6 +69,17 @@ public class MemoryMapConfigMemory extends LinkedList<MemoryMapConfigMemoryItem>
         }
         return false;
     }
+    
+    public List<MemoryMapConfigMemoryItem> getItemByNames(String... name) {
+        ArrayList<MemoryMapConfigMemoryItem> items = new ArrayList<MemoryMapConfigMemoryItem>();
+        for(MemoryMapConfigMemoryItem item : this) {
+            for(String memoryName : name )
+            if(item.getName().equals(memoryName)) {
+                items.add(item);
+            }
+        }
+        return items;
+    }
 
     @Override
     public boolean add(MemoryMapConfigMemoryItem e) {
