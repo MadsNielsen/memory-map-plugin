@@ -107,9 +107,9 @@ public class GccMemoryMapParser extends AbstractMemoryMapParser implements Seria
     
     @Override
     public MemoryMapConfigMemory parseMapFile(File f, MemoryMapConfigMemory configuration) throws IOException {
-        
+        CharSequence sequence = createCharSequenceFromFile(f);
         for(MemoryMapConfigMemoryItem item : configuration) {
-            Matcher m = getLinePatternForMapFile(item.getName()).matcher(createCharSequenceFromFile(f));            
+            Matcher m = getLinePatternForMapFile(item.getName()).matcher(sequence);            
             while(m.find()) {
                 item.setOrigin(m.group(3));
                 item.setUsed(m.group(5));

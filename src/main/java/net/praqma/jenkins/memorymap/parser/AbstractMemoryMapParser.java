@@ -25,7 +25,6 @@ package net.praqma.jenkins.memorymap.parser;
 
 import hudson.DescriptorExtensionList;
 import hudson.ExtensionPoint;
-import hudson.model.AbstractBuild;
 import hudson.model.Describable;
 import hudson.model.Descriptor;
 import java.io.File;
@@ -106,9 +105,9 @@ public abstract class AbstractMemoryMapParser implements Describable<AbstractMem
         
         CharBuffer cbuf = null;
         FileInputStream fis = null;
-        try 
-        {
+        try {
             fis = new FileInputStream(f.getAbsolutePath());
+            logger.log(java.util.logging.Level.FINE, String.format("Parser %s created input stream for file.", parserUniqueName));
             FileChannel fc = fis.getChannel();
             ByteBuffer bbuf = fc.map(FileChannel.MapMode.READ_ONLY, 0, (int)fc.size());
             
@@ -117,20 +116,17 @@ public abstract class AbstractMemoryMapParser implements Describable<AbstractMem
                 cbuf = Charset.defaultCharset().newDecoder().decode(bbuf);
             } else {
                 cbuf = Charset.forName(charset).newDecoder().decode(bbuf);
-            }
-            
-            
-        } 
-        catch (FileNotFoundException ex)
-        {
-              throw ex;  
-        }
-        
-        catch (IOException ex) {
+            }            
+        } catch (FileNotFoundException ex){
+            logger.log(java.util.logging.Level.FINE, String.format("Parser %s reported exception of type FileNotFoundException.", parserUniqueName));
+             throw ex;  
+        } catch (IOException ex) {
+            logger.log(java.util.logging.Level.FINE, String.format("Parser %s reported exception of type IOException.", parserUniqueName));
             throw ex;
-        }  finally {
+        } finally {
             if(fis != null) {
                 fis.close();
+                logger.log(java.util.logging.Level.FINE, String.format("Parser %s closed input stream for file.", parserUniqueName));
             }
         }
         return cbuf;
