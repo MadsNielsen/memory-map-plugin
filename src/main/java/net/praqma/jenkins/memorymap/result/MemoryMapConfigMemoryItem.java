@@ -34,9 +34,6 @@ import net.praqma.jenkins.memorymap.util.HexUtils;
 public class MemoryMapConfigMemoryItem implements Serializable, Comparable<MemoryMapConfigMemoryItem> {
     
     private MemoryMapConfigMemoryItem parent;    
-    private static long MEGA_MULTIPLIER = 1024*1024;
-    private static long KILO_MULTIPLIER = 1024;
-    
     private String name;
     
     //The "start" address. Not always relavant but in some cases we use the 'origin' and the 'endAddress' to calculate the size
@@ -47,8 +44,8 @@ public class MemoryMapConfigMemoryItem implements Serializable, Comparable<Memor
     private String length;   
 
     //The used attributes is what is consumed by the component
-    private String used = "";
-    private String unused = "";
+    private String used;
+    private String unused;
     
     //Model property for 
     private List<MemoryMapConfigMemoryItem> associatedSections;
@@ -167,11 +164,23 @@ public class MemoryMapConfigMemoryItem implements Serializable, Comparable<Memor
     public void setAssociatedSections(List<MemoryMapConfigMemoryItem> associatedSections) {
         this.setAssociatedSections(associatedSections);
     }
-
+    
+    private Object getValueOrNotApplicable(Object o) {
+        if (o == null) {
+            return "N/A";
+        } else {
+            return o;
+        }
+    }
     
     @Override
     public String toString() {
-        return String.format("%s [origin = %s, length = %s, used = %s, unused = %s, endAddress = %s]", getName(), getOrigin(), getLength(), getUsed(), getUnused(), getEndAddress());
+        String base = String.format("%s [origin = %s, length = %s, used = %s, unused = %s, endAddress = %s]", getName(), getOrigin(), getValueOrNotApplicable(getLength()), getUsed(), getValueOrNotApplicable(getUnused()), getValueOrNotApplicable(getEndAddress()));
+        if(parent != null) {
+            base = base + String.format("%n---- %s",parent);
+        }
+        
+        return base;
     }
 
     /**

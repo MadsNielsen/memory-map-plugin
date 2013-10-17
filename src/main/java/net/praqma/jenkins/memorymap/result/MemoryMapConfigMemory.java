@@ -41,13 +41,9 @@ public class MemoryMapConfigMemory extends LinkedList<MemoryMapConfigMemoryItem>
     public String toString() {
         StringBuilder builder = new StringBuilder();
         
-        for (MemoryMapConfigMemoryItem item : this) {
-            if(item.getLength() != null) {
-                builder.append(item.toString());
-                builder.append("\n");
-            } else {
-                LOG.info(String.format("The item %s do does not have a specified length", item.getName() ));
-            }
+        for (MemoryMapConfigMemoryItem item : this) {            
+            builder.append(String.format("[%s] %s", this.indexOf(item), item));
+            builder.append("\n");            
         }
         
         return builder.toString();

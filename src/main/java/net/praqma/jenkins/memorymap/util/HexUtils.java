@@ -77,7 +77,7 @@ public class HexUtils {
         }
         
         public Integer getIntegerValue() {
-            return Integer.parseInt(rawString, 16);
+            return Integer.parseInt(rawString.replace("0x",""), 16);
         }
         
         public boolean isValidMetricValue() {

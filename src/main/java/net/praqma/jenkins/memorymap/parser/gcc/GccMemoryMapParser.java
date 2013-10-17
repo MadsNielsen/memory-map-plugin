@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,6 +17,7 @@ import net.praqma.jenkins.memorymap.parser.MemoryMapParserDescriptor;
 import net.praqma.jenkins.memorymap.result.MemoryMapConfigMemory;
 import net.praqma.jenkins.memorymap.result.MemoryMapConfigMemoryItem;
 import net.praqma.jenkins.memorymap.util.HexUtils;
+import net.praqma.jenkins.memorymap.util.HexUtils.HexifiableString;
 import net.praqma.jenkins.memorymap.util.MemoryMapMemorySelectionError;
 import net.sf.json.JSONObject;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -81,6 +83,18 @@ public class GccMemoryMapParser extends AbstractMemoryMapParser implements Seria
         return p;
     }
     
+    public class MemoryMapMemItemComparator implements Comparator<MemoryMapConfigMemoryItem> {
+
+        @Override
+        public int compare(MemoryMapConfigMemoryItem t, MemoryMapConfigMemoryItem t1) {
+            int vt = new HexifiableString(t.getOrigin()).getIntegerValue();
+            int vt1 = new HexifiableString(t1.getOrigin()).getIntegerValue();
+            return (vt<vt1 ? -1 : (vt==vt1 ? 1 : 0));
+            
+        }
+        
+    }
+    
     /**
      * Given an item with length == null. 
      * Look down in the list. If we find an item whoose length is not null, set the items length to that
@@ -88,13 +102,13 @@ public class GccMemoryMapParser extends AbstractMemoryMapParser implements Seria
      * @return a more complete configuration, where i have better values  
      */
     public MemoryMapConfigMemory guessLengthOfSections(MemoryMapConfigMemory memory) {
-        Collections.sort(memory);
+        Collections.sort(memory, new MemoryMapMemItemComparator());
+        
         for(MemoryMapConfigMemoryItem item : memory) {
             if (item.getLength() == null ) {
                 int itemIndex = memory.indexOf(item);
-                
-                for(int i = itemIndex; i < memory.size(); i++) {
-                    if(memory.get(i).getLength() != null) {
+                for(int i = itemIndex; i > 1; i--) {
+                    if(memory.get(i).getLength() != null) {                        
                         item.setParent(memory.get(i));
                         break;
                     }
@@ -115,7 +129,8 @@ public class GccMemoryMapParser extends AbstractMemoryMapParser implements Seria
                 item.setUsed(m.group(5));
             }
         }
-        return guessLengthOfSections(configuration);
+        configuration = guessLengthOfSections(configuration);
+        return configuration;
     }
     
     @Override
@@ -136,7 +151,6 @@ public class GccMemoryMapParser extends AbstractMemoryMapParser implements Seria
                 }
             }
         }
-        
         return memconfig;  
     }
 

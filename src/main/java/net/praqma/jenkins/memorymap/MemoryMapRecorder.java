@@ -66,6 +66,13 @@ public class MemoryMapRecorder extends Recorder {
     private String mapFile;
     private Integer wordSize;
     private boolean showBytesOnGraph;
+    
+    @Deprecated
+    public final String chosenParser;
+    
+    @Deprecated
+    public final String configurationFile;
+    
     public final String scale;
     public final List<AbstractMemoryMapParser> chosenParsers;
     public final List<MemoryMapGraphConfiguration> graphConfiguration;
@@ -77,13 +84,17 @@ public class MemoryMapRecorder extends Recorder {
     }
     
     @DataBoundConstructor
-    public MemoryMapRecorder(List<AbstractMemoryMapParser> chosenParsers, String configurationFile, boolean showBytesOnGraph, String wordSize, final String scale , final List<MemoryMapGraphConfiguration> graphConfiguration) {
+    public MemoryMapRecorder(String chosenParser, List<AbstractMemoryMapParser> chosenParsers, String configurationFile, boolean showBytesOnGraph, String wordSize, final String scale , final List<MemoryMapGraphConfiguration> graphConfiguration) {
         this.chosenParsers = chosenParsers;
         this.showBytesOnGraph = showBytesOnGraph;
         //TODO: This should be chose at parse-time. The 8 that is...
         this.wordSize = StringUtils.isBlank(wordSize) ? 8 : Integer.parseInt(wordSize);   
         this.scale = scale;
         this.graphConfiguration = graphConfiguration;
+        
+        //Backwards compatability
+        this.chosenParser = chosenParser;
+        this.configurationFile = configurationFile;
     }
     
     @Override
