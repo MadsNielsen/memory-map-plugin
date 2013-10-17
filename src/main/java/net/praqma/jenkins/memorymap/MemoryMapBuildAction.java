@@ -461,7 +461,9 @@ public class MemoryMapBuildAction implements Action {
                                     max = newmax;
                                 }
                                 
-                                makeMarker(maxLabel, newmax, markers);                                
+                                if(newmax > 0d) { 
+                                    makeMarker(maxLabel, newmax, markers);                                
+                                }
                                 
                             }
                             
