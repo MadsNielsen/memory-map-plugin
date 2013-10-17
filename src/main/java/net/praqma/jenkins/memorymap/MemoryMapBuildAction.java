@@ -37,6 +37,7 @@ import java.util.List;
 import net.praqma.jenkins.memorymap.result.MemoryMapConfigMemory;
 import net.praqma.jenkins.memorymap.result.MemoryMapConfigMemoryItem;
 import net.praqma.jenkins.memorymap.util.HexUtils;
+import org.apache.commons.lang.StringUtils;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.CategoryAxis3D;
@@ -326,11 +327,36 @@ public class MemoryMapBuildAction implements Action {
         double value = 0d;
         String scale = getRecorder().scale;
         for(MemoryMapConfigMemoryItem it : item) {
+            if(!StringUtils.isBlank(it.getUsed())) {
+                if (getRecorder().getShowBytesOnGraph()) {
+                    value = value + HexUtils.byteCount(it.getUsed(), getRecorder().getWordSize(), scale);
+                } else {
+                    value = value + HexUtils.wordCount(it.getUsed(), getRecorder().getWordSize(), scale);
+                }
+            }
+        }
+        return value;
+    }
+    
+    private double extractMaxNonZeroValue(MemoryMapConfigMemoryItem... item) {
+        double value = 0d;
+        String scale = getRecorder().scale;
+        for(MemoryMapConfigMemoryItem it : item) {
 
             if (getRecorder().getShowBytesOnGraph()) {
-                value = value + HexUtils.byteCount(it.getUsed(), getRecorder().getWordSize(), scale);
+                if(it.getTopLevelMemoryMax() != null) {                
+                    value = value + HexUtils.byteCount(it.getTopLevelMemoryMax(), getRecorder().getWordSize(), scale);
+                    if(value > 0d) {
+                        return value;
+                    }
+                } 
             } else {
-                value = value + HexUtils.wordCount(it.getUsed(), getRecorder().getWordSize(), scale);
+                if(it.getTopLevelMemoryMax() != null) {
+                    value = value + HexUtils.byteCount(it.getTopLevelMemoryMax(), getRecorder().getWordSize(), scale);
+                    if(value > 0d) {
+                        return value;                    
+                    } 
+                }
             }
         }
         return value;
@@ -340,10 +366,15 @@ public class MemoryMapBuildAction implements Action {
         double value = 0d;
         String scale = getRecorder().scale;
         for(MemoryMapConfigMemoryItem it : item) {
+            
             if (getRecorder().getShowBytesOnGraph()) {
-                value = HexUtils.byteCount(it.getTopLevelMemoryMax(), getRecorder().getWordSize(), scale);
+                if(it.getTopLevelMemoryMax() != null) {                
+                    value = value + HexUtils.byteCount(it.getTopLevelMemoryMax(), getRecorder().getWordSize(), scale);
+                } 
             } else {
-                value = value + HexUtils.wordCount(it.getTopLevelMemoryMax(), getRecorder().getWordSize(), scale);
+                if(it.getTopLevelMemoryMax() != null) {
+                    value = value + HexUtils.wordCount(it.getTopLevelMemoryMax(), getRecorder().getWordSize(), scale);
+                } 
             }
         }
         return value;
@@ -397,7 +428,7 @@ public class MemoryMapBuildAction implements Action {
                         
                         
                         if(allBelongSameParent) {
-                            max = extractMaxValue(ourItems.get(0));
+                            max = extractMaxNonZeroValue(ourItemsArray);
                         } else {
                             max = extractMaxValue(ourItemsArray);
                         }
@@ -421,11 +452,16 @@ public class MemoryMapBuildAction implements Action {
                            
                             if(item.getName().equals(s)) {
                                 String maxLabel = constructMaxLabel(item.getName());
-                                max = extractMaxValue(item);
+                                double newmax = extractMaxNonZeroValue(item);
                                 double value = extractValue(item);
                                 String categoryLabel = constructCategoryLabel(item.getName());                                
                                 graphDataset.add(value, categoryLabel, label);
-                                makeMarker(maxLabel, max, markers);
+                                
+                                if(newmax >= max) {
+                                    max = newmax;
+                                }
+                                
+                                makeMarker(maxLabel, newmax, markers);                                
                                 
                             }
                             

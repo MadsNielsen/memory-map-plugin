@@ -26,6 +26,7 @@ package net.praqma.jenkins.memorymap.result;
 import java.io.Serializable;
 import java.util.List;
 import net.praqma.jenkins.memorymap.util.HexUtils;
+import org.apache.commons.lang.StringUtils;
 
 /**
  *
@@ -234,19 +235,22 @@ public class MemoryMapConfigMemoryItem implements Serializable, Comparable<Memor
         MemoryMapConfigMemoryItem parent = null;
         
         for(MemoryMapConfigMemoryItem it : items) {
-            if(it.getParent() == null) {
-                //This is a parent return false
-                return false;
+            if(!StringUtils.isNumeric(it.getOrigin())) {
+                if(it.getParent() == null) {
+                    //This is a parent return false
+                    return false;
+                }
+
+                if(parent == null) {            
+                    parent = it.getParent();
+                }
+
+                if(parent != null && !parent.getName().equals(it.getParent().getName())) {
+                    return false;
+                }  
             }
-            
-            if(parent == null) {            
-                parent = it.getParent();
-            }
-            
-            if(parent != null && !parent.getName().equals(it.getParent().getName())) {
-                return false;
-            }  
         }
+        
 
         return true;
     }

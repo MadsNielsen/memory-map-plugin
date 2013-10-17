@@ -69,9 +69,7 @@ public class GccMemoryMapParser extends AbstractMemoryMapParser implements Seria
             MemoryMapConfigMemoryItem it = new MemoryMapConfigMemoryItem(match.group(2), "0");
             items.add(it);
         }
-  
-        return items;
-        
+        return items;        
     }
     
     public GccMemoryMapParser() { 
@@ -90,7 +88,6 @@ public class GccMemoryMapParser extends AbstractMemoryMapParser implements Seria
             int vt = new HexifiableString(t.getOrigin()).getIntegerValue();
             int vt1 = new HexifiableString(t1.getOrigin()).getIntegerValue();
             return (vt<vt1 ? -1 : (vt==vt1 ? 1 : 0));
-            
         }
         
     }
@@ -134,8 +131,7 @@ public class GccMemoryMapParser extends AbstractMemoryMapParser implements Seria
     }
     
     @Override
-    public MemoryMapConfigMemory parseConfigFile(File f) throws IOException {
-        
+    public MemoryMapConfigMemory parseConfigFile(File f) throws IOException {        
         //Collect sections from both the MEMORY and the SECTIONS areas from the command file.
         //The memory are the top level components, sections belong to one of thsese sections
         MemoryMapConfigMemory memconfig = getMemory(f);
