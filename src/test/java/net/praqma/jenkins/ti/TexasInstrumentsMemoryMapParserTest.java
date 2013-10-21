@@ -60,7 +60,6 @@ public class TexasInstrumentsMemoryMapParserTest {
         mmcm = parser.parseMapFile(f, mmcm);
         assertTrue(mmcm.size() > 0);
         
-        System.out.println(mmcm.toString());
         for (MemoryMapConfigMemoryItem item : mmcm){
           if(item.getName().equals("RAMM0")){
               assertEquals(item.getUsed(), "00000195");

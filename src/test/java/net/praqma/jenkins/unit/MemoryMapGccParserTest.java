@@ -51,7 +51,5 @@ public class MemoryMapGccParserTest {
         
         File f2 = new File(fileNameMap);
         mem = parser.parseMapFile(f2, mem);
-        System.out.println(mem);
-
     }
 }
