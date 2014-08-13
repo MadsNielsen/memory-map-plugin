@@ -25,7 +25,7 @@ package net.praqma.jenkins.ti;
 
 import java.io.File;
 import java.io.IOException;
-import net.praqma.jenkins.memorymap.parser.TexasInstrumentsMemoryMapParser;
+import net.praqma.jenkins.memorymap.parser.ti.TexasInstrumentsMemoryMapParser;
 import net.praqma.jenkins.memorymap.result.MemoryMapConfigMemory;
 import net.praqma.jenkins.memorymap.result.MemoryMapConfigMemoryItem;
 import org.junit.Test;

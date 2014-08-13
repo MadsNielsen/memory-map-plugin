@@ -34,7 +34,7 @@ import java.util.logging.Logger;
 import net.praqma.jenkins.memorymap.graph.MemoryMapGraphConfiguration;
 import net.praqma.jenkins.memorymap.parser.AbstractMemoryMapParser;
 import net.praqma.jenkins.memorymap.parser.MemoryMapMapParserDelegate;
-import net.praqma.jenkins.memorymap.parser.TexasInstrumentsMemoryMapParser;
+import net.praqma.jenkins.memorymap.parser.ti.TexasInstrumentsMemoryMapParser;
 import net.praqma.jenkins.memorymap.parser.iar.IARMemoryMapParser;
 import net.praqma.jenkins.memorymap.util.MemoryMapFileNotFoundError;
 import org.apache.commons.lang.SerializationUtils;

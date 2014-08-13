@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.praqma.jenkins.memorymap.graph.MemoryMapGraphConfiguration;
-import net.praqma.jenkins.memorymap.graph.MemoryMapGraphConfigurationDescriptor;
 import net.praqma.jenkins.memorymap.parser.AbstractMemoryMapParser;
 import net.praqma.jenkins.memorymap.parser.MemoryMapParserDescriptor;
 import net.praqma.jenkins.memorymap.result.MemoryMapConfigMemory;

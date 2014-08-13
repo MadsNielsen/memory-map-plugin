@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package net.praqma.jenkins.memorymap.parser;
+package net.praqma.jenkins.memorymap.parser.ti;
 
 import hudson.Extension;
 import java.io.File;
@@ -31,7 +31,10 @@ import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.praqma.jenkins.memorymap.graph.MemoryMapGraphConfiguration;
-import static net.praqma.jenkins.memorymap.parser.AbstractMemoryMapParser.logger;
+import net.praqma.jenkins.memorymap.parser.AbstractMemoryMapParser;
+import net.praqma.jenkins.memorymap.parser.MemoryMapConfigFileParserDelegate;
+import net.praqma.jenkins.memorymap.parser.MemoryMapMapParserDelegate;
+import net.praqma.jenkins.memorymap.parser.MemoryMapParserDescriptor;
 import net.praqma.jenkins.memorymap.result.MemoryMapConfigMemory;
 import net.praqma.jenkins.memorymap.result.MemoryMapConfigMemoryItem;
 import net.praqma.jenkins.memorymap.util.MemoryMapMemorySelectionError;

@@ -3,7 +3,7 @@
     <parent> 
         <groupId>org.jenkins-ci.plugins</groupId> 
         <artifactId>plugin</artifactId> 
-        <version>1.480.3</version>
+        <version>1.532.3</version>
     </parent>
     <groupId>net.praqma</groupId>
     <artifactId>memory-map</artifactId>
@@ -277,4 +277,5 @@
         <developerConnection>scm:git:ssh://git@github.com/Praqma/memory-map-plugin.git</developerConnection>
         <url>https://github.com/Praqma/memory-map-plugin.git</url>
     </scm>
+    
 </project>
