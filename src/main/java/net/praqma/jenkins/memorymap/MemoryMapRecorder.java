@@ -55,7 +55,6 @@ import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
-import net.praqma.util.ExceptionUtils.*;
 import org.kohsuke.stapler.QueryParameter;
 /**
  *
@@ -68,10 +67,10 @@ public class MemoryMapRecorder extends Recorder {
     private boolean showBytesOnGraph;
     
     @Deprecated
-    public final String chosenParser;
+    private transient AbstractMemoryMapParser chosenParser;
     
     @Deprecated
-    public final String configurationFile;
+    private transient String configurationFile;
     
     public final String scale;
     public final List<AbstractMemoryMapParser> chosenParsers;
@@ -84,17 +83,13 @@ public class MemoryMapRecorder extends Recorder {
     }
     
     @DataBoundConstructor
-    public MemoryMapRecorder(String chosenParser, List<AbstractMemoryMapParser> chosenParsers, String configurationFile, boolean showBytesOnGraph, String wordSize, final String scale , final List<MemoryMapGraphConfiguration> graphConfiguration) {
+    public MemoryMapRecorder(List<AbstractMemoryMapParser> chosenParsers, boolean showBytesOnGraph, String wordSize, final String scale , final List<MemoryMapGraphConfiguration> graphConfiguration) {
         this.chosenParsers = chosenParsers;
         this.showBytesOnGraph = showBytesOnGraph;
         //TODO: This should be chose at parse-time. The 8 that is...
         this.wordSize = StringUtils.isBlank(wordSize) ? 8 : Integer.parseInt(wordSize);   
         this.scale = scale;
         this.graphConfiguration = graphConfiguration;
-        
-        //Backwards compatability
-        this.chosenParser = chosenParser;
-        this.configurationFile = configurationFile;
     }
     
     @Override
@@ -132,7 +127,7 @@ public class MemoryMapRecorder extends Recorder {
 
         MemoryMapBuildAction mmba = new MemoryMapBuildAction(build, config);
         mmba.setRecorder(this);
-        mmba.setMemoryMapConfig(config);                
+        mmba.setMemoryMapConfig2(config);                
         build.getActions().add(mmba);
         
         return true;        
@@ -178,6 +173,34 @@ public class MemoryMapRecorder extends Recorder {
      */
     public void setWordSize(Integer wordSize) {
         this.wordSize = wordSize;
+    }
+
+    /**
+     * @return the chosenParser
+     */
+    public AbstractMemoryMapParser getChosenParser() {
+        return chosenParser;
+    }
+
+    /**
+     * @param chosenParser the chosenParser to set
+     */
+    public void setChosenParser(AbstractMemoryMapParser chosenParser) {
+        this.chosenParser = chosenParser;
+    }
+
+    /**
+     * @return the configurationFile
+     */
+    public String getConfigurationFile() {
+        return configurationFile;
+    }
+
+    /**
+     * @param configurationFile the configurationFile to set
+     */
+    public void setConfigurationFile(String configurationFile) {
+        this.configurationFile = configurationFile;
     }
     
     @Extension

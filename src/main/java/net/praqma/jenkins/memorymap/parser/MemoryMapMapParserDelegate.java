@@ -59,7 +59,7 @@ public class MemoryMapMapParserDelegate extends FileFoundable<HashMap<String,Mem
     @Override
     public HashMap<String, MemoryMapConfigMemory> invoke(File file, VirtualChannel vc) throws IOException, InterruptedException {        
         for(AbstractMemoryMapParser parser : parsers) {
-            MemoryMapConfigMemory mem = parser.parseMapFile(findFile(file, parser.mapFile), config.get(parser.parserUniqueName));
+            MemoryMapConfigMemory mem = parser.parseMapFile(findFile(file, parser.mapFile), config.get(parser.getParserUniqueName()));
         }
         return config;
     }

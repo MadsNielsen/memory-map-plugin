@@ -53,9 +53,9 @@ public class MemoryMapConfigFileParserDelegate extends FileFoundable<HashMap<Str
     public HashMap<String, MemoryMapConfigMemory> invoke(File f, VirtualChannel channel) throws IOException, InterruptedException {
         HashMap<String, MemoryMapConfigMemory> memorys = new HashMap<String, MemoryMapConfigMemory>();
         
-        for(int i=0; i< parsers.size(); i++) {           
-            String uuid =  parsers.get(i).parserUniqueName;
-            memorys.put(uuid, parsers.get(i).parseConfigFile(findFile(f, parsers.get(i).getConfigurationFile()))); 
+        for (AbstractMemoryMapParser parser : parsers) {
+            String uuid = parser.getParserUniqueName();
+            memorys.put(uuid, parser.parseConfigFile(findFile(f, parser.getConfigurationFile())));
         } 
         return memorys;
     }

@@ -59,7 +59,7 @@ public abstract class AbstractMemoryMapParser implements Describable<AbstractMem
     
     protected List<Pattern> patterns;
     public final List<MemoryMapGraphConfiguration> gConf;
-    public final String parserUniqueName;
+    private String parserUniqueName;
     protected String mapFile;
     private String configurationFile;
     private Integer wordSize;
@@ -107,7 +107,7 @@ public abstract class AbstractMemoryMapParser implements Describable<AbstractMem
         FileInputStream fis = null;
         try {
             fis = new FileInputStream(f.getAbsolutePath());
-            logger.log(java.util.logging.Level.FINE, String.format("Parser %s created input stream for file.", parserUniqueName));
+            logger.log(java.util.logging.Level.FINE, String.format("Parser %s created input stream for file.", getParserUniqueName()));
             FileChannel fc = fis.getChannel();
             ByteBuffer bbuf = fc.map(FileChannel.MapMode.READ_ONLY, 0, (int)fc.size());
             
@@ -118,15 +118,15 @@ public abstract class AbstractMemoryMapParser implements Describable<AbstractMem
                 cbuf = Charset.forName(charset).newDecoder().decode(bbuf);
             }            
         } catch (FileNotFoundException ex){
-            logger.log(java.util.logging.Level.FINE, String.format("Parser %s reported exception of type FileNotFoundException.", parserUniqueName));
+            logger.log(java.util.logging.Level.FINE, String.format("Parser %s reported exception of type FileNotFoundException.", getParserUniqueName()));
              throw ex;  
         } catch (IOException ex) {
-            logger.log(java.util.logging.Level.FINE, String.format("Parser %s reported exception of type IOException.", parserUniqueName));
+            logger.log(java.util.logging.Level.FINE, String.format("Parser %s reported exception of type IOException.", getParserUniqueName()));
             throw ex;
         } finally {
             if(fis != null) {
                 fis.close();
-                logger.log(java.util.logging.Level.FINE, String.format("Parser %s closed input stream for file.", parserUniqueName));
+                logger.log(java.util.logging.Level.FINE, String.format("Parser %s closed input stream for file.", getParserUniqueName()));
             }
         }
         return cbuf;
@@ -219,5 +219,19 @@ public abstract class AbstractMemoryMapParser implements Describable<AbstractMem
     @Override
     public String toString() {
         return getUniqueName();
+    }
+
+    /**
+     * @return the parserUniqueName
+     */
+    public String getParserUniqueName() {
+        return parserUniqueName;
+    }
+
+    /**
+     * @param parserUniqueName the parserUniqueName to set
+     */
+    public void setParserUniqueName(String parserUniqueName) {
+        this.parserUniqueName = parserUniqueName;
     }
 }

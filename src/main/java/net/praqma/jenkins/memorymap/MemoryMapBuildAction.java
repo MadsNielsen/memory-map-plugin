@@ -34,6 +34,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 import net.praqma.jenkins.memorymap.result.MemoryMapConfigMemory;
 import net.praqma.jenkins.memorymap.result.MemoryMapConfigMemoryItem;
 import net.praqma.jenkins.memorymap.util.HexUtils;
@@ -60,14 +61,17 @@ import org.kohsuke.stapler.StaplerResponse;
  */
 public class MemoryMapBuildAction implements Action {
 
+    @Deprecated
+    private MemoryMapConfigMemory memoryMapConfig;
+    
     private static final double labelOffset = 1.2d;
-    private HashMap<String, MemoryMapConfigMemory> memoryMapConfig;
+    private HashMap<String, MemoryMapConfigMemory> memoryMapConfig2;
     private AbstractBuild<?, ?> build;
     private MemoryMapRecorder recorder;
-
+    
     public MemoryMapBuildAction(AbstractBuild<?, ?> build, HashMap<String, MemoryMapConfigMemory> memoryMapConfig) {
        this.build = build; 
-       this.memoryMapConfig = memoryMapConfig;
+       this.memoryMapConfig2 = memoryMapConfig;
     }
 
     @Override
@@ -276,19 +280,19 @@ public class MemoryMapBuildAction implements Action {
     /**
      * @return the memoryMapConfig
      */
-    public HashMap<String, MemoryMapConfigMemory> getMemoryMapConfig() {
-        return memoryMapConfig;
+    public HashMap<String, MemoryMapConfigMemory> getMemoryMapConfig2() {
+        return memoryMapConfig2;
     }
 
     /**
      * @param memoryMapConfig the memoryMapConfig to set
      */
-    public void setMemoryMapConfig(HashMap<String, MemoryMapConfigMemory> memoryMapConfig) {
-        this.memoryMapConfig = memoryMapConfig;
+    public void setMemoryMapConfig2(HashMap<String, MemoryMapConfigMemory> memoryMapConfig2) {
+        this.memoryMapConfig2 = memoryMapConfig2;
     }
 
     public boolean isValidConfigurationWithData() {
-        return memoryMapConfig != null && memoryMapConfig.size() >= 1;
+        return memoryMapConfig2 != null && memoryMapConfig2.size() >= 1;
     }
     
     private String constructMaxLabel(String... parts) {
@@ -417,7 +421,7 @@ public class MemoryMapBuildAction implements Action {
                 String categoryLabel = constructCategoryLabel(parts);
                 
                 for (MemoryMapBuildAction membuild = this; membuild != null; membuild = membuild.getPreviousAction()) {
-                    MemoryMapConfigMemory result = membuild.getMemoryMapConfig().get(dataset);
+                    MemoryMapConfigMemory result = membuild.getMemoryMapConfig2().get(dataset);
                     ChartUtil.NumberOnlyBuildLabel label = new ChartUtil.NumberOnlyBuildLabel(membuild.build);
                     if(result != null) {
                         List<MemoryMapConfigMemoryItem> ourItems = result.getItemByNames(parts);
@@ -441,7 +445,7 @@ public class MemoryMapBuildAction implements Action {
             } else {
                 HashMap<String, String> maximumValues = new HashMap<String, String>();
                 for (MemoryMapBuildAction membuild = this; membuild != null; membuild = membuild.getPreviousAction()) {
-                    MemoryMapConfigMemory result = membuild.getMemoryMapConfig().get(dataset);
+                    MemoryMapConfigMemory result = membuild.getMemoryMapConfig2().get(dataset);
                     ChartUtil.NumberOnlyBuildLabel label = new ChartUtil.NumberOnlyBuildLabel(membuild.build);
                     
                     if(result != null) {
@@ -474,5 +478,31 @@ public class MemoryMapBuildAction implements Action {
             }
         }
         return max;
+    }
+    
+    public Object readResolve() {
+        
+        if(getMemoryMapConfig() != null) {
+            HashMap<String, MemoryMapConfigMemory> conf = new HashMap<String, MemoryMapConfigMemory>();
+            String uuid = UUID.randomUUID().toString();
+            conf.put(uuid, getMemoryMapConfig());
+            this.setMemoryMapConfig2(conf);
+        }
+        
+        return this;
+    }
+
+    /**
+     * @return the memoryMapConfig
+     */
+    public MemoryMapConfigMemory getMemoryMapConfig() {
+        return memoryMapConfig;
+    }
+
+    /**
+     * @param memoryMapConfig the memoryMapConfig to set
+     */
+    public void setMemoryMapConfig(MemoryMapConfigMemory memoryMapConfig) {
+        this.memoryMapConfig = memoryMapConfig;
     }
 }
