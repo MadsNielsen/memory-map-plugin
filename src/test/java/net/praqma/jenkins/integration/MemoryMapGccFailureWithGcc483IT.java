@@ -82,9 +82,7 @@ public class MemoryMapGccFailureWithGcc483IT {
         }
         reader.close();
         
-        b2.getWorkspace().deleteRecursive();
         jenkins.assertBuildStatus(Result.SUCCESS, b2);
-        
-
+       
     }
 }
