@@ -31,7 +31,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
-import java.util.zip.ZipInputStream;
 import net.praqma.jenkins.memorymap.MemoryMapRecorder;
 import net.praqma.jenkins.memorymap.graph.MemoryMapGraphConfiguration;
 import net.praqma.jenkins.memorymap.parser.AbstractMemoryMapParser;
@@ -82,7 +81,42 @@ public class MemoryMapGccFailureWithGcc483IT {
         }
         reader.close();
         
-        jenkins.assertBuildStatus(Result.SUCCESS, b2);
-       
+        jenkins.assertBuildStatus(Result.SUCCESS, b2);       
+    }
+    
+    @Test
+    public void testParseGcc432LDfile() throws Exception {
+        FreeStyleProject fsp = jenkins.createFreeStyleProject("ggc_483_IT_Backwards");
+        MemoryMapGraphConfiguration config = new MemoryMapGraphConfiguration(".text+.rodata", "Rom usage", Boolean.TRUE);
+        List<MemoryMapGraphConfiguration> graphs = Arrays.asList(config);
+        
+        AbstractMemoryMapParser parser = new GccMemoryMapParser("myParser", "**/prom2_432.map", "**/prom432.ld", 8, true, graphs);
+        MemoryMapRecorder recorder = new MemoryMapRecorder(Arrays.asList(parser), true, null, null, graphs);
+        fsp.getPublishersList().add(recorder);
+        
+        //Schedule a build that should fail. We need to create the workspace.
+        FreeStyleBuild b = fsp.scheduleBuild2(0).get();
+        jenkins.assertBuildStatus(Result.FAILURE, b);
+  
+        File zipfile = new File(this.getClass().getResource("gcc432.zip").getFile());
+        System.out.println(zipfile.getAbsolutePath());
+        
+        //Copy the zip file to the workspace
+        FileUtils.copyFileToDirectory(zipfile, new File(b.getWorkspace().absolutize().getRemote()), true);
+        
+        //Unzip the contents of our zip file into the workspace.
+        FilePath zipInWorkspace = new FilePath(b.getWorkspace(), "gcc432.zip");
+        zipInWorkspace.unzip(b.getWorkspace());
+        
+        //Run build again. We should detect these two memory sections
+        FreeStyleBuild b2 = fsp.scheduleBuild2(0).get();
+        
+        BufferedReader reader = new BufferedReader(b2.getLogReader());
+        while(reader.readLine() != null) {
+            System.out.println(reader.readLine());
+        }
+        reader.close();
+        
+        jenkins.assertBuildStatus(Result.SUCCESS, b2);       
     }
 }

@@ -1,8 +1,10 @@
 package net.praqma.jenkins.memorymap.parser.gcc;
 
 import hudson.Extension;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.Reader;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,26 +28,29 @@ import org.kohsuke.stapler.StaplerRequest;
  * @author Praqma
  */
 public class GccMemoryMapParser extends AbstractMemoryMapParser implements Serializable {    
-    //private static final Pattern MEM_SECTIONS = Pattern.compile("(\\S+)( : \\{[^\\}]\\n)+");    
-    private static final Pattern MEM_SECTIONS = Pattern.compile("(\\s+)(\\S+)( :)(\\s+AT \\(\\S+\\))*");    
+    
+    private static final Pattern MEM_SECTIONS = Pattern.compile("^\\s+(\\S+)( \\S+.*|\\(\\S+\\)| ):", Pattern.MULTILINE);    
+    
     @DataBoundConstructor    
     public GccMemoryMapParser(String parserUniqueName, String mapFile, String configurationFile, Integer wordSize, Boolean bytesOnGraph, List<MemoryMapGraphConfiguration> graphConfiguration) {
         super(parserUniqueName, mapFile, configurationFile, wordSize, bytesOnGraph, graphConfiguration);
     }
     
     /**
+     * @param f
+     * @throws java.io.IOException
      * @return  a list of the defined MEMORY in the map file
      */
     public MemoryMapConfigMemory getMemory(File f) throws IOException {
-        Pattern allMemory = Pattern.compile(String.format("\\s+(%s)(.*?)(?=ORIGIN)(ORIGIN)(.*?)(?=\\=)(\\=)(.*?)(?=,)(,)(\\s+)(LENGTH)(.*?)(?=\\=)(\\=)(.*)", "\\S+"));
-        CharSequence seq = createCharSequenceFromFile(f);
+        
+        Pattern allMemory = Pattern.compile(".*?^(\\s+\\S+).*?ORIGIN.*?=([^,]*).*?LENGTH\\s\\=(.*).*$", Pattern.MULTILINE);
+        CharSequence seq = createCharSequenceFromFile(f);        
+ 
         Matcher match = allMemory.matcher(seq);
         MemoryMapConfigMemory memory = new MemoryMapConfigMemory();
-        while(match.find()) {
-            
-            String hexLength = new HexUtils.HexifiableString(match.group(12)).toValidHexString().rawString;
-            
-            MemoryMapConfigMemoryItem item = new MemoryMapConfigMemoryItem(match.group(1), match.group(6), hexLength);
+        while(match.find()) {            
+            String hexLength = new HexUtils.HexifiableString(match.group(3)).toValidHexString().rawString;            
+            MemoryMapConfigMemoryItem item = new MemoryMapConfigMemoryItem(match.group(1), match.group(2), hexLength);
             memory.add(item);            
         }
         return memory;
@@ -63,9 +68,23 @@ public class GccMemoryMapParser extends AbstractMemoryMapParser implements Seria
     public List<MemoryMapConfigMemoryItem> getSections(File f) throws IOException {
         List<MemoryMapConfigMemoryItem> items = new ArrayList<MemoryMapConfigMemoryItem>();
         CharSequence m = createCharSequenceFromFile(f);
-        Matcher match = MEM_SECTIONS.matcher(m);
-        while(match.find()) {
-            MemoryMapConfigMemoryItem it = new MemoryMapConfigMemoryItem(match.group(2), "0");
+        
+        Pattern section = Pattern.compile(".*SECTIONS\\s?\\r?\\n?\\{(.*)\\n\\}", Pattern.MULTILINE|Pattern.DOTALL);
+        
+        Matcher sectionMatched = section.matcher(m);
+        String sectionString = null; 
+        
+        while(sectionMatched.find()) {
+            sectionString = sectionMatched.group(1);
+        }
+
+        System.out.println("SECTIONS === "+sectionString);
+        
+        //Find the good stuff (SECTION): *SECTIONS\n\{(.*)\n\}
+        Matcher fm = MEM_SECTIONS.matcher(sectionString);
+        
+        while(fm.find()) {
+            MemoryMapConfigMemoryItem it = new MemoryMapConfigMemoryItem(fm.group(1), "0");
             items.add(it);
         }
         return items;        
