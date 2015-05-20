@@ -1,15 +1,15 @@
 package net.praqma.jenkins.memorymap.parser.gcc;
 
 import hudson.Extension;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.Reader;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.praqma.jenkins.memorymap.graph.MemoryMapGraphConfiguration;
@@ -21,6 +21,7 @@ import net.praqma.jenkins.memorymap.util.HexUtils;
 import net.praqma.jenkins.memorymap.util.HexUtils.HexifiableString;
 import net.praqma.jenkins.memorymap.util.MemoryMapMemorySelectionError;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
 
@@ -29,11 +30,14 @@ import org.kohsuke.stapler.StaplerRequest;
  */
 public class GccMemoryMapParser extends AbstractMemoryMapParser implements Serializable {    
     
-    private static final Pattern MEM_SECTIONS = Pattern.compile("^\\s+(\\S+)( \\S+.*|\\(\\S+\\)| ):", Pattern.MULTILINE);    
+    private static final Pattern MEM_SECTIONS = Pattern.compile("^\\s+(\\S+)( \\S+.*|\\(\\S+\\)| ):", Pattern.MULTILINE);  
+    private static final Logger LOG = Logger.getLogger(GccMemoryMapParser.class.getName());
+    private String script;
     
     @DataBoundConstructor    
-    public GccMemoryMapParser(String parserUniqueName, String mapFile, String configurationFile, Integer wordSize, Boolean bytesOnGraph, List<MemoryMapGraphConfiguration> graphConfiguration) {
+    public GccMemoryMapParser(String parserUniqueName, String mapFile, String configurationFile, Integer wordSize, Boolean bytesOnGraph, List<MemoryMapGraphConfiguration> graphConfiguration, String script) {
         super(parserUniqueName, mapFile, configurationFile, wordSize, bytesOnGraph, graphConfiguration);
+        this.script = script;
     }
     
     /**
@@ -77,8 +81,6 @@ public class GccMemoryMapParser extends AbstractMemoryMapParser implements Seria
         while(sectionMatched.find()) {
             sectionString = sectionMatched.group(1);
         }
-
-        System.out.println("SECTIONS === "+sectionString);
         
         //Find the good stuff (SECTION): *SECTIONS\n\{(.*)\n\}
         Matcher fm = MEM_SECTIONS.matcher(sectionString);
@@ -137,6 +139,8 @@ public class GccMemoryMapParser extends AbstractMemoryMapParser implements Seria
     @Override
     public MemoryMapConfigMemory parseMapFile(File f, MemoryMapConfigMemory configuration) throws IOException {
         CharSequence sequence = createCharSequenceFromFile(f);
+        
+        
         for(MemoryMapConfigMemoryItem item : configuration) {
             Matcher m = getLinePatternForMapFile(item.getName()).matcher(sequence);            
             while(m.find()) {
@@ -144,7 +148,30 @@ public class GccMemoryMapParser extends AbstractMemoryMapParser implements Seria
                 item.setUsed(m.group(5));
             }
         }
+        
         configuration = guessLengthOfSections(configuration);
+        
+        if(StringUtils.isNotBlank(script)) {        
+            try {        
+                ParserItemMixin mixin = new ParserItemMixin(script, sequence.toString());
+                Object o = mixin.evaluate();
+                
+                List<MemoryMapConfigMemoryItem> items;
+                
+                try {
+                    items = (List<MemoryMapConfigMemoryItem>)o;
+                    
+                    System.out.println("Evaulation == "+items);
+                    
+                    configuration.addAll(items);
+                } catch (ClassCastException ex) {
+                    ex.printStackTrace(System.out);
+                }
+            } catch (Exception ex) {
+                LOG.log(Level.SEVERE, this.getClass().getName()+"#parseMapFile", ex);
+            }
+        }
+        
         return configuration;
     }
     
@@ -160,7 +187,11 @@ public class GccMemoryMapParser extends AbstractMemoryMapParser implements Seria
                 for (String gSplitItem : gItem.split("\\+") ) {
                     //We will fail if the name of the data section does not match any of the named items in the map file.
                     if(!memconfig.containsSectionWithName(gSplitItem)) {
-                        throw new MemoryMapMemorySelectionError(String.format( "The memory section named %s not found in map file%nAvailable sections are:%n%s", gSplitItem, memconfig.getItemNames())); 
+                        if(StringUtils.isBlank(script)) {
+                            throw new MemoryMapMemorySelectionError(String.format( "The memory section named %s not found in map file%nAvailable sections are:%n%s", gSplitItem, memconfig.getItemNames())); 
+                        } else {
+                            LOG.info("Deferring judgement on section name %s because we have a mixin present");
+                        }
                     }
                 }
             }

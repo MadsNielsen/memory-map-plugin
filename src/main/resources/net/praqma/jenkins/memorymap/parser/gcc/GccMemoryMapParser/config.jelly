@@ -2,5 +2,8 @@
          xmlns:t="/lib/hudson" xmlns:f="/lib/form">
     <st:include class="net.praqma.jenkins.memorymap.parser.AbstractMemoryMapParser" page="config.jelly"/>
 
-                
+    <f:entry field="script" title="Parser mixin script">
+        <f:expandableTextbox/>
+    </f:entry>
+  
 </j:jelly>

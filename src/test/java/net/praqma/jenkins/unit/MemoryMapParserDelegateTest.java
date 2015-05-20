@@ -24,21 +24,15 @@
 package net.praqma.jenkins.unit;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.AbstractList;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import net.praqma.jenkins.memorymap.graph.MemoryMapGraphConfiguration;
 import net.praqma.jenkins.memorymap.parser.AbstractMemoryMapParser;
 import net.praqma.jenkins.memorymap.parser.MemoryMapMapParserDelegate;
 import net.praqma.jenkins.memorymap.parser.ti.TexasInstrumentsMemoryMapParser;
-import net.praqma.jenkins.memorymap.parser.iar.IARMemoryMapParser;
 import net.praqma.jenkins.memorymap.util.MemoryMapFileNotFoundError;
 import org.apache.commons.lang.SerializationUtils;
-import net.praqma.jenkins.memorymap.util.*;
 import org.junit.After;
 import static org.junit.Assert.*;
 import org.junit.Before;

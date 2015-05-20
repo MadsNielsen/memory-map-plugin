@@ -29,16 +29,22 @@ import hudson.model.FreeStyleProject;
 import hudson.model.Result;
 import java.io.BufferedReader;
 import java.io.File;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+import net.praqma.jenkins.memorymap.MemoryMapBuildAction;
 import net.praqma.jenkins.memorymap.MemoryMapRecorder;
 import net.praqma.jenkins.memorymap.graph.MemoryMapGraphConfiguration;
 import net.praqma.jenkins.memorymap.parser.AbstractMemoryMapParser;
 import net.praqma.jenkins.memorymap.parser.gcc.GccMemoryMapParser;
+import net.praqma.jenkins.memorymap.result.MemoryMapConfigMemory;
 import org.apache.commons.io.FileUtils;
+import static org.junit.Assert.assertEquals;
 import org.junit.Rule;
 import org.junit.Test;
 import org.jvnet.hudson.test.JenkinsRule;
+import static java.nio.file.Files.readAllBytes;
+import static java.nio.file.Paths.get;
 
 /**
  *
@@ -54,7 +60,7 @@ public class MemoryMapGccFailureWithGcc483IT {
         MemoryMapGraphConfiguration config = new MemoryMapGraphConfiguration(".prom_text+.ram_data", "Rom usage", Boolean.TRUE);
         List<MemoryMapGraphConfiguration> graphs = Arrays.asList(config);
         
-        AbstractMemoryMapParser parser = new GccMemoryMapParser("myParser", "**/gcc482.map", "**/prom482.ld", 8, true, graphs);
+        AbstractMemoryMapParser parser = new GccMemoryMapParser("myParser", "**/gcc482.map", "**/prom482.ld", 8, true, graphs, null);
         MemoryMapRecorder recorder = new MemoryMapRecorder(Arrays.asList(parser), true, null, null, graphs);
         fsp.getPublishersList().add(recorder);
         
@@ -90,7 +96,7 @@ public class MemoryMapGccFailureWithGcc483IT {
         MemoryMapGraphConfiguration config = new MemoryMapGraphConfiguration(".text+.rodata", "Rom usage", Boolean.TRUE);
         List<MemoryMapGraphConfiguration> graphs = Arrays.asList(config);
         
-        AbstractMemoryMapParser parser = new GccMemoryMapParser("myParser", "**/prom2_432.map", "**/prom432.ld", 8, true, graphs);
+        AbstractMemoryMapParser parser = new GccMemoryMapParser("myParser", "**/prom2_432.map", "**/prom432.ld", 8, true, graphs, null);
         MemoryMapRecorder recorder = new MemoryMapRecorder(Arrays.asList(parser), true, null, null, graphs);
         fsp.getPublishersList().add(recorder);
         
@@ -115,6 +121,59 @@ public class MemoryMapGccFailureWithGcc483IT {
         while(reader.readLine() != null) {
             System.out.println(reader.readLine());
         }
+        reader.close();
+        
+        jenkins.assertBuildStatus(Result.SUCCESS, b2);       
+    }
+  
+    @Test
+    public void testWithMixin() throws Exception {
+        
+        URL groovyScript = this.getClass().getResource("mixin_groovy.groovy");
+        String groovy =  new String(readAllBytes(get(groovyScript.toURI())));
+        
+        /*
+        String groovy = "import net.praqma.jenkins.memorymap.result.*\n" +
+                        "\n" +
+                        "def myList = new ArrayList<MemoryMapConfigMemoryItem>()\n" +
+                        "def sectionName = mapfile.length()\n" +
+                        "def myItem = new MemoryMapConfigMemoryItem(\"Custom ${sectionName}\", \"\", \"0xFFFF\")\n" +
+                        "myList.add(myItem)\n" +
+                        "return myList";
+        */
+        
+        FreeStyleProject fsp = jenkins.createFreeStyleProject("ggc_483_IT_Mixin");
+        MemoryMapGraphConfiguration config = new MemoryMapGraphConfiguration(".text+.rodata", "Rom usage", Boolean.TRUE);
+        List<MemoryMapGraphConfiguration> graphs = Arrays.asList(config);
+        
+        AbstractMemoryMapParser parser = new GccMemoryMapParser("myParser", "**/prom2_432.map", "**/prom432.ld", 8, true, graphs, groovy);
+        MemoryMapRecorder recorder = new MemoryMapRecorder(Arrays.asList(parser), true, null, null, graphs);
+        fsp.getPublishersList().add(recorder);
+        
+        //Schedule a build that should fail. We need to create the workspace.
+        FreeStyleBuild b = fsp.scheduleBuild2(0).get();
+        jenkins.assertBuildStatus(Result.FAILURE, b);
+  
+        File zipfile = new File(this.getClass().getResource("gcc432.zip").getFile());
+        System.out.println(zipfile.getAbsolutePath());
+        
+        //Copy the zip file to the workspace
+        FileUtils.copyFileToDirectory(zipfile, new File(b.getWorkspace().absolutize().getRemote()), true);
+        
+        //Unzip the contents of our zip file into the workspace.
+        FilePath zipInWorkspace = new FilePath(b.getWorkspace(), "gcc432.zip");
+        zipInWorkspace.unzip(b.getWorkspace());
+        
+        //Run build again. We should detect these two memory sections
+        FreeStyleBuild b2 = fsp.scheduleBuild2(0).get();
+        
+        BufferedReader reader = new BufferedReader(b2.getLogReader());
+        while(reader.readLine() != null) {
+            System.out.println(reader.readLine());
+        }
+        MemoryMapConfigMemory mem = b2.getAction(MemoryMapBuildAction.class).getMemoryMapConfig2().get("myParser");
+        String name = "Custom 20029609";
+        assertEquals("0xFFFF", mem.getItemByNames(name).get(0).getLength());
         reader.close();
         
         jenkins.assertBuildStatus(Result.SUCCESS, b2);       
